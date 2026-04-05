@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+option csharp_namespace = "Eladei.BookInfo.Api";
+
+package bookInfo.v1;
+
+import "google/protobuf/wrappers.proto";
+
+// Определение сервиса информации о книгах
+service BookInfo {
+  // Обновить дополнительную информацию о книге
+  rpc UpdateAdditionalBookInfo (UpdateAdditionalBookInfoApiRequest) returns (UpdateAdditionalBookInfoApiResponse);
+
+  // Запросить информацию о книге
+  rpc GetBookInfo (GetBookInfoApiRequest) returns (GetBookInfoApiResponse);
+}
+
+// Запрос обновления дополнительной информации о книге
+message UpdateAdditionalBookInfoApiRequest {
+    string bookId = 1;
+
+    google.protobuf.UInt32Value pages = 2;
+
+    google.protobuf.UInt32Value circulation = 3;
+
+    string annotation = 4;
+
+    string editor = 5;
+
+    string translator = 6;
+
+    string artist = 7;
+}
+
+// Результат обновления дополнительной информации о книге
+message UpdateAdditionalBookInfoApiResponse { }
+
+// Запрос информации о книге
+message GetBookInfoApiRequest {
+    string bookId = 1;
+}
+
+// Результат запроса информации о книге
+message GetBookInfoApiResponse {
+    string bookId = 1;
+
+    string name = 2;
+
+    string author = 3;
+
+    google.protobuf.UInt32Value pages = 4;
+
+    google.protobuf.UInt32Value circulation = 5;
+    
+    google.protobuf.StringValue annotation = 6;
+
+    google.protobuf.StringValue editor = 7;
+
+    google.protobuf.StringValue translator = 8;
+
+    google.protobuf.StringValue artist = 9;
+}

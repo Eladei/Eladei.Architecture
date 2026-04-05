@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Eladei.Architecture.CQRS.EntityFramework\Eladei.Architecture.Cqrs.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\..\Eladei.Architecture.Messaging\Eladei.Architecture.Messaging.csproj" />
+    <ProjectReference Include="..\Eladei.BookInfo.Model\Eladei.BookInfo.Model.csproj" />
+  </ItemGroup>
+
+</Project>

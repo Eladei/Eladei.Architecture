@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Eladei.Architecture.Cqrs.EntityFramework\Eladei.Architecture.Cqrs.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\..\Eladei.Architecture.Cqrs\Eladei.Architecture.Cqrs.csproj" />
+    <ProjectReference Include="..\..\..\..\Eladei.Architecture.Logging\Eladei.Architecture.Logging.csproj" />
+    <ProjectReference Include="..\..\..\..\Eladei.Architecture.Messaging\Eladei.Architecture.Messaging.csproj" />
+    <ProjectReference Include="..\Eladei.BookRating.Domain\Eladei.BookRating.Domain.csproj" />
+    <ProjectReference Include="..\Eladei.BookRating.Model\Eladei.BookRating.Model.csproj" />
+  </ItemGroup>
+
+</Project>

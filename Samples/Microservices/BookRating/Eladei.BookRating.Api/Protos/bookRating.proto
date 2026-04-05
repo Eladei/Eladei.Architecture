@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+option csharp_namespace = "Eladei.BookRating.Api";
+package book.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Определение сервиса работы с рейтингом книг
+service BookRating {
+	// Регистрирует книгу в рейтинге
+	rpc RegisterBook (RegisterBookApiRequest) returns (RegisterBookApiResponse);
+
+	// Удаляет книгу из рейтинга
+	rpc RemoveBook (RemoveBookApiRequest) returns (RemoveBookApiResponse);
+
+	// Обновляет информацию о книге в рейтинге
+	rpc UpdateBook(UpdateBookApiRequest) returns (UpdateBookApiResponse);
+
+	// Голосует за книгу в рейтинге
+	rpc VoteForBook(VoteForBookApiRequest) returns (VoteForBookApiResponse);
+
+	// Возвращает перечень книг, входящих в рейтинг
+	rpc GetBooks (GetBooksApiRequest) returns (GetBooksApiResponse);
+}
+
+// Запрос на добавление книги в рейтинг
+message RegisterBookApiRequest {
+	string name = 1;
+	string author = 2;
+}
+
+// Ответ, содержащий результаты операции регистрации
+// книги в рейтинге
+message RegisterBookApiResponse {
+	string bookId = 1;
+}
+
+// Запрос на удаление книги из рейтинга
+message RemoveBookApiRequest {
+	string bookId = 1;
+}
+
+// Ответ, содержащий результаты операции удаления
+// книги из рейтинга
+message RemoveBookApiResponse { }
+
+// Запрос на изменение информации о книге в рейтинге
+message UpdateBookApiRequest {
+    string bookId = 1;
+	string name = 2;
+	string author = 3;
+}
+
+// Ответ, содержащий результаты операции изменения
+// информации о книге в рейтинге
+message UpdateBookApiResponse { }
+
+// Запрос на голосование за книгу в рейтинге
+message VoteForBookApiRequest {
+    string bookId = 1;
+}
+
+// Ответ, содержащий результаты операции голосования
+// за книгу в рейтинге
+message VoteForBookApiResponse { }
+
+// Запрос на получение перечня книг, добавленных в рейтинг
+message GetBooksApiRequest {
+	uint32 booksPerPage = 1;
+    uint32 page = 2;
+}
+
+// Ответ, содержащий перечень книг, добавленных в рейтинг
+message GetBooksApiResponse {
+	uint32 totalPages = 1;
+	repeated BookInfoApiModel allPositions = 2;
+}
+
+// Информация о книге в рейтинге
+message BookInfoApiModel {
+    string bookId = 1;
+	string name = 2;
+	string author = 3;
+	uint32 votes = 4;
+	google.protobuf.Timestamp registeredAt = 5;
+}
