@@ -167,8 +167,8 @@ Full examples: /samples/ConsoleExamples
 Доменная модель на основе DDD намеренно упрощена для демонстрации работы библиотеки. В реальных проектах DDD необходимо использовать только для сложной бизнес-логики.
 
 ### Microservices (production-ready)
-- BookRating: transaction script + Outbox + Kafka
-- BookInfo: transaction script + Outbox + Kafka
+- BookRating: CQRS + transaction script + Outbox + Kafka
+- BookInfo: CQRS + transaction script + Outbox + Kafka
 
 ## Roadmap / TODO
 - Unit-тесты для CQRS-библиотек (планируется)
