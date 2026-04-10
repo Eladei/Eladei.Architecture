@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Eladei.Architecture.CQRS.EntityFramework\Eladei.Architecture.Cqrs.EntityFramework.csproj" />
-    <ProjectReference Include="..\..\..\Eladei.Architecture.DDD\Eladei.Architecture.Ddd.csproj" />
+    <ProjectReference Include="..\..\..\Eladei.Architecture.Cqrs.EntityFramework\Eladei.Architecture.Cqrs.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\Eladei.Architecture.Ddd\Eladei.Architecture.Ddd.csproj" />
   </ItemGroup>
 
 </Project>

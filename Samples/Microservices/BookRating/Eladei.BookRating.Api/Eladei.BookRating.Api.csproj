@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Eladei.Architecture.CQRS.DDD\Eladei.Architecture.Cqrs.Ddd.csproj" />
-    <ProjectReference Include="..\..\..\..\Eladei.Architecture.CQRS.EntityFramework\Eladei.Architecture.Cqrs.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\..\Eladei.Architecture.Cqrs.Ddd\Eladei.Architecture.Cqrs.Ddd.csproj" />
+    <ProjectReference Include="..\..\..\..\Eladei.Architecture.Cqrs.EntityFramework\Eladei.Architecture.Cqrs.EntityFramework.csproj" />
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Jobs\Eladei.Architecture.Jobs.Quartz.csproj" />
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Logging\Eladei.Architecture.Logging.csproj" />
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Messaging.Kafka\Eladei.Architecture.Messaging.Kafka.csproj" />

@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Eladei.Architecture.DDD\Eladei.Architecture.Ddd.csproj" />
+    <ProjectReference Include="..\Eladei.Architecture.Ddd\Eladei.Architecture.Ddd.csproj" />
     <ProjectReference Include="..\Eladei.Architecture.Logging\Eladei.Architecture.Logging.csproj" />
   </ItemGroup>
 
