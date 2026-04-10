@@ -10,7 +10,8 @@ namespace Eladei.BookRating.Domain.Commands;
 /// <summary>
 /// Команда обновления информации о книге в рейтинге
 /// </summary>
-public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext> {
+public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext>
+{
     private readonly Guid _bookId;
     private readonly string _newName;
     private readonly string _newAuthor;
@@ -22,7 +23,8 @@ public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext> {
     /// <param name="newName">Новое название</param>
     /// <param name="newAuthor">Новый автор</param>
     /// <exception cref="ArgumentException"></exception>
-    public UpdateBookInfoCommand(Guid bookId, string newName, string newAuthor) {
+    public UpdateBookInfoCommand(Guid bookId, string newName, string newAuthor)
+    {
         if (bookId == Guid.Empty)
             throw new ArgumentException(nameof(bookId));
 
@@ -38,7 +40,8 @@ public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext> {
     }
 
     /// <exception cref="BookWithCurrentInfoAlreadyExistsException"></exception>
-    public override async Task<bool> BeforeExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken) {
+    public override async Task<bool> BeforeExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken)
+    {
         var bookWithNewInfoExists = await context.Books.AnyAsync(
             s => s.Name == _newName
                 && s.Author == _newAuthor
@@ -53,8 +56,9 @@ public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext> {
     }
 
     /// <exception cref="BookWithIdNotFoundException"></exception>
-    public override async Task ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken) {
-        var book = await context.Books.FirstOrDefaultAsync(s => s.Id == _bookId, cancellationToken) 
+    public override async Task ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken)
+    {
+        var book = await context.Books.FirstOrDefaultAsync(s => s.Id == _bookId, cancellationToken)
             ?? throw new BookWithIdNotFoundException(Resource.BookWithIdNotFound, _bookId);
 
         book.Name = _newName;

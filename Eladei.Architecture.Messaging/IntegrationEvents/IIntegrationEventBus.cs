@@ -3,7 +3,8 @@
 /// <summary>
 /// Шина событий интеграции
 /// </summary>
-public interface IIntegrationEventBus {
+public interface IIntegrationEventBus
+{
     /// <summary>
     /// Опубликовать событие интеграции
     /// </summary>

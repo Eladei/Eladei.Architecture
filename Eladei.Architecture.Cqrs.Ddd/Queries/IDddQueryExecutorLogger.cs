@@ -3,7 +3,8 @@
 /// <summary>
 /// Логгер исполнителя запросов
 /// </summary>
-public interface IDddQueryExecutorLogger {
+public interface IDddQueryExecutorLogger
+{
     /// <summary>
     /// Логировать начало обработки запроса
     /// </summary>

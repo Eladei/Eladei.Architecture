@@ -5,7 +5,8 @@ namespace Eladei.BookRating.Model.Entities;
 /// <summary>
 /// Базовый класс сущности БД
 /// </summary>
-public abstract class EntityBase {
+public abstract class EntityBase
+{
     /// <summary>
     /// Версия строки для оптимистической блокировки
     /// </summary>

@@ -4,12 +4,14 @@
 /// Сущность
 /// </summary>
 /// <typeparam name="T">Тип идентификатора сущности</typeparam>
-public abstract class Entity<T> : IEntity<T> {
+public abstract class Entity<T> : IEntity<T>
+{
     /// <summary>
     /// Создает объект класса Entity
     /// </summary>
     /// <param name="id">Идентификатор сущности</param>
-    public Entity(T id) { 
+    public Entity(T id)
+    {
         Id = id;
     }
 

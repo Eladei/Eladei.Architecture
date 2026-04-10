@@ -3,22 +3,27 @@ using Npgsql;
 
 namespace Eladei.Architecture.Tests.EntityFramework.Integration;
 
-public static class TestNpgsqlDatabaseFactory {
+public static class TestNpgsqlDatabaseFactory
+{
     public static async Task<DbContextOptions<TContext>> CreateDatabaseAsync<TContext>(
         string connectionString,
         Func<DbContextOptions<TContext>, TContext> contextFactory)
-        where TContext : DbContext {
+        where TContext : DbContext
+    {
         var dbName = "test_db_" + Guid.NewGuid().ToString("N");
 
-        var builder = new NpgsqlConnectionStringBuilder(connectionString) {
+        var builder = new NpgsqlConnectionStringBuilder(connectionString)
+        {
             Database = dbName
         };
 
-        var masterConnectionString = new NpgsqlConnectionStringBuilder(connectionString) {
+        var masterConnectionString = new NpgsqlConnectionStringBuilder(connectionString)
+        {
             Database = "postgres"
         }.ToString();
 
-        using (var connection = new NpgsqlConnection(masterConnectionString)) {
+        using (var connection = new NpgsqlConnection(masterConnectionString))
+        {
             await connection.OpenAsync();
 
             using var cmd = connection.CreateCommand();
@@ -31,18 +36,21 @@ public static class TestNpgsqlDatabaseFactory {
             .UseNpgsql(builder.ToString())
             .Options;
 
-        using (var context = contextFactory(options)) {
+        using (var context = contextFactory(options))
+        {
             await context.Database.MigrateAsync();
         }
 
         return options;
     }
 
-    public static async Task DropDatabaseAsync(string connectionString) {
+    public static async Task DropDatabaseAsync(string connectionString)
+    {
         var builder = new NpgsqlConnectionStringBuilder(connectionString);
         var dbName = builder.Database;
 
-        var masterConnectionString = new NpgsqlConnectionStringBuilder(connectionString) {
+        var masterConnectionString = new NpgsqlConnectionStringBuilder(connectionString)
+        {
             Database = "postgres"
         }.ToString();
 
@@ -50,7 +58,8 @@ public static class TestNpgsqlDatabaseFactory {
         await connection.OpenAsync();
 
         // Завершаем активные подключения
-        using (var terminateCmd = connection.CreateCommand()) {
+        using (var terminateCmd = connection.CreateCommand())
+        {
             terminateCmd.CommandText = $@"
                 SELECT pg_terminate_backend(pid)
                 FROM pg_stat_activity

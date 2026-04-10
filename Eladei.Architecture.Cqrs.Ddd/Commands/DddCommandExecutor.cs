@@ -14,7 +14,8 @@ namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 /// Для сохранение событий в БД (outbox) в одной транзакции с результатами работы команды 
 /// необходима реализация интерфейса IDddOutboxDomainEventDao
 /// </remarks>
-public class DddCommandExecutor : IDddCommandExecutor {
+public class DddCommandExecutor : IDddCommandExecutor
+{
     protected readonly IUnitOfWorkContextFactory _unitOfWorkContextFactory;
     protected readonly IOperationExecutionPolicyService _executionRetryPolicy;
     protected readonly IDddOutboxDomainEventDao _domainEventDao;
@@ -32,7 +33,8 @@ public class DddCommandExecutor : IDddCommandExecutor {
         IUnitOfWorkContextFactory unitOfWorkContextFactory,
         IOperationExecutionPolicyService executionPolicyService,
         IDddOutboxDomainEventDao domainEventDao,
-        IDddCommandExecutorLogger? logger = null) {
+        IDddCommandExecutorLogger? logger = null)
+    {
         _unitOfWorkContextFactory = unitOfWorkContextFactory
             ?? throw new ArgumentNullException(nameof(unitOfWorkContextFactory));
 
@@ -45,25 +47,29 @@ public class DddCommandExecutor : IDddCommandExecutor {
         _logger = logger;
     }
 
-    public virtual async Task ExecuteAsync(IDddCommand command, CancellationToken cancellationToken) {
+    public virtual async Task ExecuteAsync(IDddCommand command, CancellationToken cancellationToken)
+    {
         var commandName = command.GetType().Name;
 
         _logger?.ExecutingStarted(commandName);
 
         var commandPolicy = _executionRetryPolicy.GetExecutionPolicy(command);
 
-        for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++) {
+        for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++)
+        {
             command.ClearEvents();
 
             var unitOfWorkContext = _unitOfWorkContextFactory.CreateContext();
 
-            try {
+            try
+            {
                 var continueExecuting = await command.BeforeExecuteAsync(unitOfWorkContext, cancellationToken);
 
                 if (!continueExecuting)
                     return;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger?.CriticalError(commandName, ex);
 
                 throw;
@@ -73,7 +79,8 @@ public class DddCommandExecutor : IDddCommandExecutor {
 
             await unitOfWorkContext.BeginTransactionAsync(cancellationToken);
 
-            try {
+            try
+            {
                 await command.ExecuteAsync(unitOfWorkContext, cancellationToken);
 
                 await SaveDomainEvents(command.Events, unitOfWorkContext, cancellationToken);
@@ -84,14 +91,16 @@ public class DddCommandExecutor : IDddCommandExecutor {
 
                 return;
             }
-            catch (DomainLogicException ex) {
+            catch (DomainLogicException ex)
+            {
                 await unitOfWorkContext.RollbackTransactionAsync(cancellationToken);
 
                 _logger?.DomainLogicError(commandName, ex);
 
                 throw;
             }
-            catch (OperationCanceledException ex) {
+            catch (OperationCanceledException ex)
+            {
                 await unitOfWorkContext.RollbackTransactionAsync(cancellationToken);
 
                 foundEx = ex;
@@ -100,7 +109,8 @@ public class DddCommandExecutor : IDddCommandExecutor {
 
                 throw;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 await unitOfWorkContext.RollbackTransactionAsync(cancellationToken);
 
                 foundEx = ex;
@@ -108,7 +118,8 @@ public class DddCommandExecutor : IDddCommandExecutor {
                 _logger?.CriticalError(commandName, foundEx);
             }
 
-            if (!commandPolicy.ShouldRetry(foundEx, attempt)) {
+            if (!commandPolicy.ShouldRetry(foundEx, attempt))
+            {
                 var errorMsg = string.Format(
                     Resources.CommandDataSourceUpdateAttemptLimitReachedError,
                     commandName,
@@ -125,22 +136,26 @@ public class DddCommandExecutor : IDddCommandExecutor {
         }
     }
 
-    public virtual async Task<R> ExecuteAsync<R>(IDddCommand<R> command, CancellationToken cancellationToken) {
+    public virtual async Task<R> ExecuteAsync<R>(IDddCommand<R> command, CancellationToken cancellationToken)
+    {
         var commandName = command.GetType().Name;
 
         _logger?.ExecutingStarted(commandName);
 
         var commandPolicy = _executionRetryPolicy.GetExecutionPolicy(command);
 
-        for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++) {
+        for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++)
+        {
             command.ClearEvents();
 
             var unitOfWorkContext = _unitOfWorkContextFactory.CreateContext();
 
-            try {
+            try
+            {
                 await command.BeforeExecuteAsync(unitOfWorkContext, cancellationToken);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger?.CriticalError(commandName, ex);
 
                 throw;
@@ -150,7 +165,8 @@ public class DddCommandExecutor : IDddCommandExecutor {
 
             await unitOfWorkContext.BeginTransactionAsync(cancellationToken);
 
-            try {
+            try
+            {
                 var result = await command.ExecuteAsync(unitOfWorkContext, cancellationToken);
 
                 await SaveDomainEvents(command.Events, unitOfWorkContext, cancellationToken);
@@ -163,29 +179,33 @@ public class DddCommandExecutor : IDddCommandExecutor {
 
                 return result;
             }
-            catch (DomainLogicException ex) {
+            catch (DomainLogicException ex)
+            {
                 await unitOfWorkContext.RollbackTransactionAsync(cancellationToken);
 
                 _logger?.DomainLogicError(commandName, ex);
 
                 throw;
             }
-            catch (OperationCanceledException ex) {
+            catch (OperationCanceledException ex)
+            {
                 await unitOfWorkContext.RollbackTransactionAsync(cancellationToken);
 
                 _logger?.ExecutingCancelled(commandName, ex);
 
                 throw;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 await unitOfWorkContext.RollbackTransactionAsync(cancellationToken);
 
-                foundEx = ex; 
-                
+                foundEx = ex;
+
                 _logger?.CriticalError(commandName, foundEx);
             }
 
-            if (!commandPolicy.ShouldRetry(foundEx, attempt)) {
+            if (!commandPolicy.ShouldRetry(foundEx, attempt))
+            {
                 var errorMsg = string.Format(
                     Resources.CommandDataSourceUpdateAttemptLimitReachedError,
                     commandName,
@@ -211,7 +231,8 @@ public class DddCommandExecutor : IDddCommandExecutor {
     /// <param name="maxDelayInMilliseconds">Максимальная величина задержки в миллисекундах</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     protected virtual async Task DelayBeforeNewAttempt(
-        uint currentAttempt, uint maxDelayInMilliseconds, CancellationToken cancellationToken) {
+        uint currentAttempt, uint maxDelayInMilliseconds, CancellationToken cancellationToken)
+    {
 
         uint baseDelay = Math.Min(1000 * (uint)Math.Pow(2, currentAttempt - 1), maxDelayInMilliseconds);
 
@@ -226,7 +247,8 @@ public class DddCommandExecutor : IDddCommandExecutor {
         await Task.Delay(delayMs, cancellationToken);
     }
 
-    protected virtual Task SaveDomainEvents(IReadOnlyCollection<IDomainEvent> domainEvents, IRepositoryFactory repositoryFactory, CancellationToken cancellationToken) {
+    protected virtual Task SaveDomainEvents(IReadOnlyCollection<IDomainEvent> domainEvents, IRepositoryFactory repositoryFactory, CancellationToken cancellationToken)
+    {
         if (domainEvents.Any())
             return _domainEventDao.SaveAsync(domainEvents, repositoryFactory, cancellationToken);
 

@@ -2,11 +2,13 @@ using Eladei.BookInfo.Api.Services;
 
 namespace Eladei.BookInfo.Api;
 
-public class Program {
+public class Program
+{
     private const string JustLocalhostAnswer
         = "Communication with gRPC endpoints must be made through a gRPC client...";
 
-    public static async Task Main(string[] args) {
+    public static async Task Main(string[] args)
+    {
         var builder = WebApplication.CreateBuilder(args);
         CompositionRoot.DefineDependencies(builder);
 
@@ -15,7 +17,8 @@ public class Program {
         app.MapGrpcService<BookInfoServiceV1>();
 
         // Добавляем Grpc-рефлексию
-        if (app.Environment.IsDevelopment()) {
+        if (app.Environment.IsDevelopment())
+        {
             app.MapGrpcReflectionService();
         }
 

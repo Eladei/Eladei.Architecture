@@ -1,4 +1,4 @@
-﻿namespace Eladei.Architecture.Ddd.Repositories; 
+﻿namespace Eladei.Architecture.Ddd.Repositories;
 
 /// <summary>
 /// Репозиторий

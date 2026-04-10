@@ -8,18 +8,21 @@ namespace CqrsWithDddExecuting.Application;
 /// <summary>
 /// Команда регистрации книги
 /// </summary>
-internal sealed class VoteForBookCommand : DddCommandBase {
+internal sealed class VoteForBookCommand : DddCommandBase
+{
     private readonly Guid _bookId;
 
     /// <summary>
     /// Создает объект класса RegisterBookCommand
     /// </summary>
     /// <param name="bookId">Идентификатор книги</param>
-    public VoteForBookCommand(Guid bookId) {
+    public VoteForBookCommand(Guid bookId)
+    {
         _bookId = bookId;
     }
 
-    public override async Task ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default) {
+    public override async Task ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default)
+    {
         var bookRepository = repositoryFactory.CreateRepository<IBookRepository>();
 
         var foundBook = await bookRepository.FindByIdAsync(_bookId, cancellationToken)
@@ -29,6 +32,6 @@ internal sealed class VoteForBookCommand : DddCommandBase {
 
         await bookRepository.UpdateBookAsync(foundBook, cancellationToken);
 
-        AddDomainEvents([..foundBook.DomainEvents]);
+        AddDomainEvents([.. foundBook.DomainEvents]);
     }
 }

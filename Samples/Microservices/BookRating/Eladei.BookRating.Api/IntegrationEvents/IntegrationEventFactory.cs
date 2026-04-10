@@ -8,9 +8,11 @@ namespace Eladei.BookRating.Api.IntegrationEvents;
 /// <summary>
 /// Фабрика для формирования событий интеграции
 /// </summary>
-public sealed class IntegrationEventFactory : IIntegrationEventFactory {
+public sealed class IntegrationEventFactory : IIntegrationEventFactory
+{
     public IIntegrationEvent? Create(IDomainEvent domainEvent, Guid correlationId)
-        =>  domainEvent switch {
+        => domainEvent switch
+        {
             BookWasRegisteredInRatingDomainEvent evnt => new BookWasRegisteredInRatingIntegrationEvent(
                 evnt.BookId, correlationId, evnt.Name, evnt.Author),
             BookInfoWasUpdatedInRatingDomainEvent evnt => new BookInfoWasUpdatedInRatingIntegrationEvent(

@@ -7,11 +7,13 @@ using Microsoft.Extensions.Logging;
 
 namespace CqrsWithDddExecuting;
 
-internal class Program {
+internal class Program
+{
     private static DddCommandExecutor _commandExecutor;
     private static DddQueryExecutor _queryExecutor;
 
-    static async Task Main(string[] args) {
+    static async Task Main(string[] args)
+    {
         SetExecutors();
 
         // Выполнить команды
@@ -30,10 +32,12 @@ internal class Program {
         ShowBookInfo(foundBook);
     }
 
-    private static void SetExecutors() {
+    private static void SetExecutors()
+    {
         // Логгеры для команд и запросов
         var loggerFactory = LoggerFactory.Create(builder
-            => { builder.AddConsole(); });
+            =>
+        { builder.AddConsole(); });
 
         var commandLogger = loggerFactory.CreateLogger<DddCommandExecutorLogger>();
         var eventDaoLogger = loggerFactory.CreateLogger<MockOutboxDomainEventDao>();
@@ -51,11 +55,12 @@ internal class Program {
 
         // Исполнитель запросов
         _queryExecutor = new DddQueryExecutor(
-            contextFactory, 
+            contextFactory,
             new DddQueryExecutorLogger(queryLogger));
     }
 
-    private static void ShowBookInfo(BookInRatingReadModel book) {
+    private static void ShowBookInfo(BookInRatingReadModel book)
+    {
         Console.WriteLine(
 @$"
 Информация по зарегистрированной книге: 

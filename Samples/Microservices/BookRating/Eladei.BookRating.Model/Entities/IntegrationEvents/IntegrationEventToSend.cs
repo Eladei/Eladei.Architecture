@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Eladei.BookRating.Model.Entities.IntegrationEvents; 
+namespace Eladei.BookRating.Model.Entities.IntegrationEvents;
 
 /// <summary>
 /// Информация об отправке события интеграции
 /// </summary>
-public class IntegrationEventToSend : EntityBase {
+public class IntegrationEventToSend : EntityBase
+{
     /// <summary>
     /// Идентификатор события
     /// </summary>

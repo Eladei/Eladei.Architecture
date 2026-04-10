@@ -3,7 +3,8 @@
 /// <summary>
 /// Событие интеграции
 /// </summary>
-public interface IIntegrationEvent {
+public interface IIntegrationEvent
+{
     /// <summary>
     /// Id события
     /// </summary>

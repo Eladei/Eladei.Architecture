@@ -5,7 +5,8 @@ namespace Eladei.BookRating.Domain.Commands.DomainEvents;
 /// <summary>
 /// Книга была удалена из рейтинга
 /// </summary>
-public sealed class BookWasRemovedFromRatingDomainEvent : DomainEvent {
+public sealed class BookWasRemovedFromRatingDomainEvent : DomainEvent
+{
     /// <summary>
     /// Создает объект класса BookWasRemovedFromRatingDomainEvent
     /// </summary>

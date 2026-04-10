@@ -7,10 +7,12 @@ namespace Eladei.BookRating.Api.Services;
 /// </summary>
 /// <remarks>Шина инициализируется при первом внедрении в конструктор объекта 
 /// на основе настроек из CompositionRoot.</remarks>
-public class EventBusStarter : IHostedService {
+public class EventBusStarter : IHostedService
+{
     private readonly IIntegrationEventBus _eventBus;
 
-    public EventBusStarter(IIntegrationEventBus eventBus) {
+    public EventBusStarter(IIntegrationEventBus eventBus)
+    {
         _eventBus = eventBus;
     }
 

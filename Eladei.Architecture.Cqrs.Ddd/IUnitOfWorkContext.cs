@@ -1,4 +1,4 @@
-﻿namespace Eladei.Architecture.Cqrs.Ddd; 
+﻿namespace Eladei.Architecture.Cqrs.Ddd;
 
 /// <summary>
 /// Контекст единицы работы

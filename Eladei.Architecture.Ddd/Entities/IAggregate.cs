@@ -5,7 +5,8 @@ namespace Eladei.Architecture.Ddd.Entities;
 /// <summary>
 /// Агрегат
 /// </summary>
-public interface IAggregate {
+public interface IAggregate
+{
     /// <summary>
     /// Идентификатор сущности
     /// </summary>

@@ -5,7 +5,8 @@ namespace Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 /// <summary>
 /// Книга была зарегистрирована в рейтинге
 /// </summary>
-public class BookWasRegisteredInRatingIntegrationEvent : IntegrationEvent {
+public class BookWasRegisteredInRatingIntegrationEvent : IntegrationEvent
+{
     /// <summary>
     /// Создает объект класса BookWasRegisteredInRatingIntegrationEvent
     /// </summary>
@@ -13,7 +14,8 @@ public class BookWasRegisteredInRatingIntegrationEvent : IntegrationEvent {
     /// <param name="correlationId">Id для сквозного отслеживания</param>
     /// <param name="name">Название книги</param>
     /// <param name="author">Автор</param>
-    public BookWasRegisteredInRatingIntegrationEvent(Guid bookId, Guid correlationId, string name, string author) : base(bookId, correlationId) {
+    public BookWasRegisteredInRatingIntegrationEvent(Guid bookId, Guid correlationId, string name, string author) : base(bookId, correlationId)
+    {
         Name = name;
         Author = author;
     }

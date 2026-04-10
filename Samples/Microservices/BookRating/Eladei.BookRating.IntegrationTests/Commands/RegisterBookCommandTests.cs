@@ -13,16 +13,19 @@ namespace Eladei.BookRating.IntegrationTests.Commands;
 /// Интеграционные тесты команды RegisterBookCommand
 /// </summary>
 /// <see cref="RegisterBookCommand"/>
-public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRatingDbContext> {
-    static RegisterBookCommandTests() {
+public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRatingDbContext>
+{
+    static RegisterBookCommandTests()
+    {
         Env.Load();
     }
 
-    public RegisterBookCommandTests() 
+    public RegisterBookCommandTests()
         : base(Environment.GetEnvironmentVariable("SERVER_CONNECTION_STRING")!, opts => new BookRatingDbContext(opts)) { }
 
     [Fact]
-    public async Task Command_Should_Throw_BookWithCurrentInfoAlreadyExistsException_When_Book_Already_Exists() {
+    public async Task Command_Should_Throw_BookWithCurrentInfoAlreadyExistsException_When_Book_Already_Exists()
+    {
         // Arrange
         var name = "Капитанская дочка";
         var author = "А.С. Пушкин";
@@ -31,13 +34,14 @@ public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRa
 
         using var context = CreateContext();
 
-        context.Books.Add(new Book {
+        context.Books.Add(new Book
+        {
             Id = Guid.NewGuid(),
             Name = name,
             Author = author
         });
 
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(CancellationToken.None);
 
         // Act, Assert
         var exception = await Assert.ThrowsAsync<BookWithCurrentInfoAlreadyExistsException>(
@@ -47,7 +51,8 @@ public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRa
     }
 
     [Fact]
-    public async Task Command_Should_Save_New_Book() {
+    public async Task Command_Should_Save_New_Book()
+    {
         // Arrange
         var name = "Капитанская дочка";
         var author = "А.С. Пушкин";
@@ -58,7 +63,7 @@ public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRa
 
         // Act
         var bookId = await command.ExecuteAsync(context, CancellationToken.None);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(CancellationToken.None);
 
         // Assert
         var addedBook = context.Books.FirstOrDefault(b => b.Id == bookId);

@@ -3,7 +3,8 @@
 /// <summary>
 /// Исполнитель запросов
 /// </summary>
-public interface IDddQueryExecutor {
+public interface IDddQueryExecutor
+{
     /// <summary>
     /// Выполнить запрос
     /// </summary>

@@ -6,7 +6,8 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 /// Исполнитель запроса, работающей с Entity Framework
 /// </summary>
 /// <typeparam name="T">Контекст данных</typeparam>
-public interface IEfQueryExecutor<T> where T : DbContext {
+public interface IEfQueryExecutor<T> where T : DbContext
+{
     /// <summary>
     /// Выполнить запрос
     /// </summary>

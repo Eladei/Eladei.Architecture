@@ -9,8 +9,10 @@ namespace Eladei.BookInfo.Api.Policies;
 /// <summary>
 /// Служба запроса политики выполнения операции
 /// </summary>
-public sealed class OperationExecutionPolicyService : IOperationExecutionPolicyService {
-    static OperationExecutionPolicyService() {
+public sealed class OperationExecutionPolicyService : IOperationExecutionPolicyService
+{
+    static OperationExecutionPolicyService()
+    {
         var policies = new Dictionary<Type, IOperationExecutionPolicy>();
 
         policies.AddPolicy<AddBookCommand>(()
@@ -27,7 +29,7 @@ public sealed class OperationExecutionPolicyService : IOperationExecutionPolicyS
     private static readonly IOperationExecutionPolicy _defaultPolicy = new OperationExecutionPolicyBuilder().Build();
 
     public IOperationExecutionPolicy GetExecutionPolicy(IOperation operation)
-        => _policies.TryGetValue(operation.GetType(), out var policy) 
-            ? policy 
+        => _policies.TryGetValue(operation.GetType(), out var policy)
+            ? policy
             : _defaultPolicy;
 }

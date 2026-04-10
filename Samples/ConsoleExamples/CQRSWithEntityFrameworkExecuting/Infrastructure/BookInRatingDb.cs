@@ -7,7 +7,8 @@ namespace CqrsWithEntityFrameworkExecuting.Infrastructure;
 /// Информация о книге в рейтинге
 /// </summary>
 [Index(nameof(Name), nameof(Author), IsUnique = true)]
-public sealed class BookInRatingDb {
+public sealed class BookInRatingDb
+{
     /// <summary>
     /// Идентификатор книги
     /// </summary>

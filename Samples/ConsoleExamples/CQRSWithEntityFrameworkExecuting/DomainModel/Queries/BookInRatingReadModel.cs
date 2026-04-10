@@ -3,7 +3,8 @@
 /// <summary>
 /// Информация о книге в рейтинге
 /// </summary>
-public sealed record class BookInRatingReadModel {
+public sealed record class BookInRatingReadModel
+{
     /// <summary>
     /// Идентификатор книги
     /// </summary>

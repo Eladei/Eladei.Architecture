@@ -4,7 +4,8 @@
 /// Страничный результат поиска
 /// </summary>
 /// <typeparam name="T">Тип найденных элементов</typeparam>
-public class PageResult<T> {
+public class PageResult<T>
+{
     /// <summary>
     /// Номер текущей страницы
     /// </summary>

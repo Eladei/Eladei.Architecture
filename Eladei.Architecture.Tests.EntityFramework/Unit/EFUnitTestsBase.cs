@@ -3,10 +3,12 @@ using Moq;
 
 namespace Eladei.Architecture.Tests.EntityFramework.Unit;
 
-public abstract class EFUnitTestsBase<T> where T : DbContext {
+public abstract class EFUnitTestsBase<T> where T : DbContext
+{
     protected T _context;
 
-    public EFUnitTestsBase() {
+    public EFUnitTestsBase()
+    {
         _context = SetUpDbContext(new Mock<T>());
     }
 

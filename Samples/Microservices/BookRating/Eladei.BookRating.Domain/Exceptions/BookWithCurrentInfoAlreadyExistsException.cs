@@ -5,7 +5,8 @@ namespace Eladei.BookRating.Domain.Exceptions;
 /// <summary>
 /// Книга с указанной информацией уже существует
 /// </summary>
-public sealed class BookWithCurrentInfoAlreadyExistsException : DomainLogicException {
+public sealed class BookWithCurrentInfoAlreadyExistsException : DomainLogicException
+{
     public BookWithCurrentInfoAlreadyExistsException() : base() { }
 
     public BookWithCurrentInfoAlreadyExistsException(string message) : base(message) { }

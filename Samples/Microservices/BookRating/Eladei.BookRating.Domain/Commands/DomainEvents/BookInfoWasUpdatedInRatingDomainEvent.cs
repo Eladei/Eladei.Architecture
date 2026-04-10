@@ -5,14 +5,16 @@ namespace Eladei.BookRating.Domain.Commands.DomainEvents;
 /// <summary>
 /// Информация о книге была обновлена в рейтинге
 /// </summary>
-public sealed class BookInfoWasUpdatedInRatingDomainEvent : DomainEvent {
+public sealed class BookInfoWasUpdatedInRatingDomainEvent : DomainEvent
+{
     /// <summary>
     /// Создает объект класса BookInfoWasUpdatedInRatingDomainEvent 
     /// </summary>
     /// <param name="bookId">Идентификатор книги</param>
     /// <param name="name">Название книги</param>
     /// <param name="author">Автор</param>
-    public BookInfoWasUpdatedInRatingDomainEvent(Guid bookId, string name, string author) : base(bookId) {
+    public BookInfoWasUpdatedInRatingDomainEvent(Guid bookId, string name, string author) : base(bookId)
+    {
         Name = name;
         Author = author;
     }

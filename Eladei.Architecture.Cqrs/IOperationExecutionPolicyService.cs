@@ -3,7 +3,8 @@
 /// <summary>
 /// Служба запроса политики выполнения операции
 /// </summary>
-public interface IOperationExecutionPolicyService {
+public interface IOperationExecutionPolicyService
+{
     /// <summary>
     /// Возвращает политику выполнения операции
     /// </summary>

@@ -8,7 +8,8 @@ namespace Eladei.Architecture.Messaging.Kafka;
 /// <summary>
 /// Шина событий на основе Kafka
 /// </summary>
-public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable {
+public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable
+{
     private readonly IBus _eventBus;
     private readonly ILogger<KafkaEventBus>? _logger;
     private readonly string _topic;
@@ -19,7 +20,8 @@ public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable {
     /// <param name="kafkaBus">Активатор Kafka</param>
     /// <param name="topic">Топик, в который будет осуществляться публикация событий</param>
     /// <param name="logger">Логгер</param>
-    public KafkaEventBus(IBus kafkaBus, string topic, ILogger<KafkaEventBus>? logger = null) {
+    public KafkaEventBus(IBus kafkaBus, string topic, ILogger<KafkaEventBus>? logger = null)
+    {
         ArgumentNullException.ThrowIfNull(kafkaBus, nameof(kafkaBus));
         ArgumentNullException.ThrowIfNullOrWhiteSpace(topic, nameof(topic));
 
@@ -28,11 +30,14 @@ public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable {
         _logger = logger;
     }
 
-    public async Task PublishEventAsync(IIntegrationEvent integrationEvent) {
-        try {
+    public async Task PublishEventAsync(IIntegrationEvent integrationEvent)
+    {
+        try
+        {
             await _eventBus.Advanced.Topics.Publish(_topic, integrationEvent);
 
-            if (_logger is not null) {
+            if (_logger is not null)
+            {
                 var msg = string.Format(
                     Resources.IntegrationEventWasPublished,
                     integrationEvent.GetType().Name,
@@ -42,7 +47,8 @@ public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable {
                 _logger.LogInformation(msg);
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             var msg = string.Format(
                 Resources.IntegrationEventPublishingError,
                 integrationEvent.GetType().Name,
@@ -53,7 +59,8 @@ public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable {
         }
     }
 
-    public void Dispose() {
+    public void Dispose()
+    {
         _eventBus.Dispose();
     }
 }

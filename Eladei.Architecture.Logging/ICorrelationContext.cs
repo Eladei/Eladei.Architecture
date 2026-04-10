@@ -5,7 +5,8 @@
 /// </summary>
 /// <remarks>Необходим для проброса correlationId при логировании
 /// для отслеживания всей цепочки операций</remarks>
-public interface ICorrelationContext {
+public interface ICorrelationContext
+{
     /// <summary>
     /// Id для сквозного отслеживания
     /// </summary>

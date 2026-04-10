@@ -10,14 +10,16 @@ namespace Eladei.BookInfo.Domain.Queries;
 /// <summary>
 /// Запрос для получения информации о книге
 /// </summary>
-public sealed class BookInfoQuery : EfQueryBase<BookInfoDbContext, BookInfoReadModel> {
+public sealed class BookInfoQuery : EfQueryBase<BookInfoDbContext, BookInfoReadModel>
+{
     private readonly Guid _bookId;
 
     /// <summary>
     /// Создает объект класса BookInfoQuery
     /// </summary>
     /// <param name="bookId">Идентификатор книги</param>
-    public BookInfoQuery(Guid bookId) {
+    public BookInfoQuery(Guid bookId)
+    {
         _bookId = bookId;
     }
 
@@ -27,9 +29,11 @@ public sealed class BookInfoQuery : EfQueryBase<BookInfoDbContext, BookInfoReadM
     /// <param name="context">Контекст данных</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Список книг</returns>
-    public override async Task<BookInfoReadModel> ExecuteAsync(BookInfoDbContext context, CancellationToken cancellationToken) {
+    public override async Task<BookInfoReadModel> ExecuteAsync(BookInfoDbContext context, CancellationToken cancellationToken)
+    {
         var book = await context.BookInformations
-            .Select(b => new BookInfoReadModel {
+            .Select(b => new BookInfoReadModel
+            {
                 Id = b.Id,
                 Name = b.Name,
                 Author = b.Author,

@@ -8,7 +8,8 @@ namespace Eladei.BookRating.Domain.Queries;
 /// <summary>
 /// Запрос для получения списка книг
 /// </summary>
-public sealed class BooksQuery : EfPageQueryBase<BookRatingDbContext, BookReadModel> {
+public sealed class BooksQuery : EfPageQueryBase<BookRatingDbContext, BookReadModel>
+{
     /// <summary>
     /// Создает объект класса BooksQuery
     /// </summary>
@@ -22,7 +23,8 @@ public sealed class BooksQuery : EfPageQueryBase<BookRatingDbContext, BookReadMo
     /// <param name="context">Контекст данных</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Список книг</returns>
-    protected override async Task<IEnumerable<BookReadModel>> PerformAsync(BookRatingDbContext context, CancellationToken cancellationToken) {
+    protected override async Task<IEnumerable<BookReadModel>> PerformAsync(BookRatingDbContext context, CancellationToken cancellationToken)
+    {
         var query = context.Books
             .OrderByDescending(s => s.Votes)
             .Skip((int)ElementsToSkip);
@@ -30,7 +32,8 @@ public sealed class BooksQuery : EfPageQueryBase<BookRatingDbContext, BookReadMo
         if (_elementsPerPage.HasValue)
             query = query.Take((int)_elementsPerPage);
 
-        var bookInfos = await query.Select(s => new BookReadModel {
+        var bookInfos = await query.Select(s => new BookReadModel
+        {
             Id = s.Id,
             Name = s.Name,
             Author = s.Author,

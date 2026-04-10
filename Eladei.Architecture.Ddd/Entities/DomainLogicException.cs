@@ -3,7 +3,8 @@
 /// <summary>
 /// Исключение, возникающее при нарушении доменной логики
 /// </summary>
-public class DomainLogicException: Exception {
+public class DomainLogicException : Exception
+{
     public DomainLogicException() { }
 
     public DomainLogicException(string message) : base(message) { }

@@ -14,7 +14,8 @@ namespace Eladei.BookRating.Api.Jobs;
 /// - успешная отправка события;
 /// - ошибка отправки события;
 /// - истечение срока резервирования</remarks>
-public sealed class OutboxIntegrationEventsSenderJob : QuartzJobBase {
+public sealed class OutboxIntegrationEventsSenderJob : QuartzJobBase
+{
     private readonly OutboxIntegrationEventsSenderJobConfig _jobConfig;
     private readonly Guid _senderId;
     private readonly ICommandExecutor _commandExecutor;
@@ -25,7 +26,8 @@ public sealed class OutboxIntegrationEventsSenderJob : QuartzJobBase {
         ICommandExecutor commandExecutor,
         IIntegrationEventBus integrationEventBus,
         ICorrelationContext correlationContext,
-        ILogger<OutboxIntegrationEventsSenderJob> logger) : base(correlationContext, logger) {
+        ILogger<OutboxIntegrationEventsSenderJob> logger) : base(correlationContext, logger)
+    {
         _jobConfig = jobConfig
             ?? throw new ArgumentNullException(nameof(jobConfig));
 
@@ -38,7 +40,8 @@ public sealed class OutboxIntegrationEventsSenderJob : QuartzJobBase {
         _senderId = Guid.NewGuid();
     }
 
-    protected override async Task Perform(CancellationToken cancellationToken) {
+    protected override async Task Perform(CancellationToken cancellationToken)
+    {
         var reservedEventsCount = await _commandExecutor.ExecuteAsync(
             new ReserveIntegrationEventsInOutboxForSendingCommand(_senderId, _jobConfig.ReservingTimeInSeconds, _jobConfig.MaxEventsToReserve), cancellationToken);
 

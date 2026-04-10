@@ -10,7 +10,8 @@ namespace Eladei.BookInfo.Api.IntegrationEvents.Handlers;
 /// <summary>
 /// Обработчик события регистрации книги в рейтинге
 /// </summary>
-public sealed class BookWasRegisteredInRatingIntegrationEventHandler : KafkaIntegrationEventHandlerBase<BookWasRegisteredInRatingIntegrationEvent> {
+public sealed class BookWasRegisteredInRatingIntegrationEventHandler : KafkaIntegrationEventHandlerBase<BookWasRegisteredInRatingIntegrationEvent>
+{
     private readonly ICommandExecutor _commandExecutor;
 
     /// <summary>
@@ -22,15 +23,17 @@ public sealed class BookWasRegisteredInRatingIntegrationEventHandler : KafkaInte
     /// <param name="logger">Логгер</param>
     /// <exception cref="ArgumentNullException"></exception>
     public BookWasRegisteredInRatingIntegrationEventHandler(
-        ICommandExecutor commandExecutor, 
+        ICommandExecutor commandExecutor,
         ICorrelationContext correlationContext,
         CancellationToken cancellationToken,
-        ILogger<BookWasRegisteredInRatingIntegrationEventHandler>? logger) : base(cancellationToken, correlationContext, logger) {
+        ILogger<BookWasRegisteredInRatingIntegrationEventHandler>? logger) : base(cancellationToken, correlationContext, logger)
+    {
         _commandExecutor = commandExecutor
             ?? throw new ArgumentNullException(nameof(commandExecutor));
     }
 
-    protected override async Task HandleAsync(BookWasRegisteredInRatingIntegrationEvent integrationEvent, CancellationToken cancellationToken) {
+    protected override async Task HandleAsync(BookWasRegisteredInRatingIntegrationEvent integrationEvent, CancellationToken cancellationToken)
+    {
         var command = new AddBookCommand(
             integrationEvent.BookId, integrationEvent.Name, integrationEvent.Author);
 

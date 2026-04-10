@@ -5,7 +5,8 @@ namespace CqrsWithEntityFrameworkExecuting.DomainModel.Commands;
 /// <summary>
 /// Событие удаления книги из рейтинга
 /// </summary>
-public class BookWasRemovedFromRatingDomainEvent : DomainEvent {
+public class BookWasRemovedFromRatingDomainEvent : DomainEvent
+{
     /// <summary>
     /// Создает объект класса BookWasRemovedFromRatingDomainEvent
     /// </summary>

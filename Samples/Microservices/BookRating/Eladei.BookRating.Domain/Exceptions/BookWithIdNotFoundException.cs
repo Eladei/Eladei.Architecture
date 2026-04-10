@@ -5,7 +5,8 @@ namespace Eladei.BookRating.Domain.Exceptions;
 /// <summary>
 /// Книга с указанным идентификатором не найдена
 /// </summary>
-public sealed class BookWithIdNotFoundException : DomainLogicException {
+public sealed class BookWithIdNotFoundException : DomainLogicException
+{
     public BookWithIdNotFoundException() : base() { }
 
     public BookWithIdNotFoundException(string message) : base(message) { }

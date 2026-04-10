@@ -7,7 +7,8 @@ namespace Eladei.BookRating.Model.Entities;
 /// Книга
 /// </summary>
 [Index(nameof(Name), nameof(Author), IsUnique = true)]
-public class Book : EntityBase {
+public class Book : EntityBase
+{
     /// <summary>
     /// Уникальный идентификатор книги
     /// </summary>
