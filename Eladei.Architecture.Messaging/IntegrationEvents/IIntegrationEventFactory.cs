@@ -5,7 +5,8 @@ namespace Eladei.Architecture.Messaging.IntegrationEvents;
 /// <summary>
 /// Фабрика для формирования событий интеграции
 /// </summary>
-public interface IIntegrationEventFactory {
+public interface IIntegrationEventFactory
+{
     /// <summary>
     /// Создать событие интеграции на основе события предметной области
     /// </summary>

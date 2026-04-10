@@ -9,7 +9,8 @@ namespace Eladei.Architecture.Messaging.Kafka.IntegrationEvents;
 /// Базовый класс обработчика события интеграции для Kafka
 /// </summary>
 /// <typeparam name="E">Тип события интеграции</typeparam>
-public abstract class KafkaIntegrationEventHandlerBase<E> : IntegrationEventHandlerBase<E>, IHandleMessages<E> where E : IIntegrationEvent {
+public abstract class KafkaIntegrationEventHandlerBase<E> : IntegrationEventHandlerBase<E>, IHandleMessages<E> where E : IIntegrationEvent
+{
     /// <summary>
     /// Создает объект класса KafkaStatelessIntegrationEventHandlerBase
     /// </summary>
@@ -17,5 +18,5 @@ public abstract class KafkaIntegrationEventHandlerBase<E> : IntegrationEventHand
     /// <param name="correlationContext">Контекст корреляции</param>
     /// <param name="logger">Логгер</param>
     public KafkaIntegrationEventHandlerBase(CancellationToken cancellationToken, ICorrelationContext correlationContext, ILogger? logger = null)
-        : base(cancellationToken, correlationContext, logger){ }
+        : base(cancellationToken, correlationContext, logger) { }
 }

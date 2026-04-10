@@ -7,11 +7,13 @@ using Microsoft.Extensions.Logging;
 
 namespace CqrsWithEntityFrameworkExecuting;
 
-internal class Program {
+internal class Program
+{
     private static EfCommandExecutor<BookRatingDbContext> _commandExecutor;
     private static EfQueryExecutor<BookRatingDbContext> _queryExecutor;
 
-    static async Task Main(string[] args) {
+    static async Task Main(string[] args)
+    {
         SetExecutors();
 
         var registerBookCommand = new RegisterBookCommand("Капитанская дочка", "А.С.Пушкин");
@@ -31,10 +33,12 @@ internal class Program {
         await _commandExecutor.ExecuteAsync(removeBookCommand, CancellationToken.None);
     }
 
-    private static void SetExecutors() {
+    private static void SetExecutors()
+    {
         // Логгеры для команд и запросов
         var loggerFactory = LoggerFactory.Create(builder
-            => { builder.AddConsole(); });
+            =>
+        { builder.AddConsole(); });
 
         var commandLogger = loggerFactory.CreateLogger<EfCommandExecutorLogger>();
         var eventDaoLogger = loggerFactory.CreateLogger<MockOutboxDomainEventDao>();
@@ -56,7 +60,8 @@ internal class Program {
             new EfQueryExecutorLogger(queryLogger));
     }
 
-    private static void ShowBookInfo(BookInRatingReadModel book) {
+    private static void ShowBookInfo(BookInRatingReadModel book)
+    {
         Console.WriteLine(
 @$"
 Информация по зарегистрированной книге: 

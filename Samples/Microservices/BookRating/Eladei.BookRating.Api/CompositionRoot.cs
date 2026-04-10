@@ -35,11 +35,13 @@ namespace Eladei.BookRating.Api;
 /// <summary>
 /// Корень сборки сервиса
 /// </summary>
-public static class CompositionRoot {
+public static class CompositionRoot
+{
     /// <summary>
     /// Определяет зависимости сервиса
     /// </summary>
-    public static void DefineDependencies(WebApplicationBuilder appBuilder) {
+    public static void DefineDependencies(WebApplicationBuilder appBuilder)
+    {
         Env.Load();
 
         appBuilder.Services.AddAuthorization();
@@ -75,7 +77,8 @@ public static class CompositionRoot {
     /// Устанавливаем объекты для работы с БД
     /// </summary>
     /// <param name="services">Коллекция сервисов</param>
-    private static void SetDbServices(IServiceCollection services) {
+    private static void SetDbServices(IServiceCollection services)
+    {
         string connectionStr = EnvVariablesHelper.GetVariable<string>(EnvVariablesNames.DbConnectionString);
 
         services.AddDbContextPool<BookRatingDbContext>(
@@ -88,7 +91,8 @@ public static class CompositionRoot {
     /// Устанавливает перехватчики
     /// </summary>
     /// <param name="appBuilder">Строитель сервиса</param>
-    private static void SetLoggers(WebApplicationBuilder appBuilder) {
+    private static void SetLoggers(WebApplicationBuilder appBuilder)
+    {
         const string consoleOutputTemplate = "[{Timestamp:u} {Level}] [{CorrelationId}] {Message}{NewLine}{Exception}";
         const string fileOutputTemplate = consoleOutputTemplate;
         const string outputLogFile = "logs/log-.txt";
@@ -114,8 +118,10 @@ public static class CompositionRoot {
     /// Устанавливаем перехватчики
     /// </summary>
     /// <param name="services">Коллекция сервисов</param>
-    private static void SetInterceptors(IServiceCollection services) {
-        services.AddGrpc(options => {
+    private static void SetInterceptors(IServiceCollection services)
+    {
+        services.AddGrpc(options =>
+        {
             options.Interceptors.Add<CorrelationIdInterceptor>();
             options.Interceptors.Add<LoggerInterceptor>();
             options.Interceptors.Add<ErrorInterceptor>();
@@ -126,8 +132,10 @@ public static class CompositionRoot {
     /// Устанавливает jobs
     /// </summary>
     /// <param name="services">Коллекция сервисов</param>
-    private static void SetJobs(IServiceCollection services) {
-        var integrationEventsSenderJobConfig = new OutboxIntegrationEventsSenderJobConfig {
+    private static void SetJobs(IServiceCollection services)
+    {
+        var integrationEventsSenderJobConfig = new OutboxIntegrationEventsSenderJobConfig
+        {
             ReservingTimeInSeconds = EnvVariablesHelper.GetVariable<uint>(
                 EnvVariablesNames.IntegrationEventsReservingTimeForSendingInSeconds),
             MaxEventsToReserve = EnvVariablesHelper.GetVariable<uint>(
@@ -136,14 +144,16 @@ public static class CompositionRoot {
 
         services.AddSingleton<OutboxIntegrationEventsSenderJobConfig>(integrationEventsSenderJobConfig);
 
-        services.AddQuartz(q => {
+        services.AddQuartz(q =>
+        {
             var outOfDateServersCron = EnvVariablesHelper
                 .GetVariable<string>(EnvVariablesNames.IntegrationEventsSenderJobCron);
 
             q.AddNewJob<OutboxIntegrationEventsSenderJob>(outOfDateServersCron);
         });
 
-        services.AddQuartzHostedService(options => {
+        services.AddQuartzHostedService(options =>
+        {
             options.WaitForJobsToComplete = true;
         });
     }
@@ -152,7 +162,8 @@ public static class CompositionRoot {
     /// Конфигурирует шину событий
     /// </summary>
     /// <param name="services">Службы текущего сервиса опроса</param>
-    private static void SetUpEventBus (IServiceCollection services) {
+    private static void SetUpEventBus(IServiceCollection services)
+    {
         var host = EnvVariablesHelper.GetVariable<string>(EnvVariablesNames.KafkaHost);
         var port = EnvVariablesHelper.GetVariable<ushort>(EnvVariablesNames.KafkaPort);
 
@@ -166,8 +177,10 @@ public static class CompositionRoot {
         var integrationEventsHandlingRetriesCount = EnvVariablesHelper
             .GetVariable<int>(EnvVariablesNames.IntegrationEventsHandlingRetriesCount);
 
-        services.AddSingleton<IIntegrationEventBus>(provider => {
-            var producerConfig = new ProducerConfig() {
+        services.AddSingleton<IIntegrationEventBus>(provider =>
+        {
+            var producerConfig = new ProducerConfig()
+            {
                 BootstrapServers = host,
                 MessageTimeoutMs = 5000,
                 RequestTimeoutMs = 3000,
@@ -181,7 +194,8 @@ public static class CompositionRoot {
                 AllowAutoCreateTopics = true, // В production избегать данной опции и создавать топики предварительно
             };
 
-            var consumerConfig = new ConsumerConfig() {
+            var consumerConfig = new ConsumerConfig()
+            {
                 BootstrapServers = host,
                 GroupId = groupId,
                 EnableAutoCommit = false,
@@ -202,7 +216,8 @@ public static class CompositionRoot {
             var kafkaBus = Configure.With(handlerActivator)
                 .Logging(l => l.MicrosoftExtensionsLogging(kafkaLogger))
                 .Transport(t => t.UseKafka(kafkaEndpoint, topic, producerConfig, consumerConfig))
-                .Options(o => {
+                .Options(o =>
+                {
                     o.SetMaxParallelism(1);
                     o.InsertStepAfterAutoHeadersOutgoingStep(new AddKafkaKeyHeaderByEventIdStepInterceptor());
                     o.RetryStrategy(

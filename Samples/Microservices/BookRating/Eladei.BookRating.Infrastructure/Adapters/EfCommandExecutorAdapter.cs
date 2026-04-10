@@ -8,13 +8,15 @@ namespace Eladei.BookRating.Infrastructure.Adapters;
 /// <summary>
 /// Адаптер исполнителя команд
 /// </summary>
-public class EfCommandExecutorAdapter : ICommandExecutor {
+public class EfCommandExecutorAdapter : ICommandExecutor
+{
     private readonly IEfCommandExecutor<BookRatingDbContext> _commandExecutor;
     private readonly ILogger<EfCommandExecutorAdapter> _logger;
 
     public EfCommandExecutorAdapter(
         IEfCommandExecutor<BookRatingDbContext> commandExecutor,
-        ILogger<EfCommandExecutorAdapter> logger) {
+        ILogger<EfCommandExecutorAdapter> logger)
+    {
         _commandExecutor = commandExecutor
             ?? throw new ArgumentNullException(nameof(commandExecutor));
 
@@ -22,8 +24,10 @@ public class EfCommandExecutorAdapter : ICommandExecutor {
             ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public Task ExecuteAsync(ICommand command, CancellationToken ct) {
-        if (command is not IEfCommand<BookRatingDbContext> efCommand) {
+    public Task ExecuteAsync(ICommand command, CancellationToken ct)
+    {
+        if (command is not IEfCommand<BookRatingDbContext> efCommand)
+        {
             var invalidOperEx = new InvalidOperationException(
                 $"{nameof(EfCommandExecutorAdapter)} supports only {nameof(IEfCommand<BookRatingDbContext>)}");
 
@@ -35,8 +39,10 @@ public class EfCommandExecutorAdapter : ICommandExecutor {
         return _commandExecutor.ExecuteAsync(efCommand, ct);
     }
 
-    public Task<R> ExecuteAsync<R>(ICommand<R> command, CancellationToken ct) {
-        if (command is not IEfCommand<BookRatingDbContext, R> efCommand) {
+    public Task<R> ExecuteAsync<R>(ICommand<R> command, CancellationToken ct)
+    {
+        if (command is not IEfCommand<BookRatingDbContext, R> efCommand)
+        {
             var invalidOperEx = new InvalidOperationException(
                 $"{nameof(EfCommandExecutorAdapter)} supports only {nameof(IEfCommand<BookRatingDbContext, R>)}");
 

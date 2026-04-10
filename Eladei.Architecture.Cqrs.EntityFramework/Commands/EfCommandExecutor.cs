@@ -16,7 +16,8 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 /// необходима реализация интерфейса IEfOutboxDomainEventDao
 /// </remarks>
 /// <typeparam name="T">Контекст данных</typeparam>
-public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
+public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
+{
     protected readonly IDbContextFactory<T> _contextFactory;
     protected readonly IOperationExecutionPolicyService _executionRetryPolicy;
     protected readonly IEfOutboxDomainEventDao<T> _domainEventDao;
@@ -34,7 +35,8 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
         IDbContextFactory<T> contextFactory,
         IOperationExecutionPolicyService executionPolicyService,
         IEfOutboxDomainEventDao<T> domainEventDao,
-        IEfCommandExecutorLogger? logger = null) {
+        IEfCommandExecutorLogger? logger = null)
+    {
         _contextFactory = contextFactory
             ?? throw new ArgumentNullException(nameof(contextFactory));
 
@@ -47,25 +49,29 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
         _logger = logger;
     }
 
-    public virtual async Task ExecuteAsync(IEfCommand<T> command, CancellationToken cancellationToken) {
+    public virtual async Task ExecuteAsync(IEfCommand<T> command, CancellationToken cancellationToken)
+    {
         var commandName = command.GetType().Name;
 
         _logger?.ExecutingStarted(commandName);
 
         var commandPolicy = _executionRetryPolicy.GetExecutionPolicy(command);
 
-        for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++) {
+        for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++)
+        {
             command.ClearEvents();
 
             using var context = await CreateDbContextAsync(commandName, cancellationToken);
 
-            try {
+            try
+            {
                 var continueExecuting = await command.BeforeExecuteAsync(context, cancellationToken);
 
                 if (!continueExecuting)
                     return;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger?.CriticalError(commandName, ex);
 
                 throw;
@@ -75,7 +81,8 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
 
             using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
-            try {
+            try
+            {
                 await command.ExecuteAsync(context, cancellationToken);
 
                 await SaveDomainEvents(command.Events, context, cancellationToken);
@@ -88,14 +95,16 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
 
                 return;
             }
-            catch (DomainLogicException ex) {
+            catch (DomainLogicException ex)
+            {
                 await transaction.RollbackAsync(cancellationToken);
 
                 _logger?.DomainLogicError(commandName, ex);
 
                 throw;
             }
-            catch (DbUpdateException ex) {
+            catch (DbUpdateException ex)
+            {
                 await transaction.RollbackAsync(cancellationToken);
 
                 foundEx = ex;
@@ -103,7 +112,8 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
                 await HandleDbUpdateException(
                     commandName, ex, attempt, commandPolicy.MaxAttemptsCount, cancellationToken);
             }
-            catch (OperationCanceledException ex) {
+            catch (OperationCanceledException ex)
+            {
                 await transaction.RollbackAsync(cancellationToken);
 
                 foundEx = ex;
@@ -112,7 +122,8 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
 
                 throw;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 await transaction.RollbackAsync(cancellationToken);
 
                 foundEx = ex;
@@ -120,7 +131,8 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
                 _logger?.CriticalError(commandName, foundEx);
             }
 
-            if (!commandPolicy.ShouldRetry(foundEx, attempt)) {
+            if (!commandPolicy.ShouldRetry(foundEx, attempt))
+            {
                 var errorMsg = string.Format(
                     Resources.CommandDbUpdateAttemptLimitReachedError,
                     commandName,
@@ -137,22 +149,26 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
         }
     }
 
-    public virtual async Task<R> ExecuteAsync<R>(IEfCommand<T, R> command, CancellationToken cancellationToken) {
+    public virtual async Task<R> ExecuteAsync<R>(IEfCommand<T, R> command, CancellationToken cancellationToken)
+    {
         var commandName = command.GetType().Name;
 
         _logger?.ExecutingStarted(commandName);
 
         var commandPolicy = _executionRetryPolicy.GetExecutionPolicy(command);
 
-        for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++) {
+        for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++)
+        {
             command.ClearEvents();
 
             using var context = await CreateDbContextAsync(commandName, cancellationToken);
 
-            try {
+            try
+            {
                 await command.BeforeExecuteAsync(context, cancellationToken);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger?.CriticalError(commandName, ex);
 
                 throw;
@@ -162,7 +178,8 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
 
             using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
-            try {
+            try
+            {
                 var result = await command.ExecuteAsync(context, cancellationToken);
 
                 await SaveDomainEvents(command.Events, context, cancellationToken);
@@ -175,14 +192,16 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
 
                 return result;
             }
-            catch (DomainLogicException ex) {
+            catch (DomainLogicException ex)
+            {
                 await transaction.RollbackAsync(cancellationToken);
 
                 _logger?.DomainLogicError(commandName, ex);
 
                 throw;
             }
-            catch (DbUpdateException ex) {
+            catch (DbUpdateException ex)
+            {
                 await transaction.RollbackAsync(cancellationToken);
 
                 foundEx = ex;
@@ -190,22 +209,25 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
                 await HandleDbUpdateException(
                     commandName, ex, attempt, commandPolicy.MaxAttemptsCount, cancellationToken);
             }
-            catch (OperationCanceledException ex) {
+            catch (OperationCanceledException ex)
+            {
                 await transaction.RollbackAsync(cancellationToken);
 
                 _logger?.ExecutingCancelled(commandName, ex);
 
                 throw;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 await transaction.RollbackAsync(cancellationToken);
 
-                foundEx = ex; 
-                
+                foundEx = ex;
+
                 _logger?.CriticalError(commandName, foundEx);
             }
 
-            if (!commandPolicy.ShouldRetry(foundEx, attempt)) {
+            if (!commandPolicy.ShouldRetry(foundEx, attempt))
+            {
                 var errorMsg = string.Format(
                     Resources.CommandDbUpdateAttemptLimitReachedError,
                     commandName,
@@ -224,10 +246,12 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
         throw new UnreachableException(Resources.UnreachableCodeError);
     }
 
-    protected virtual async Task<T> CreateDbContextAsync(string commandName, CancellationToken cancellationToken) {
+    protected virtual async Task<T> CreateDbContextAsync(string commandName, CancellationToken cancellationToken)
+    {
         T context = await _contextFactory.CreateDbContextAsync(cancellationToken);
 
-        if (context is null) {
+        if (context is null)
+        {
             var invalidOperEx = new InvalidOperationException(Resources.CantCreateDbContext);
 
             _logger?.CriticalError(commandName, invalidOperEx);
@@ -250,15 +274,19 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
     /// <exception cref="DbRemovingObjectWasRemovedException"></exception>
     /// <exception cref="DbUnknownEntityStateException"></exception>
     protected virtual async Task HandleDbUpdateException(
-        string commandName, DbUpdateException ex, 
-        uint attempt, uint maxAttemptsCount, CancellationToken cancellationToken) {
-        foreach (var entry in ex.Entries) {
+        string commandName, DbUpdateException ex,
+        uint attempt, uint maxAttemptsCount, CancellationToken cancellationToken)
+    {
+        foreach (var entry in ex.Entries)
+        {
             var databaseValues = await entry.GetDatabaseValuesAsync(cancellationToken);
 
             // Выбросить исключение, если изменяемый или удаляемый объект уже был удален,
             // или если добавляемый объект уже был добавлен
-            if (databaseValues == null) {
-                switch (entry.State) {
+            if (databaseValues == null)
+            {
+                switch (entry.State)
+                {
                     case EntityState.Added:
                     case EntityState.Unchanged:
                         break;
@@ -296,7 +324,8 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
     /// <param name="maxDelayInMilliseconds">Максимальная величина задержки в миллисекундах</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     protected virtual async Task DelayBeforeNewAttempt(
-        uint currentAttempt, uint maxDelayInMilliseconds, CancellationToken cancellationToken) {
+        uint currentAttempt, uint maxDelayInMilliseconds, CancellationToken cancellationToken)
+    {
 
         uint baseDelay = Math.Min(1000 * (uint)Math.Pow(2, currentAttempt - 1), maxDelayInMilliseconds);
 
@@ -311,7 +340,8 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext {
         await Task.Delay(delayMs, cancellationToken);
     }
 
-    protected virtual Task SaveDomainEvents(IReadOnlyCollection<IDomainEvent> domainEvents, T context, CancellationToken cancellationToken) {
+    protected virtual Task SaveDomainEvents(IReadOnlyCollection<IDomainEvent> domainEvents, T context, CancellationToken cancellationToken)
+    {
         if (domainEvents.Any())
             return _domainEventDao.SaveAsync(domainEvents, context, cancellationToken);
 

@@ -9,24 +9,28 @@ namespace CqrsWithDddExecuting.Application;
 /// <summary>
 /// Запрос информации о книге по ее идентификатору
 /// </summary>
-internal sealed class FindBookByIdQuery : DddQueryBase<BookInRatingReadModel> {
+internal sealed class FindBookByIdQuery : DddQueryBase<BookInRatingReadModel>
+{
     private readonly Guid _bookId;
 
     /// <summary>
     /// Создает объект класса FindBookByIdQuery
     /// </summary>
     /// <param name="bookId">Идентификатор книги</param>
-    public FindBookByIdQuery(Guid bookId) {
+    public FindBookByIdQuery(Guid bookId)
+    {
         _bookId = bookId;
     }
 
-    public override async Task<BookInRatingReadModel> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default) {
+    public override async Task<BookInRatingReadModel> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default)
+    {
         var bookRepository = repositoryFactory.CreateRepository<IBookRepository>();
 
         var foundBook = await bookRepository.FindByIdAsync(_bookId, cancellationToken)
             ?? throw new DomainLogicException($"Не найдена книга с указанным Id='{_bookId}'");
 
-        return new BookInRatingReadModel { 
+        return new BookInRatingReadModel
+        {
             BookId = foundBook.Id,
             Name = foundBook.Name,
             Author = foundBook.Author,

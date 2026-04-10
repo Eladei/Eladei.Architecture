@@ -8,14 +8,16 @@ namespace Eladei.BookRating.Api.Services;
 /// <summary>
 /// Сервис работы с рейтингом книг
 /// </summary>
-public sealed class BookRatingServiceV1 : BookRating.BookRatingBase {
+public sealed class BookRatingServiceV1 : BookRating.BookRatingBase
+{
     private readonly IOperationExecutor _operationExecutor;
 
     /// <summary>
     /// Создает объект класса BookRatingServiceV1
     /// </summary>
     /// <param name="operationExecutor">Исполнитель операций</param>
-    public BookRatingServiceV1(IOperationExecutor operationExecutor) {
+    public BookRatingServiceV1(IOperationExecutor operationExecutor)
+    {
         _operationExecutor = operationExecutor
             ?? throw new ArgumentNullException(nameof(operationExecutor));
     }
@@ -27,12 +29,14 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase {
     /// <param name="context">Контекст для вызова на стороне сервера</param>
     /// <returns>Ответ, содержащий результаты операции 
     /// регистрации книги в рейтинге</returns>
-    public override async Task<RegisterBookApiResponse> RegisterBook(RegisterBookApiRequest request, ServerCallContext context) {
+    public override async Task<RegisterBookApiResponse> RegisterBook(RegisterBookApiRequest request, ServerCallContext context)
+    {
         var command = new RegisterBookCommand(request.Name, request.Author);
-        
+
         var bookId = await _operationExecutor.ExecuteAsync(command, context.CancellationToken);
 
-        return new RegisterBookApiResponse {
+        return new RegisterBookApiResponse
+        {
             BookId = bookId.ToString()
         };
     }
@@ -44,7 +48,8 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase {
     /// <param name="context">Контекст для вызова на стороне сервера</param>
     /// <returns>Ответ, содержащий результаты операции изменения 
     /// информации о книге в рейтинге</returns>
-    public override async Task<UpdateBookApiResponse> UpdateBook(UpdateBookApiRequest request, ServerCallContext context) {
+    public override async Task<UpdateBookApiResponse> UpdateBook(UpdateBookApiRequest request, ServerCallContext context)
+    {
         var bookId = new Guid(request.BookId);
 
         var command = new UpdateBookInfoCommand(bookId, request.Name, request.Author);
@@ -61,7 +66,8 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase {
     /// <param name="context">Контекст для вызова на стороне сервера</param>
     /// <returns>Ответ, содержащий результаты операции удаления
     /// книги из рейтинга</returns>
-    public override async Task<RemoveBookApiResponse> RemoveBook(RemoveBookApiRequest request, ServerCallContext context) {
+    public override async Task<RemoveBookApiResponse> RemoveBook(RemoveBookApiRequest request, ServerCallContext context)
+    {
         var bookId = new Guid(request.BookId);
 
         var command = new RemoveBookCommand(bookId);
@@ -78,7 +84,8 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase {
     /// <param name="context">Контекст для вызова на стороне сервера</param>
     /// <returns>Ответ, содержащий результаты операции голосования 
     /// за книгу в рейтинге</returns>
-    public override async Task<VoteForBookApiResponse> VoteForBook(VoteForBookApiRequest request, ServerCallContext context) {
+    public override async Task<VoteForBookApiResponse> VoteForBook(VoteForBookApiRequest request, ServerCallContext context)
+    {
         var command = new VoteForBookCommand(new Guid(request.BookId));
 
         await _operationExecutor.ExecuteAsync(command, context.CancellationToken);
@@ -92,17 +99,21 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase {
     /// <param name="request">Запрос на получение перечня книг, добавленных в рейтинг</param>
     /// <param name="context">Контекст для вызова на стороне сервера</param>
     /// <returns>Ответ, содержащий перечень книг, добавленных в рейтинг</returns>
-    public override async Task<GetBooksApiResponse> GetBooks(GetBooksApiRequest request, ServerCallContext context) {
+    public override async Task<GetBooksApiResponse> GetBooks(GetBooksApiRequest request, ServerCallContext context)
+    {
         var query = new BooksQuery(request.BooksPerPage, request.Page);
 
         var queryResult = await _operationExecutor.ExecuteAsync(query, context.CancellationToken);
 
-        var result = new GetBooksApiResponse {
+        var result = new GetBooksApiResponse
+        {
             TotalPages = queryResult.TotalPages
         };
-        
-        foreach(var book in queryResult.Result) {
-            result.AllPositions.Add(new BookInfoApiModel() {
+
+        foreach (var book in queryResult.Result)
+        {
+            result.AllPositions.Add(new BookInfoApiModel()
+            {
                 BookId = book.Id.ToString(),
                 Name = book.Name,
                 Author = book.Author,

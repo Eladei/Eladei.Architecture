@@ -7,7 +7,8 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 /// Запрос для работы с Entity Framework
 /// </summary>
 /// <typeparam name="T">Контекст данных</typeparam>
-public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> where T : DbContext {
+public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> where T : DbContext
+{
     private readonly uint _page;
     protected readonly uint? _elementsPerPage;
 
@@ -24,7 +25,8 @@ public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> wher
     /// <param name="elementsPerPage">Число элементов на страницу</param>
     /// <param name="page">Номер страницы, для которой будет вестись поиск</param>>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    protected EfPageQueryBase(uint? elementsPerPage = null, uint? page = null) {
+    protected EfPageQueryBase(uint? elementsPerPage = null, uint? page = null)
+    {
         if (elementsPerPage.HasValue)
             ArgumentOutOfRangeException.ThrowIfZero(elementsPerPage.Value);
 
@@ -35,12 +37,14 @@ public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> wher
         _page = page ?? 1;
     }
 
-    public override async Task<PageResult<R>> ExecuteAsync(T context, CancellationToken cancellationToken = default) {
+    public override async Task<PageResult<R>> ExecuteAsync(T context, CancellationToken cancellationToken = default)
+    {
         var result = await PerformAsync(context, cancellationToken);
 
         var pagesAdditionalInfo = await GetPagesAdditionalInfo(context, cancellationToken);
 
-        return new PageResult<R> {
+        return new PageResult<R>
+        {
             CurrentPage = _page,
             TotalPages = pagesAdditionalInfo.TotalPages,
             TotalElements = pagesAdditionalInfo.TotalElements,
@@ -64,14 +68,16 @@ public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> wher
     /// <returns>Общее количество элементов</returns>
     protected abstract Task<uint> GetAllElementsCount(T context, CancellationToken cancellationToken);
 
-    private async Task<PageAdditionalInfo> GetPagesAdditionalInfo(T context, CancellationToken cancellationToken) {
+    private async Task<PageAdditionalInfo> GetPagesAdditionalInfo(T context, CancellationToken cancellationToken)
+    {
         var allElementsCount = await GetAllElementsCount(context, cancellationToken);
 
         var totalPages = _elementsPerPage.HasValue
             ? (uint)Math.Ceiling((double)allElementsCount / _elementsPerPage.Value)
             : allElementsCount;
 
-        return new PageAdditionalInfo {
+        return new PageAdditionalInfo
+        {
             TotalPages = totalPages,
             TotalElements = allElementsCount
         };
@@ -80,7 +86,8 @@ public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> wher
     /// <summary>
     /// Дополнительная информация о странице
     /// </summary>
-    private record PageAdditionalInfo {
+    private record PageAdditionalInfo
+    {
         /// <summary>
         /// Общее количество страниц
         /// </summary>

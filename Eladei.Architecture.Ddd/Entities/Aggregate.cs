@@ -6,14 +6,16 @@ namespace Eladei.Architecture.Ddd.Entities;
 /// Агрегат
 /// </summary>
 /// <typeparam name="T">Тип идентификатора агрегата</typeparam>
-public abstract class Aggregate<T> : IAggregate<T> {
+public abstract class Aggregate<T> : IAggregate<T>
+{
     private readonly List<IDomainEvent> _domainEvents;
 
     /// <summary>
     /// Создает объект класса Aggregate
     /// </summary>
     /// <param name="id">Идентификатор сущности</param>
-    public Aggregate(T id) { 
+    public Aggregate(T id)
+    {
         Id = id;
         _domainEvents = [];
     }
@@ -32,7 +34,8 @@ public abstract class Aggregate<T> : IAggregate<T> {
     /// Добавить доменное событие
     /// </summary>
     /// <param name="domainEvent">Доменное событие</param>
-    public void AddDomainEvent(IDomainEvent domainEvent) {
+    public void AddDomainEvent(IDomainEvent domainEvent)
+    {
         if (_domainEvents.Any(x => x.EventId == domainEvent.EventId))
             throw new DomainLogicException(
                 $"DomainEvent already added to aggregate '{nameof(Aggregate<T>)}' with Id='{Id}'");

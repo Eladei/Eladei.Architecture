@@ -6,7 +6,8 @@ namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 /// <summary>
 /// Команда
 /// </summary>
-public interface IDddCommand : ICommand {
+public interface IDddCommand : ICommand
+{
     /// <summary>
     /// Доменные события
     /// </summary>
@@ -38,7 +39,8 @@ public interface IDddCommand : ICommand {
 /// Команда, возвращающая результат
 /// </summary>
 /// <typeparam name="R">Тип результата</typeparam>
-public interface IDddCommand<R> : ICommand<R> {
+public interface IDddCommand<R> : ICommand<R>
+{
     /// <summary>
     /// Доменные события
     /// </summary>

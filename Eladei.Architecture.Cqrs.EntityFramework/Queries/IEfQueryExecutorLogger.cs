@@ -3,7 +3,8 @@
 /// <summary>
 /// Логгер исполнителя запросов
 /// </summary>
-public interface IEfQueryExecutorLogger {
+public interface IEfQueryExecutorLogger
+{
     /// <summary>
     /// Логировать начало обработки запроса
     /// </summary>

@@ -9,7 +9,8 @@ namespace Eladei.BookInfo.Domain.Commands;
 /// <summary>
 /// Команда обновления дополнительной информации о книге
 /// </summary>
-public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbContext> {
+public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbContext>
+{
     private readonly Guid _bookId;
     private readonly AdditionalBookInfo _additionalInfo;
 
@@ -19,16 +20,18 @@ public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbCo
     /// <param name="bookId">Идентификатор книги</param>
     /// <param name="additionalInfo">Дополнительная информация о книге</param>
     /// <exception cref="ArgumentException"></exception>
-    public UpdateAdditiotalBookInfoCommand(Guid bookId, AdditionalBookInfo additionalInfo) {
+    public UpdateAdditiotalBookInfoCommand(Guid bookId, AdditionalBookInfo additionalInfo)
+    {
         _bookId = bookId;
         _additionalInfo = additionalInfo
             ?? throw new ArgumentNullException(nameof(additionalInfo));
     }
 
     /// <exception cref="BookWithIdNotFoundException"></exception>
-    public override async Task ExecuteAsync(BookInfoDbContext context, CancellationToken cancellationToken) {
+    public override async Task ExecuteAsync(BookInfoDbContext context, CancellationToken cancellationToken)
+    {
         var book = await context.BookInformations
-            .FirstOrDefaultAsync(s => s.Id == _bookId, cancellationToken) 
+            .FirstOrDefaultAsync(s => s.Id == _bookId, cancellationToken)
             ?? throw new BookWithIdNotFoundException(Resources.BookWithCurrentIdNotExists, _bookId);
 
         book.Pages = _additionalInfo.Pages;
@@ -43,7 +46,8 @@ public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbCo
 /// <summary>
 /// Дополнительная информация о книге
 /// </summary>
-public record AdditionalBookInfo {
+public record AdditionalBookInfo
+{
     /// <summary>
     /// Число страниц
     /// </summary>

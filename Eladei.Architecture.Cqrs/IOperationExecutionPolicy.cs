@@ -3,7 +3,8 @@
 /// <summary>
 /// Политика выполнения операции
 /// </summary>
-public interface IOperationExecutionPolicy {
+public interface IOperationExecutionPolicy
+{
     /// <summary>
     /// Допустимое число попыток выполнения операции
     /// </summary>

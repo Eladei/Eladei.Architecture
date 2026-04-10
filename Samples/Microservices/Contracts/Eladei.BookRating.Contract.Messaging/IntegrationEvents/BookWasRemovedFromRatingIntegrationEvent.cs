@@ -5,7 +5,8 @@ namespace Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 /// <summary>
 /// Книга была удалена из рейтинга
 /// </summary>
-public class BookWasRemovedFromRatingIntegrationEvent : IntegrationEvent {
+public class BookWasRemovedFromRatingIntegrationEvent : IntegrationEvent
+{
     /// <summary>
     /// Создает объект класса BookWasRemovedFromRatingIntegrationEvent
     /// </summary>

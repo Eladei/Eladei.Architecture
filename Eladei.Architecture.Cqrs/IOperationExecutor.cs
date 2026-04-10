@@ -6,4 +6,4 @@ namespace Eladei.Architecture.Cqrs;
 /// <summary>
 /// Исполнитель операций
 /// </summary>
-public interface IOperationExecutor : ICommandExecutor, IQueryExecutor {}
+public interface IOperationExecutor : ICommandExecutor, IQueryExecutor { }

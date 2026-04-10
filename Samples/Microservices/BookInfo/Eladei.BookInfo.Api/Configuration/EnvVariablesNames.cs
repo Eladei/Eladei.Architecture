@@ -3,7 +3,8 @@
 /// <summary>
 /// Переменные окружения
 /// </summary>
-public static class EnvVariablesNames {
+public static class EnvVariablesNames
+{
     /// <summary>
     /// Строка подключения к БД
     /// </summary>

@@ -10,7 +10,8 @@ namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 /// Сохраняйте события в той же транзакции, что и другие данные.
 /// Для этого передавайте в метод SaveAsync ту же фабрику репозиториев, 
 /// что используется в единице работы</remarks>
-public interface IDddOutboxDomainEventDao {
+public interface IDddOutboxDomainEventDao
+{
     /// <summary>
     /// Сохранить событие предметной области в постоянное хранилище
     /// </summary>

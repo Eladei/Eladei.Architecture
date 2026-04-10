@@ -4,14 +4,17 @@ using Rebus.Pipeline.Send;
 
 namespace Eladei.Architecture.Messaging.Kafka.Extensions;
 
-public static class OptionsConfigurerExtensions {
+public static class OptionsConfigurerExtensions
+{
     /// <summary>
     /// Insert the step before adding the kafka temporary header before the serialization step
     /// </summary>
     /// <param name="configurer"></param>
     /// <param name="outgoingStep">Custom interceptor</param>
-    public static void InsertStepAfterAutoHeadersOutgoingStep(this OptionsConfigurer configurer, IOutgoingStep outgoingStep) {
-        configurer.Decorate<IPipeline>(c => {
+    public static void InsertStepAfterAutoHeadersOutgoingStep(this OptionsConfigurer configurer, IOutgoingStep outgoingStep)
+    {
+        configurer.Decorate<IPipeline>(c =>
+        {
             var pipeline = c.Get<IPipeline>();
             return new PipelineStepInjector(pipeline)
                 .OnSend(outgoingStep, PipelineRelativePosition.After, typeof(AutoHeadersOutgoingStep));

@@ -3,7 +3,8 @@
 /// <summary>
 /// Доменное событие
 /// </summary>
-public interface IDomainEvent {
+public interface IDomainEvent
+{
     /// <summary>
     /// Id события
     /// </summary>

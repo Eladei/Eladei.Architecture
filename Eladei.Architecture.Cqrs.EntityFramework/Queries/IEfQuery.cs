@@ -6,7 +6,8 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 /// Запрос для работы с EntityFramework
 /// </summary>
 /// <typeparam name="R">Тип результата</typeparam>
-public interface IEfQuery<T, R> : IQuery<R> {
+public interface IEfQuery<T, R> : IQuery<R>
+{
     /// <summary>
     /// Выполнить запрос
     /// </summary>

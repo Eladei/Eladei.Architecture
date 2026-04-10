@@ -14,13 +14,15 @@ namespace Eladei.BookRating.UnitTests.Commands;
 /// Unit-тесты команды RegisterBookCommand
 /// </summary>
 /// <see cref="RegisterBookCommand"/>
-public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbContext> {
+public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbContext>
+{
     private List<Book> _books = new();
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public Task Command_Should_Throw_ArgumentException_When_Name_Is_Null_Or_Empty(string name) {
+    public Task Command_Should_Throw_ArgumentException_When_Name_Is_Null_Or_Empty(string? name)
+    {
         // Arrange
         var author = "А.С. Пушкин";
 
@@ -34,7 +36,8 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public Task Command_Should_Throw_ArgumentException_When_Author_Is_Null_Or_Empty(string author) {
+    public Task Command_Should_Throw_ArgumentException_When_Author_Is_Null_Or_Empty(string? author)
+    {
         // Arrange
         var name = "Капитанская дочка";
 
@@ -46,7 +49,8 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
     }
 
     [Fact]
-    public async Task Command_Should_Return_Id_Of_Registered_Book() {
+    public async Task Command_Should_Return_Id_Of_Registered_Book()
+    {
         // Arrange
         var name = "Капитанская дочка";
         var author = "А.С. Пушкин";
@@ -60,7 +64,8 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
     }
 
     [Fact]
-    public async Task Command_Should_Generate_BookWasRegisteredInRatingDomainEvent() {
+    public async Task Command_Should_Generate_BookWasRegisteredInRatingDomainEvent()
+    {
         // Arrange
         var name = "Капитанская дочка";
         var author = "А.С. Пушкин";
@@ -80,7 +85,8 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
         evnt.Author.ShouldBe(author);
     }
 
-    protected override BookRatingDbContext SetUpDbContext(Mock<BookRatingDbContext> contextMock) {
+    protected override BookRatingDbContext SetUpDbContext(Mock<BookRatingDbContext> contextMock)
+    {
         contextMock.Setup(s => s.Books).ReturnsDbSet(_books);
 
         return contextMock.Object;

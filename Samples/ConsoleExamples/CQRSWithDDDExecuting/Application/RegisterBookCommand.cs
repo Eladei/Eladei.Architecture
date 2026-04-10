@@ -7,7 +7,8 @@ namespace CqrsWithDddExecuting.Application;
 /// <summary>
 /// Команда регистрации книги
 /// </summary>
-internal sealed class RegisterBookCommand : DddCommandWithResultBase<Guid> {
+internal sealed class RegisterBookCommand : DddCommandWithResultBase<Guid>
+{
     private readonly string _name;
     private readonly string _author;
 
@@ -16,12 +17,14 @@ internal sealed class RegisterBookCommand : DddCommandWithResultBase<Guid> {
     /// </summary>
     /// <param name="name">Название книги</param>
     /// <param name="author">Автор книги</param>
-    public RegisterBookCommand(string name, string author) {
+    public RegisterBookCommand(string name, string author)
+    {
         _name = name;
         _author = author;
     }
 
-    public override async Task<Guid> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default) {
+    public override async Task<Guid> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default)
+    {
         var bookRepository = repositoryFactory.CreateRepository<IBookRepository>();
 
         var bookId = Guid.NewGuid();

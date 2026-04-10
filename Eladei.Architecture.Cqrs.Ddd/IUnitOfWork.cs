@@ -1,9 +1,10 @@
-﻿namespace Eladei.Architecture.Cqrs.Ddd; 
+﻿namespace Eladei.Architecture.Cqrs.Ddd;
 
 /// <summary>
 /// Единица работы
 /// </summary>
-public interface IUnitOfWork {
+public interface IUnitOfWork
+{
     /// <summary>
     /// Начать транзакцию
     /// </summary>

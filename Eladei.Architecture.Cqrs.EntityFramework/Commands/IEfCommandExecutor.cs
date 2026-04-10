@@ -6,7 +6,8 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 /// Исполнитель команд, работающий с Entity Framework
 /// </summary>
 /// <typeparam name="T">Контекст данных</typeparam>
-public interface IEfCommandExecutor<T> where T : DbContext {
+public interface IEfCommandExecutor<T> where T : DbContext
+{
     /// <summary>
     /// Выполнить команду
     /// </summary>

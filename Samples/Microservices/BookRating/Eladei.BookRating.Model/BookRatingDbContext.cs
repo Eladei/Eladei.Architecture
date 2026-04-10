@@ -8,7 +8,8 @@ namespace Eladei.BookRating.Model;
 /// <summary>
 /// Контекст базы данных для работы с рейтингом книг
 /// </summary>
-public class BookRatingDbContext : DbContext {
+public class BookRatingDbContext : DbContext
+{
     public BookRatingDbContext() : base() { }
 
     public BookRatingDbContext(DbContextOptions<BookRatingDbContext> contextOptions) : base(contextOptions) { }
@@ -20,7 +21,8 @@ public class BookRatingDbContext : DbContext {
 
     public virtual DbSet<IntegrationEventToSend> IntegrationEvents { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Book>()
@@ -29,9 +31,12 @@ public class BookRatingDbContext : DbContext {
             .Property(e => e.Version).IsRowVersion();
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) {
-        foreach (var entry in ChangeTracker.Entries()) {
-            switch (entry.State) {
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            switch (entry.State)
+            {
                 case EntityState.Added:
                     ((EntityBase)entry.Entity).CreatedAtUtc = DateTime.UtcNow;
                     break;

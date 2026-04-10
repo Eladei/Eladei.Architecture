@@ -1,6 +1,6 @@
 ﻿using Eladei.Architecture.Ddd.Repositories;
 
-namespace Eladei.Architecture.Cqrs.Ddd; 
+namespace Eladei.Architecture.Cqrs.Ddd;
 
 /// <summary>
 /// Фабрика репозиториев
@@ -8,7 +8,8 @@ namespace Eladei.Architecture.Cqrs.Ddd;
 /// <remarks>Учитывайте, что создаваемый репозиторий 
 /// должен работать с тем же контекстом, что и единица работы. 
 /// Это необходимо для сохранения изменений единицей работы в одной транзакции</remarks>
-public interface IRepositoryFactory {
+public interface IRepositoryFactory
+{
     /// <summary>
     /// Создает репозиторий
     /// </summary>

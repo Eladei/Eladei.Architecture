@@ -11,7 +11,8 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 /// с последующей публикацией в отдельном процессе, например в job.
 /// Сохраняйте события в той же транзакции, что и другие данные.
 /// Для этого передавайте в метод SaveAsync тот же контекст данных</remarks>
-public interface IEfOutboxDomainEventDao<T> where T : DbContext {
+public interface IEfOutboxDomainEventDao<T> where T : DbContext
+{
     /// <summary>
     /// Сохранить доменное событие в постоянное хранилище
     /// </summary>

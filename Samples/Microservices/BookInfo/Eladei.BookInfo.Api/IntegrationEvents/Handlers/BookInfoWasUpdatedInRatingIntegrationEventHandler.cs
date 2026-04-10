@@ -10,7 +10,8 @@ namespace Eladei.BookInfo.Api.IntegrationEvents.Handlers;
 /// <summary>
 /// Обработчик события обновления информации о книге в рейтинге
 /// </summary>
-public sealed class BookInfoWasUpdatedInRatingIntegrationEventHandler : KafkaIntegrationEventHandlerBase<BookInfoWasUpdatedInRatingIntegrationEvent> {
+public sealed class BookInfoWasUpdatedInRatingIntegrationEventHandler : KafkaIntegrationEventHandlerBase<BookInfoWasUpdatedInRatingIntegrationEvent>
+{
     private readonly ICommandExecutor _commandExecutor;
 
     /// <summary>
@@ -25,12 +26,14 @@ public sealed class BookInfoWasUpdatedInRatingIntegrationEventHandler : KafkaInt
         ICommandExecutor commandExecutor,
         ICorrelationContext correlationContext,
         CancellationToken cancellationToken,
-        ILogger<BookInfoWasUpdatedInRatingIntegrationEventHandler>? logger) : base(cancellationToken, correlationContext, logger) {
-        _commandExecutor = commandExecutor 
+        ILogger<BookInfoWasUpdatedInRatingIntegrationEventHandler>? logger) : base(cancellationToken, correlationContext, logger)
+    {
+        _commandExecutor = commandExecutor
             ?? throw new ArgumentNullException(nameof(commandExecutor));
     }
 
-    protected override async Task HandleAsync(BookInfoWasUpdatedInRatingIntegrationEvent integrationEvent, CancellationToken cancellationToken) {
+    protected override async Task HandleAsync(BookInfoWasUpdatedInRatingIntegrationEvent integrationEvent, CancellationToken cancellationToken)
+    {
         var command = new UpdateMainBookInfoCommand(
             integrationEvent.BookId, integrationEvent.Name, integrationEvent.Author);
 

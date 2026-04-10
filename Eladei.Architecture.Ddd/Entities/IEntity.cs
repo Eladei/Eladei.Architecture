@@ -4,7 +4,8 @@
 /// Сущность
 /// </summary>
 /// <typeparam name="T">Тип идентификатора сущности</typeparam>
-public interface IEntity<T> {
+public interface IEntity<T>
+{
     /// <summary>
     /// Идентификатор сущности
     /// </summary>

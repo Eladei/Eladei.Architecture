@@ -8,7 +8,8 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 /// </summary>
 /// <typeparam name="T">Контекст данных</typeparam>
 /// <remarks>Команда напрямую работает с контекстом данных, реализует transaction script</remarks>
-public abstract class EfCommandBase<T> : IEfCommand<T> where T : DbContext {
+public abstract class EfCommandBase<T> : IEfCommand<T> where T : DbContext
+{
     private readonly List<IDomainEvent> _events = [];
 
     /// <summary>
@@ -16,11 +17,13 @@ public abstract class EfCommandBase<T> : IEfCommand<T> where T : DbContext {
     /// </summary>
     public IReadOnlyCollection<IDomainEvent> Events => _events;
 
-    public void ClearEvents() { 
+    public void ClearEvents()
+    {
         _events.Clear();
     }
 
-    public virtual Task<bool> BeforeExecuteAsync(T context, CancellationToken cancellationToken = default) {
+    public virtual Task<bool> BeforeExecuteAsync(T context, CancellationToken cancellationToken = default)
+    {
         return Task.FromResult(true);
     }
 
@@ -32,7 +35,8 @@ public abstract class EfCommandBase<T> : IEfCommand<T> where T : DbContext {
     /// <param name="domainEvents">Доменные события</param>
     /// <remarks>Добавленные доменные события доступны через коллекцию Events.
     /// Используются для возможности сохранения событий в outbox обработчиком команд</remarks>
-    protected void SaveDomainEvents(params IDomainEvent[] domainEvents) {
+    protected void SaveDomainEvents(params IDomainEvent[] domainEvents)
+    {
         _events.AddRange(domainEvents);
     }
 }

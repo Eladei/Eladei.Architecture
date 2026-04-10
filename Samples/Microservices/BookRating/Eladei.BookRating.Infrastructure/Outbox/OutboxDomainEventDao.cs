@@ -9,7 +9,8 @@ namespace Eladei.BookRating.Infrastructure.Outbox;
 /// <summary>
 /// Служба сохранения доменных событий в outbox
 /// </summary>
-public sealed class OutboxDomainEventDao : IEfOutboxDomainEventDao<BookRatingDbContext> {
+public sealed class OutboxDomainEventDao : IEfOutboxDomainEventDao<BookRatingDbContext>
+{
     private readonly IIntegrationEventFactory _integrationEventFactory;
     private readonly ICorrelationContext _correlationContext;
 
@@ -21,7 +22,8 @@ public sealed class OutboxDomainEventDao : IEfOutboxDomainEventDao<BookRatingDbC
     /// <exception cref="ArgumentNullException"></exception>
     public OutboxDomainEventDao(
         IIntegrationEventFactory integrationEventFactory,
-        ICorrelationContext correlationContext) {
+        ICorrelationContext correlationContext)
+    {
         _integrationEventFactory = integrationEventFactory
             ?? throw new ArgumentNullException(nameof(integrationEventFactory));
 
@@ -29,7 +31,8 @@ public sealed class OutboxDomainEventDao : IEfOutboxDomainEventDao<BookRatingDbC
             ?? throw new ArgumentNullException(nameof(correlationContext));
     }
 
-    public Task SaveAsync(IReadOnlyCollection<IDomainEvent> domainEvents, BookRatingDbContext context, CancellationToken cancellationToken) {
+    public Task SaveAsync(IReadOnlyCollection<IDomainEvent> domainEvents, BookRatingDbContext context, CancellationToken cancellationToken)
+    {
         var command = new SaveDomainEventsToOutboxCommand(domainEvents, _integrationEventFactory, _correlationContext);
 
         return command.ExecuteAsync(context, cancellationToken);

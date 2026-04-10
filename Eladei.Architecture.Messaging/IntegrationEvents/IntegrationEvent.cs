@@ -3,13 +3,15 @@
 /// <summary>
 /// Событие интеграции
 /// </summary>
-public abstract class IntegrationEvent : IIntegrationEvent {
+public abstract class IntegrationEvent : IIntegrationEvent
+{
     /// <summary>
     /// Конструктор класса IntegrationEvent
     /// </summary>
     /// <param name="entityId">Id сущности, к которой относится событие</param>
     /// <param name="correlationId">Id для сквозного отслеживания</param>
-    public IntegrationEvent(Guid entityId, Guid correlationId) { 
+    public IntegrationEvent(Guid entityId, Guid correlationId)
+    {
         EventId = Guid.NewGuid();
         EntityId = entityId;
         CorrelationId = correlationId;

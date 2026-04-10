@@ -6,7 +6,8 @@ namespace Eladei.Architecture.Messaging.Kafka.IntegrationEvents;
 /// <summary>
 /// Фабрика обработчиков событий интеграции
 /// </summary>
-public interface IKafkaEventHandlerFactory {
+public interface IKafkaEventHandlerFactory
+{
     /// <summary>
     /// Создает обработчик события интеграции
     /// </summary>

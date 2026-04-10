@@ -5,7 +5,8 @@ namespace CqrsWithDddExecuting.DomainModel;
 /// <summary>
 /// Репозиторий книг
 /// </summary>
-public interface IBookRepository : IRepository {
+public interface IBookRepository : IRepository
+{
     /// <summary>
     /// Сохранить книгу
     /// </summary>

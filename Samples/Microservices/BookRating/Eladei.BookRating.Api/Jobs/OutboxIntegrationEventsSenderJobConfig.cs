@@ -1,9 +1,10 @@
-﻿namespace Eladei.BookRating.Api.Jobs; 
+﻿namespace Eladei.BookRating.Api.Jobs;
 
 /// <summary>
 /// Конфигурация job отправки событий интеграции из outbox
 /// </summary>
-public sealed record OutboxIntegrationEventsSenderJobConfig {
+public sealed record OutboxIntegrationEventsSenderJobConfig
+{
     /// <summary>
     /// Время резервирования job события интеграции для отправки
     /// </summary>

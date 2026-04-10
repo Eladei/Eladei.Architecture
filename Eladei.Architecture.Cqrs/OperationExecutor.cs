@@ -7,7 +7,8 @@ namespace Eladei.Architecture.Cqrs;
 /// Исполнитель операций, работающих с Entity Framework
 /// </summary>
 /// <typeparam name="T">Контекст данных</typeparam>
-public class OperationExecutor : IOperationExecutor {
+public class OperationExecutor : IOperationExecutor
+{
     private readonly ICommandExecutor _commandExecutor;
     private readonly IQueryExecutor _queryExecutor;
 
@@ -19,7 +20,8 @@ public class OperationExecutor : IOperationExecutor {
     /// <exception cref="ArgumentNullException"></exception>
     public OperationExecutor(
         ICommandExecutor commandExecutor,
-        IQueryExecutor queryExecutor) {
+        IQueryExecutor queryExecutor)
+    {
         _commandExecutor = commandExecutor
             ?? throw new ArgumentNullException(nameof(commandExecutor));
 

@@ -10,7 +10,8 @@ namespace Eladei.BookRating.Api.Filters;
 /// <summary>
 /// Перехватчик для обработки возникающих ошибок
 /// </summary>
-public sealed class ErrorInterceptor : Interceptor {
+public sealed class ErrorInterceptor : Interceptor
+{
     private const string ErrorMsgPattern = "Error thrown by {0}";
 
     private readonly ILogger _logger;
@@ -19,21 +20,26 @@ public sealed class ErrorInterceptor : Interceptor {
     /// Создает объект класса ErrorInterceptor
     /// </summary>
     /// <param name="logger">Логгер</param>
-    public ErrorInterceptor(ILogger<ErrorInterceptor> logger) {
+    public ErrorInterceptor(ILogger<ErrorInterceptor> logger)
+    {
         _logger = logger;
     }
 
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
         TRequest request,
         ServerCallContext context,
-        UnaryServerMethod<TRequest, TResponse> continuation) {
-        try {
+        UnaryServerMethod<TRequest, TResponse> continuation)
+    {
+        try
+        {
             return await continuation(request, context);
         }
-        catch (Exception exception) {
+        catch (Exception exception)
+        {
             var ex = exception.InnerException ?? exception;
 
-            switch (ex) {
+            switch (ex)
+            {
                 case OperationCanceledException:
                     throw HandleError(ex, StatusCode.Cancelled, context.Method);
                 case TimeoutException:
@@ -53,7 +59,8 @@ public sealed class ErrorInterceptor : Interceptor {
                     var statusCode = StatusCode.Internal;
 
                     // Обработка конкретного случая нарушения ограничений базы данных 
-                    if (ex is DbUpdateConcurrencyException) {
+                    if (ex is DbUpdateConcurrencyException)
+                    {
                         statusCode = StatusCode.Aborted;
                     }
 
@@ -73,7 +80,8 @@ public sealed class ErrorInterceptor : Interceptor {
     /// <param name="methodName">Название метода, 
     /// в котором была зафиксирована ошибка</param>
     /// <returns>RPC-исключение</returns>
-    private RpcException HandleError(Exception ex, StatusCode statusCode, string methodName) {
+    private RpcException HandleError(Exception ex, StatusCode statusCode, string methodName)
+    {
         _logger.LogError(ex, string.Format(ErrorMsgPattern, methodName));
 
         // В Release-сборках возвращение только сообщения об ошибке

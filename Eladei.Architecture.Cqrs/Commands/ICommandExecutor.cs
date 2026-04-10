@@ -3,7 +3,8 @@
 /// <summary>
 /// Исполнитель команд
 /// </summary>
-public interface ICommandExecutor {
+public interface ICommandExecutor
+{
     /// <summary>
     /// Выполнить команду
     /// </summary>

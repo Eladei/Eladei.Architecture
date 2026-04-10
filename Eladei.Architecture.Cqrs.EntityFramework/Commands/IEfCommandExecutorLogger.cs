@@ -1,11 +1,12 @@
 ﻿using Eladei.Architecture.Ddd.Entities;
 
-namespace Eladei.Architecture.Cqrs.EntityFramework.Commands; 
+namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 
 /// <summary>
 /// Логгер исполнителя команд
 /// </summary>
-public interface IEfCommandExecutorLogger {
+public interface IEfCommandExecutorLogger
+{
     /// <summary>
     /// Логировать начало обработки команды
     /// </summary>

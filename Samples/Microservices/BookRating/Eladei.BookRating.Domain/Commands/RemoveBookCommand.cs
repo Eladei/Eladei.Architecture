@@ -10,19 +10,22 @@ namespace Eladei.BookRating.Domain.Commands;
 /// <summary>
 /// Команда удаления книги из рейтинга
 /// </summary>
-public sealed class RemoveBookCommand : EfCommandBase<BookRatingDbContext> {
+public sealed class RemoveBookCommand : EfCommandBase<BookRatingDbContext>
+{
     private readonly Guid _bookId;
 
     /// <summary>
     /// Создает объект класса RemoveBookCommand
     /// </summary>
     /// <param name="bookId">Id книги</param>
-    public RemoveBookCommand(Guid bookId) {
+    public RemoveBookCommand(Guid bookId)
+    {
         _bookId = bookId;
     }
 
     /// <exception cref="BookWithIdNotFoundException"></exception>
-    public override async Task ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken) {
+    public override async Task ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken)
+    {
         var book = await context.Books.FirstOrDefaultAsync(s => s.Id == _bookId)
             ?? throw new BookWithIdNotFoundException(Resource.BookWithIdNotFound, _bookId);
 

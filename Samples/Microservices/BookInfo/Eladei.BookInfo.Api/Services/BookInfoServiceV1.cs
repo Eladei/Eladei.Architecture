@@ -8,20 +8,24 @@ namespace Eladei.BookInfo.Api.Services;
 /// <summary>
 /// Сервис работы с информацией о книгах
 /// </summary>
-public class BookInfoServiceV1 : BookInfo.BookInfoBase {
+public class BookInfoServiceV1 : BookInfo.BookInfoBase
+{
     private readonly IOperationExecutor _operationExecutor;
 
-    public BookInfoServiceV1(IOperationExecutor operationExecutor) {
+    public BookInfoServiceV1(IOperationExecutor operationExecutor)
+    {
         _operationExecutor = operationExecutor
             ?? throw new ArgumentNullException(nameof(operationExecutor));
     }
 
-    public override async Task<GetBookInfoApiResponse> GetBookInfo(GetBookInfoApiRequest request, ServerCallContext context) {
+    public override async Task<GetBookInfoApiResponse> GetBookInfo(GetBookInfoApiRequest request, ServerCallContext context)
+    {
         var query = new BookInfoQuery(new Guid(request.BookId));
 
         var bookInfo = await _operationExecutor.ExecuteAsync(query, context.CancellationToken);
-        
-        return new GetBookInfoApiResponse {
+
+        return new GetBookInfoApiResponse
+        {
             BookId = bookInfo.Id.ToString(),
             Name = bookInfo.Name,
             Author = bookInfo.Author,
@@ -34,8 +38,10 @@ public class BookInfoServiceV1 : BookInfo.BookInfoBase {
         };
     }
 
-    public override async Task<UpdateAdditionalBookInfoApiResponse> UpdateAdditionalBookInfo(UpdateAdditionalBookInfoApiRequest request, ServerCallContext context) {
-        var additionalInfo = new AdditionalBookInfo { 
+    public override async Task<UpdateAdditionalBookInfoApiResponse> UpdateAdditionalBookInfo(UpdateAdditionalBookInfoApiRequest request, ServerCallContext context)
+    {
+        var additionalInfo = new AdditionalBookInfo
+        {
             Pages = request.Pages,
             Circulation = request.Circulation,
             Annotation = request.Annotation,

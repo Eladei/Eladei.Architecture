@@ -3,7 +3,8 @@
 /// <summary>
 /// Исполнитель команд
 /// </summary>
-public interface IDddCommandExecutor {
+public interface IDddCommandExecutor
+{
     /// <summary>
     /// Выполнить команду
     /// </summary>

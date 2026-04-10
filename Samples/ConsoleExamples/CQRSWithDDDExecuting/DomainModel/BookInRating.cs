@@ -5,7 +5,8 @@ namespace CqrsWithDddExecuting.DomainModel;
 /// <summary>
 /// Информация о книге в рейтинге
 /// </summary>
-public sealed class BookInRating : Aggregate<Guid> {
+public sealed class BookInRating : Aggregate<Guid>
+{
     /// <summary>
     /// Создает объект класса BookInRating
     /// </summary>
@@ -14,7 +15,8 @@ public sealed class BookInRating : Aggregate<Guid> {
     /// <param name="author">Автор</param>
     /// <param name="votes">Число голосов, отданных за книгу</param>
     /// <exception cref="ArgumentException"></exception>
-    public BookInRating(Guid id, string name, string author, uint votes = 0) : base(id) {
+    public BookInRating(Guid id, string name, string author, uint votes = 0) : base(id)
+    {
         Name = name ?? throw new ArgumentException("Не указано название книги");
         Author = author ?? throw new ArgumentException("Не указан автор книги");
         Votes = votes;
@@ -38,7 +40,8 @@ public sealed class BookInRating : Aggregate<Guid> {
     /// <summary>
     /// Проголосовать за книгу
     /// </summary>
-    public void Vote() {
+    public void Vote()
+    {
         Votes++;
 
         AddDomainEvent(new BookWasVotedDomainEvent(Id));

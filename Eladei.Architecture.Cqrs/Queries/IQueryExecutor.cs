@@ -3,7 +3,8 @@
 /// <summary>
 /// Исполнитель запроса
 /// </summary>
-public interface IQueryExecutor {
+public interface IQueryExecutor
+{
     /// <summary>
     /// Выполнить запрос
     /// </summary>

@@ -5,7 +5,8 @@ namespace CqrsWithDddExecuting.DomainModel;
 /// <summary>
 /// События голосования за книгу в рейтинге
 /// </summary>
-public class BookWasVotedDomainEvent : DomainEvent {
+public class BookWasVotedDomainEvent : DomainEvent
+{
     /// <summary>
     /// Создает объект класса BookWasVotedDomainEvent
     /// </summary>

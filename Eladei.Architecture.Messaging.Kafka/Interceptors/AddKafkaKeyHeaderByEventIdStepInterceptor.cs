@@ -8,11 +8,14 @@ namespace Eladei.Architecture.Messaging.Kafka.Interceptors;
 /// <summary>
 /// Добавляет "kafka-key" заголовок с идентификатором события интеграции {IIntegrationEvent.EventId}.
 /// </summary>
-public sealed class AddKafkaKeyHeaderByEventIdStepInterceptor : IOutgoingStep {
-    public async Task Process(OutgoingStepContext context, Func<Task> next) {
+public sealed class AddKafkaKeyHeaderByEventIdStepInterceptor : IOutgoingStep
+{
+    public async Task Process(OutgoingStepContext context, Func<Task> next)
+    {
         var message = context.Load<Message>();
 
-        if (message?.Body is IIntegrationEvent body) {
+        if (message?.Body is IIntegrationEvent body)
+        {
             message.Headers[KafkaHeaders.KafkaKey] = $"{body.EntityId}";
         }
 

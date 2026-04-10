@@ -3,7 +3,8 @@
 /// <summary>
 /// Информация о книге
 /// </summary>
-public record BookInfoReadModel {
+public record BookInfoReadModel
+{
     /// <summary>
     /// Уникальный идентификатор книги
     /// </summary>

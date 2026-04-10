@@ -10,7 +10,8 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 /// <remarks>Интерфейс описывает команду, напрямую работающую с контекстом данных.
 /// Такие команды реализуют transaction script</remarks>
 /// <typeparam name="T">Тип контекста данных</typeparam>
-public interface IEfCommand<T> : ICommand where T : DbContext {
+public interface IEfCommand<T> : ICommand where T : DbContext
+{
     /// <summary>
     /// Доменные события
     /// </summary>
@@ -45,7 +46,8 @@ public interface IEfCommand<T> : ICommand where T : DbContext {
 /// <typeparam name="R">Тип результата</typeparam>
 /// <remarks>Интерфейс описывает команду, напрямую работающую с контекстом данных.
 /// Такие команды реализуют transaction script</remarks>
-public interface IEfCommand<T, R> : ICommand<R> where T : DbContext {
+public interface IEfCommand<T, R> : ICommand<R> where T : DbContext
+{
     /// <summary>
     /// Доменные события
     /// </summary>

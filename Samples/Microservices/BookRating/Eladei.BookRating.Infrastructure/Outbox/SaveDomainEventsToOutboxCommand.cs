@@ -11,7 +11,8 @@ namespace Eladei.BookRating.Infrastructure.Outbox;
 /// <summary>
 /// Команда сохранения доменных событий в outbox
 /// </summary>
-public sealed class SaveDomainEventsToOutboxCommand : EfCommandBase<BookRatingDbContext> {
+public sealed class SaveDomainEventsToOutboxCommand : EfCommandBase<BookRatingDbContext>
+{
     private readonly IIntegrationEventFactory _integrationEventFactory;
     private readonly IReadOnlyCollection<IDomainEvent> _domainEvents;
     private readonly ICorrelationContext _correlationContext;
@@ -25,8 +26,9 @@ public sealed class SaveDomainEventsToOutboxCommand : EfCommandBase<BookRatingDb
     /// <exception cref="ArgumentNullException"></exception>
     public SaveDomainEventsToOutboxCommand(
         IReadOnlyCollection<IDomainEvent> domainEvents,
-        IIntegrationEventFactory integrationEventFactory, 
-        ICorrelationContext correlationContext) {
+        IIntegrationEventFactory integrationEventFactory,
+        ICorrelationContext correlationContext)
+    {
         _domainEvents = domainEvents
             ?? throw new ArgumentNullException(nameof(domainEvents));
 
@@ -37,13 +39,15 @@ public sealed class SaveDomainEventsToOutboxCommand : EfCommandBase<BookRatingDb
             ?? throw new ArgumentNullException(nameof(correlationContext));
     }
 
-    public override Task ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken) {
+    public override Task ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken)
+    {
         var integrationEvents = new List<IIntegrationEvent>();
-        
-        foreach(var domainEvent in _domainEvents) {
+
+        foreach (var domainEvent in _domainEvents)
+        {
             var integrationEvent = _integrationEventFactory.Create(domainEvent, _correlationContext.CorrelationId);
 
-            if(integrationEvent is not null)
+            if (integrationEvent is not null)
                 integrationEvents.Add(integrationEvent);
         }
 
@@ -53,12 +57,14 @@ public sealed class SaveDomainEventsToOutboxCommand : EfCommandBase<BookRatingDb
         return Task.CompletedTask;
     }
 
-    private static IntegrationEventToSend Convert(IIntegrationEvent integrationEvent) {
+    private static IntegrationEventToSend Convert(IIntegrationEvent integrationEvent)
+    {
         var eventType = integrationEvent.GetType();
 
         var metadata = JsonSerializer.Serialize(integrationEvent, eventType);
 
-        return new IntegrationEventToSend { 
+        return new IntegrationEventToSend
+        {
             Id = integrationEvent.EventId,
             EntityId = integrationEvent.EntityId,
             CorrelationId = integrationEvent.CorrelationId,

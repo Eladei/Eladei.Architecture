@@ -5,10 +5,12 @@ namespace Eladei.BookInfo.Api.Services;
 /// <summary>
 /// Служба дли инициализации шины событий интеграции
 /// </summary>
-public class EventBusStarter : IHostedService {
+public class EventBusStarter : IHostedService
+{
     private readonly IIntegrationEventBus _eventBus;
 
-    public EventBusStarter(IIntegrationEventBus eventBus) {
+    public EventBusStarter(IIntegrationEventBus eventBus)
+    {
         _eventBus = eventBus;
     }
 

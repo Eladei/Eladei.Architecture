@@ -3,12 +3,14 @@
 /// <summary>
 /// Доменное событие
 /// </summary>
-public abstract class DomainEvent : IDomainEvent {
+public abstract class DomainEvent : IDomainEvent
+{
     /// <summary>
     /// Конструктор класса DomainEvent
     /// </summary>
     /// <param name="entityId">Id сущности, к которой относится событие</param>
-    public DomainEvent(Guid entityId) { 
+    public DomainEvent(Guid entityId)
+    {
         EventId = Guid.NewGuid();
         EntityId = entityId;
         CreatedOnUtc = DateTime.UtcNow;
