@@ -5,16 +5,16 @@ namespace Eladei.Architecture.Tests.EntityFramework.Integration;
 
 public abstract class NpgsqlIntegrationTestsBase<T> : IAsyncLifetime where T : DbContext
 {
+    private readonly NpgsqlConnectionParams _serverConnectionParams;
     private readonly Func<DbContextOptions<T>, T> _contextFactory;
 
-    private readonly string _serverConnectionString;
     private string _dbConnectionString;
     private DbContextOptions<T> _contextOptions;
 
-    public NpgsqlIntegrationTestsBase(string serverConnectionString, Func<DbContextOptions<T>, T> contextFactory)
+    public NpgsqlIntegrationTestsBase(NpgsqlConnectionParams serverConnectionParams, Func<DbContextOptions<T>, T> contextFactory)
     {
-        _serverConnectionString = serverConnectionString
-            ?? throw new ArgumentNullException(nameof(serverConnectionString));
+        _serverConnectionParams = serverConnectionParams
+            ?? throw new ArgumentNullException(nameof(serverConnectionParams));
 
         _contextFactory = contextFactory
             ?? throw new ArgumentNullException(nameof(contextFactory));
@@ -22,7 +22,8 @@ public abstract class NpgsqlIntegrationTestsBase<T> : IAsyncLifetime where T : D
 
     public async ValueTask InitializeAsync()
     {
-        _contextOptions = await TestNpgsqlDatabaseFactory.CreateDatabaseAsync(_serverConnectionString, _contextFactory);
+        _contextOptions = await TestNpgsqlDatabaseFactory.CreateDatabaseAsync(
+            _serverConnectionParams.ConnectionString, _contextFactory);
 
         using var context = CreateContext();
         _dbConnectionString = context.Database.GetConnectionString()!;
