@@ -1,5 +1,4 @@
-﻿using DotNetEnv;
-using Eladei.Architecture.Tests.EntityFramework.Integration;
+﻿using Eladei.Architecture.Tests.EntityFramework.Integration;
 using Eladei.BookRating.Domain.Commands;
 using Eladei.BookRating.Domain.Exceptions;
 using Eladei.BookRating.Domain.Properties;
@@ -15,13 +14,8 @@ namespace Eladei.BookRating.IntegrationTests.Commands;
 /// <see cref="RegisterBookCommand"/>
 public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRatingDbContext>
 {
-    static RegisterBookCommandTests()
-    {
-        Env.Load();
-    }
-
-    public RegisterBookCommandTests()
-        : base(Environment.GetEnvironmentVariable("SERVER_CONNECTION_STRING")!, opts => new BookRatingDbContext(opts)) { }
+    public RegisterBookCommandTests(NpgsqlConnectionParams serverConnectionParams)
+        : base(serverConnectionParams, opts => new BookRatingDbContext(opts)) { }
 
     [Fact]
     public async Task Command_Should_Throw_BookWithCurrentInfoAlreadyExistsException_When_Book_Already_Exists()

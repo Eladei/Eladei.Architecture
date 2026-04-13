@@ -1,0 +1,42 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+      
+jobs:
+  cd:
+    if: ${{
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'}}
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      SERVER_CONNECTION_STRING: Server=localhost;Port=1234;User Id=postgres;Password=EnterPassword
+    
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: EnterPassword
+        ports:
+          - 1234:5432
+    
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore dependencies
+        run: dotnet Restore
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+      - name: Integration tests
+        run: |
+          for proj in $(find . -name "*IntegrationTests.csproj"); do
+            dotnet test "$proj" --no-build --configuration Release --verbosity normal
+          done
