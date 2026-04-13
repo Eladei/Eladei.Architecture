@@ -14,14 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      SERVER_CONNECTION_STRING: Server=localhost;Port=1234;User Id=postgres;Password=EnterPassword
+      SERVER_CONNECTION_STRING: Server=localhost;Port=1234;User Id=postgres;Password=${{ secrets.POSTGRES_INTEGRATION_TESTS_PASSWORD }}
     
     services:
       postgres:
         image: postgres
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: EnterPassword
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_INTEGRATION_TESTS_PASSWORD }}
         ports:
           - 1234:5432
     
