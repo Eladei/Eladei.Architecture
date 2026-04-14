@@ -1,42 +1,65 @@
 name: CD
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-      
+  push:
+    tags:
+      - "v*"
+
 jobs:
-  cd:
-    if: ${{
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_branch == 'main'}}
+  publish:
     runs-on: ubuntu-latest
+
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      SERVER_CONNECTION_STRING: Server=localhost;Port=1234;User Id=postgres;Password=${{ secrets.POSTGRES_INTEGRATION_TESTS_PASSWORD }}
-    
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_INTEGRATION_TESTS_PASSWORD }}
-        ports:
-          - 1234:5432
-    
+
     steps:
+      # =========================
+      # Checkout
+      # =========================
       - uses: actions/checkout@v5
-      - name: Setup .Net
+
+      # =========================
+      # Setup .NET
+      # =========================
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-      - name: Restore dependencies
+
+      # =========================
+      # Version from tag (v1.2.3 -> 1.2.3)
+      # =========================
+      - name: Set version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+      # =========================
+      # Restore
+      # =========================
+      - name: Restore
         run: dotnet restore
+
+      # =========================
+      # Build (safety gate)
+      # =========================
       - name: Build
-        run: dotnet build --no-restore --configuration Release
-      - name: Integration tests
+        run: dotnet build -c Release --no-restore
+
+      # =========================
+      # Pack (repo decides what is packable)
+      # =========================
+      - name: Pack
         run: |
-          for proj in $(find . -name "*IntegrationTests.csproj"); do
-            dotnet test "$proj" --no-build --configuration Release --verbosity normal
-          done
+          dotnet pack -c Release \
+            --no-build \
+            -p:PackageVersion=$VERSION \
+            -o out
+
+      # =========================
+      # Push packages
+      # =========================
+      - name: Push packages
+        run: |
+          dotnet nuget push "out/*.nupkg" \
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
