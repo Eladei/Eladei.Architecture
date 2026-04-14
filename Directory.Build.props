@@ -1,0 +1,45 @@
+<Project>
+  <PropertyGroup>
+    <!-- передается из GitHub Actions -->
+    <Version>$(PackageVersion)</Version>
+    <PackageVersion>$(PackageVersion)</PackageVersion>
+    <AssemblyVersion>$(PackageVersion)</AssemblyVersion>
+    <FileVersion>$(PackageVersion)</FileVersion>
+  </PropertyGroup>
+
+  <!-- =========================
+       DEFAULT PACK RULES
+       ========================= -->
+
+  <!-- по умолчанию НЕ пакуем всё -->
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <!-- =========================
+       ARCHITECTURE PACKAGES ONLY
+       ========================= -->
+  <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').StartsWith('Eladei.Architecture'))">
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <!-- =========================
+       NEVER PACK TEST PROJECTS
+       ========================= -->
+  <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('UnitTests'))">
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('IntegrationTests'))">
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <!-- =========================
+       COMMON QUALITY SETTINGS
+       ========================= -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+</Project>

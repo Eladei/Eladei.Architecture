@@ -21,10 +21,54 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore --configuration Release
+
+  format-check:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
       - name: Format verify
         run: dotnet format --verify-no-changes
-      - name: Unit testss
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Unit tests
         run: |
-          for proj in $(find . -name "*UnitTests.csproj"); do
-            dotnet test "$proj" --no-build --configuration Release --verbosity normal
-          done
+          find . -name "*.UnitTests.csproj" -exec dotnet test {} --configuration Release --verbosity normal \;
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && github.base_ref == 'main')
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      SERVER_CONNECTION_STRING: Server=localhost;Port=1234;User Id=postgres;Password=${{ secrets.POSTGRES_INTEGRATION_TESTS_PASSWORD }}
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_INTEGRATION_TESTS_PASSWORD }}
+        ports:
+           - 1234:5432
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Integration tests
+        run: |
+          find . -name "*.IntegrationTests.csproj" -exec dotnet test {} --configuration Release --verbosity normal \;
