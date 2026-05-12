@@ -4,6 +4,11 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Description>Вспомогательные классы для работы с Quartz.</Description>
+    <Copyright>eladei</Copyright>
+    <PackageTags>quartz</PackageTags>
+    <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

@@ -12,6 +12,7 @@
 | `Eladei.Architecture.Cqrs.Ddd` | Реализация команд и запросов с поддержкой DDD. Команды и запросы работают с доменной моделью (Application layer). |
 | `Eladei.Architecture.Cqrs.EntityFramework` | Реализация команд и запросов через EF Core в стиле Transaction Script. Команды и запросы могут быть частью Domain layer. |
 | `Eladei.Architecture.Ddd` | Базовые типы для реализации тактических шаблонов DDD. |
+| `Eladei.Architecture.Jobs.Quartz` | Вспомогательные классы для работы с Quartz. |
 | `Eladei.Architecture.Logging` | Базовые типы для логирования. |
 | `Eladei.Architecture.Messaging` | Базовые типы для обработки событий интеграции. |
 | `Eladei.Architecture.Messaging.Kafka` | Типы для работы с событиями интеграции через Kafka. |
