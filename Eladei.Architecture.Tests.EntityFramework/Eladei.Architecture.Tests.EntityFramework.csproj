@@ -4,6 +4,11 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Description>Базовые типы для формирования интеграционных и unit-тестов, ориентированных на Entity Framework.</Description>
+    <Copyright>eladei</Copyright>
+    <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
+    <PackageTags>unit-testing;entity-framework</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
