@@ -4,6 +4,11 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
+    <Copyright>eladei</Copyright>
+    <Description>Реализация команд и запросов через EF Core в стиле Transaction Script. Команды и запросы могут быть частью Domain layer.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>cqrs;entity-framework;outbox;transaction</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

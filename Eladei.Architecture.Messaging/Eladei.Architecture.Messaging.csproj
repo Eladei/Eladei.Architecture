@@ -4,6 +4,11 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
+    <Copyright>eladei</Copyright>
+    <Description>Базовые типы для обработки событий интеграции.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>messaging;event-driven;microservice</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

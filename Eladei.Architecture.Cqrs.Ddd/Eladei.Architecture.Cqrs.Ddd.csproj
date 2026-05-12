@@ -4,6 +4,11 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Description>Реализация команд и запросов с поддержкой DDD. Команды и запросы работают с доменной моделью (Application layer).</Description>
+    <Copyright>eladei</Copyright>
+    <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>cqrs;ddd;outbox;transaction</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
