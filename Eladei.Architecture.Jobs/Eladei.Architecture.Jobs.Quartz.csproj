@@ -4,15 +4,21 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Description>Вспомогательные классы для работы с Quartz.</Description>
-    <Copyright>eladei</Copyright>
+    <Description>Helper classes for working with Quartz.</Description>
+    <Copyright>Eladei</Copyright>
     <PackageTags>quartz</PackageTags>
     <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>Eladei</Authors>
+    <PackageId>Eladei.Architecture.Jobs.Quartz</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Class1.cs" />
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

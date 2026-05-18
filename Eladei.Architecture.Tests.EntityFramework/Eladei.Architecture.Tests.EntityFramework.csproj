@@ -4,12 +4,22 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Description>Базовые типы для формирования интеграционных и unit-тестов, ориентированных на Entity Framework.</Description>
-    <Copyright>eladei</Copyright>
+    <Description>Base types for building integration and unit tests focused on Entity Framework.</Description>
+    <Copyright>Eladei</Copyright>
     <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
     <PackageTags>unit-testing;entity-framework</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Eladei</Authors>
+    <PackageId>Eladei.Architecture.Tests.EntityFramework</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />

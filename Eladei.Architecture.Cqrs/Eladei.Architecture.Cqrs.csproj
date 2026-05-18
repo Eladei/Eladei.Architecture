@@ -5,11 +5,21 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>eladei</Copyright>
-    <Description>Базовые абстракции и классы для работы с командами и запросами.</Description>
+    <Copyright>Eladei</Copyright>
+    <Description>Base abstractions and classes for working with commands and queries.</Description>
     <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
     <PackageTags>cqrs</PackageTags>
+    <PackageId>Eladei.Architecture.Cqrs</PackageId>
+    <Authors>Eladei</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Eladei.Architecture.Ddd\Eladei.Architecture.Ddd.csproj" />

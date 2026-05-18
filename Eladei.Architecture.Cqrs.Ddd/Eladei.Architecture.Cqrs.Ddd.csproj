@@ -4,12 +4,22 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Description>Реализация команд и запросов с поддержкой DDD. Команды и запросы работают с доменной моделью (Application layer).</Description>
-    <Copyright>eladei</Copyright>
+    <Description>Command and query implementation with DDD support. Commands and queries operate on the domain model (Application Layer).</Description>
+    <Copyright>Eladei</Copyright>
     <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>cqrs;ddd;outbox;transaction</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>Eladei</Authors>
+    <PackageId>Eladei.Architecture.Cqrs.Ddd</PackageId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.5" />

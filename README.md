@@ -2,40 +2,40 @@
 
 **Lightweight CQRS + DDD / Entity Framework Executor for .NET**  
 
-`Eladei.Architecture` — это набор библиотек для реализации команд и запросов с поддержкой CQRS, DDD, EF Core, Outbox.
+`Eladei.Architecture` is a set of libraries for implementing commands and queries with support for CQRS, DDD, EF Core, and Outbox.
 
 ## Библиотеки
 
 | Библиотека | Назначение |
 |------------|------------|
-| `Eladei.Architecture.Cqrs` | Базовые абстракции и классы для работы с командами и запросами. |
-| `Eladei.Architecture.Cqrs.Ddd` | Реализация команд и запросов с поддержкой DDD. Команды и запросы работают с доменной моделью (Application layer). |
-| `Eladei.Architecture.Cqrs.EntityFramework` | Реализация команд и запросов через EF Core в стиле Transaction Script. Команды и запросы могут быть частью Domain layer. |
-| `Eladei.Architecture.Ddd` | Базовые типы для реализации тактических шаблонов DDD. |
-| `Eladei.Architecture.Jobs.Quartz` | Вспомогательные классы для работы с Quartz. |
-| `Eladei.Architecture.Logging` | Базовые типы для логирования. |
-| `Eladei.Architecture.Messaging` | Базовые типы для обработки событий интеграции. |
-| `Eladei.Architecture.Messaging.Kafka` | Типы для работы с событиями интеграции через Kafka. |
-| `Eladei.Architecture.Tests.EntityFramework` | Базовые типы для формирования интеграционных и unit-тестов, ориентированных на Entity Framework. |
+| `Eladei.Architecture.Cqrs` | Base abstractions and classes for working with commands and queries. |
+| `Eladei.Architecture.Cqrs.Ddd` | Command and query implementation with DDD support. Commands and queries operate on the domain model (Application Layer). |
+| `Eladei.Architecture.Cqrs.EntityFramework` | Command and query implementation using EF Core in the Transaction Script style. Commands and queries can be part of the Domain Layer. |
+| `Eladei.Architecture.Ddd` | Base types for implementing tactical DDD patterns. |
+| `Eladei.Architecture.Jobs.Quartz` | Helper classes for working with Quartz. |
+| `Eladei.Architecture.Logging` | Base types for logging. |
+| `Eladei.Architecture.Messaging` | Base types for integration event processing. |
+| `Eladei.Architecture.Messaging.Kafka` | Types for working with integration events via Kafka. |
+| `Eladei.Architecture.Tests.EntityFramework` | Base types for building integration and unit tests focused on Entity Framework. |
 
 ---
 
 ## Основные концепции
 
 ### Команды
-- Исполняются через `DddCommandExecutor` или `EfCommandExecutor`.
-- Могут сохранять доменные события в Outbox.
-- **Outbox** — обеспечивает надежную доставку сообщений: результаты выполнения команды и события сохраняются в одной транзакции, а события отправляются отдельным процессом.
-- При ошибке транзакция откатывается (Rollback), события и результат не сохраняются.
+- Executed through `DddCommandExecutor` or `EfCommandExecutor`.
+- Can persist domain events into the Outbox.
+- **Outbox** — ensures reliable message delivery: command execution results and events are stored within the same transaction, while event publishing is performed by a separate process.
+- If an error occurs, the transaction is rolled back, and neither events nor execution results are persisted.
 
 ### Запросы
-- Исполняются через `DddQueryExecutor` или `EfQueryExecutor`.
-- Возвращают read-model без изменения состояния.
+- Executed through `DddQueryExecutor` or `EfQueryExecutor`.
+- Return read models without modifying state.
 
 ### Outbox
-- После успешного выполнения команды все доменные события сохраняются в Outbox.
-- Можно интегрировать с шиной сообщений или другим обработчиком событий.
-- Гарантируется атомарность: либо результат выполнения команды и события сохраняются, либо откат.
+- After successful command execution, all domain events are stored in the Outbox.
+- Can be integrated with a message bus or another event-processing mechanism.
+- Atomicity is guaranteed: either both command results and events are persisted, or everything is rolled back.
 
 ---
 
@@ -43,27 +43,27 @@
 
 ### 1. EF example (transaction script)
 ```csharp
-// Исполнитель команд
+// Command executor
 var commandExecutor = new EfCommandExecutor<BookRatingDbContext>(
     contextFactory,
     new MockOperationExecutionPolicyService(),
     new MockOutboxDomainEventDao(eventDaoLogger));
 
-// Исполнитель запросов
+// Query executor
 var queryExecutor = new EfQueryExecutor<BookRatingDbContext>(contextFactory);
 
-// Выполнить команду
+// Execute command
 var registerBookCommand = new RegisterBookCommand("Капитанская дочка", "А.С.Пушкин");
 
 var bookId = await commandExecutor.ExecuteAsync(registerBookCommand, CancellationToken.None);
 
-// Выполнить запрос
+// Execute query
 var findBookQuery = new FindBookByIdQuery(bookId);
 
 var bookInfo = await queryExecutor.ExecuteAsync(findBookQuery, CancellationToken.None);
 ```
 
-#### Схема работы исполнителя EF Command
+#### EF Command Executor Workflow
 ```mermaid
 flowchart TD
     A["Input Command"] --> B["EfCommandExecutor"]
@@ -84,7 +84,7 @@ flowchart TD
     K --> O["Return Result"]
 ```
 
-#### Схема работы исполнителя EF Command EF Query
+#### EF Query Executor Workflow
 ```mermaid
 flowchart TD
     A["Input Query"] --> B["EfQueryExecutor"]
@@ -98,27 +98,27 @@ flowchart TD
 
 ### 2. DDD Example (Application Layer + Domain Model)
 ```csharp
-// Исполнитель команд
+// Command executor
 var commandExecutor = new DddCommandExecutor(
     contextFactory,
     new MockOperationExecutionPolicyService(),
     new MockOutboxDomainEventDao(eventDaoLogger));
 
-// Исполнитель запросов
+// Query executor
 var queryExecutor = new DddQueryExecutor(contextFactory);
 
- // Выполнить командy
+ // Execute command
 var registerBookCommand = new RegisterBookCommand("Капитанская дочка", "А.С. Пушкин");
 
 var bookId = await _commandExecutor.ExecuteAsync(registerBookCommand, CancellationToken.None);
 
-// Выполнить запрос
+// Execute query
 var query = new FindBookByIdQuery(bookId);
 
 var foundBook = await queryExecutor.ExecuteAsync(query, CancellationToken.None);
 ```
 
-#### Схема работы исполнителя EF Command
+#### DDD Command Executor Workflow
 ```mermaid
 flowchart TD
     A["Input Command"] --> B["DddCommandExecutor"]
@@ -139,7 +139,7 @@ flowchart TD
     K --> O["Return Result / Finish"]
 ```
 
-#### Схема работы исполнителя EF Command EF Query
+#### DDD Query Executor Workflow
 ```mermaid
 flowchart TD
     A["Input Query"] --> B["DddQueryExecutor"]
@@ -153,25 +153,25 @@ flowchart TD
 ```
 
 #### Notes
-- В EF-сценарии команды напрямую взаимодействуют с БД через контекст (Transaction Script).
-- В DDD-сценарии команды работают через Application Layer, изменяя агрегаты и формируя доменные события.
-- Сохранение результатов выполнения команд и события в Outbox осуществляется только при успешном завершении транзакции.
+- In the EF scenario, commands interact directly with the database through the DbContext (Transaction Script).
+- In the DDD scenario, commands operate through the Application Layer by modifying aggregates and producing domain events.
+- Command execution results and Outbox events are persisted only after a successful transaction commit.
 
 Full examples: /samples/ConsoleExamples
 
 ## Samples
 ### ConsoleExamples
-- CqrsWithDddExecuting - консольное приложение, демонстрирующее выполнение команд и запросов с использованием DDD-подхода.
-- CqrsWithEntityFrameworkExecuting - консольное приложение, демонстрирующее выполнение команд и запросов с использованием transaction script на базе Entity Framework.
+- CqrsWithDddExecuting - console application demonstrating command and query execution using the DDD approach.
+- CqrsWithEntityFrameworkExecuting - console application demonstrating command and query execution using the Transaction Script approach with Entity Framework.
 
 #### Notes
-Доменная модель на основе DDD намеренно упрощена для демонстрации работы библиотеки. В реальных проектах DDD необходимо использовать только для сложной бизнес-логики.
+The DDD-based domain model is intentionally simplified to demonstrate how the library works. In real-world projects, DDD should only be used for complex business logic.
 
 ### Microservices (production-ready)
 - BookRating: CQRS + transaction script + Outbox + Kafka
 - BookInfo: CQRS + transaction script + Outbox + Kafka
 
 ## Roadmap / TODO
-- Unit-тесты для CQRS-библиотек (планируется)
-- Unit-тесты и интеграционные тесты для примеров микросервисов
-- Пример микросервиса с полноценной DDD-реализацией
+- Unit tests for CQRS libraries (planned)
+- Unit and integration tests for microservice samples
+- Example microservice with a full-featured DDD implementation
