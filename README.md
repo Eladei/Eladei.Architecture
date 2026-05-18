@@ -20,15 +20,15 @@
 
 ---
 
-## Основные концепции
+## Main concepts
 
-### Команды
+### Commands
 - Executed through `DddCommandExecutor` or `EfCommandExecutor`.
 - Can persist domain events into the Outbox.
 - **Outbox** — ensures reliable message delivery: command execution results and events are stored within the same transaction, while event publishing is performed by a separate process.
 - If an error occurs, the transaction is rolled back, and neither events nor execution results are persisted.
 
-### Запросы
+### Queries
 - Executed through `DddQueryExecutor` or `EfQueryExecutor`.
 - Return read models without modifying state.
 
