@@ -5,11 +5,21 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
-    <Copyright>eladei</Copyright>
-    <Description>Реализация команд и запросов через EF Core в стиле Transaction Script. Команды и запросы могут быть частью Domain layer.</Description>
+    <Copyright>Eladei</Copyright>
+    <Description>Command and query implementation using EF Core in the Transaction Script style. Commands and queries can be part of the Domain Layer.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>cqrs;entity-framework;outbox;transaction</PackageTags>
+    <Authors>Eladei</Authors>
+    <PackageId>Eladei.Architecture.Cqrs.EntityFramework</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Eladei.Architecture.Cqrs\Eladei.Architecture.Cqrs.csproj" />

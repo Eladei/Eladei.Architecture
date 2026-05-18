@@ -5,11 +5,21 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
-    <Copyright>eladei</Copyright>
-    <Description>Типы для работы с событиями интеграции через Kafka.</Description>
+    <Copyright>Eladei</Copyright>
+    <Description>Types for working with integration events via Kafka.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>kafka;messaging;event-driven;microservice</PackageTags>
+    <Authors>Eladei</Authors>
+    <PackageId>Eladei.Architecture.Messaging.Kafka</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Rebus.Kafka" Version="5.0.0" />

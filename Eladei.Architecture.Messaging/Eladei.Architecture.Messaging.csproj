@@ -5,16 +5,26 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
-    <Copyright>eladei</Copyright>
-    <Description>Базовые типы для обработки событий интеграции.</Description>
+    <Copyright>Eladei</Copyright>
+    <Description>Base types for integration event processing.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>messaging;event-driven;microservice</PackageTags>
+    <Authors>Eladei</Authors>
+    <PackageId>Eladei.Architecture.Messaging</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="IntegrationEvents\IIntegrationEventHandler.cs" />
     <Compile Remove="IntegrationEvents\IIntegrationEventHandlerFactory.cs" />
     <Compile Remove="IntegrationEvents\IntegrationEventHandlerFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

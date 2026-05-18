@@ -5,10 +5,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
-    <Copyright>eladei</Copyright>
-    <Description>Базовые типы для логирования.</Description>
+    <Copyright>Eladei</Copyright>
+    <Description>Base types for logging.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>microservice;messaging;event-driven;</PackageTags>
+    <Authors>Eladei</Authors>
+    <PackageId>Eladei.Architecture.Logging</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
