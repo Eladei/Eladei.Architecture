@@ -64,37 +64,10 @@ var bookInfo = await queryExecutor.ExecuteAsync(findBookQuery, CancellationToken
 ```
 
 #### EF Command Executor Workflow
-```mermaid
-flowchart TD
-    A["Input Command"] --> B["EfCommandExecutor"]
-    B --> C["Get Execution Policy (retry)"]
-    C --> D["Attempt Execution (up to MaxAttempts)"]
-    D --> E["BeforeExecuteAsync"]
-    E --> F["Create DbContext & Begin Transaction"]
-    F --> G["ExecuteAsync"]
-    G --> H{"Has Domain Events?"}
-    H -->|Yes| I["Save Domain Events (Outbox)"]
-    H -->|No| J["Skip"]
-    I --> J["SaveChangesAsync"]
-    J --> K["Commit Transaction"]
-    F -->|Exception| L["Rollback Transaction"]
-    L --> M{"Attempts < MaxAttempts?"}
-    M -->|Yes| D
-    M -->|No| N["Throw Exception"]
-    K --> O["Return Result"]
-```
+![](https://raw.githubusercontent.com/Eladei/Eladei.Architecture/master/ef_command_executor_workflow.svg)
 
 #### EF Query Executor Workflow
-```mermaid
-flowchart TD
-    A["Input Query"] --> B["EfQueryExecutor"]
-    B --> C["Create DbContext"]
-    C --> D["Execute Query (ExecuteAsync)"]
-    D --> E{"Exception?"}
-    E -->|OperationCanceledException| F["Log Cancelled & throw"]
-    E -->|Other Exception| G["Log Critical & throw"]
-    E -->|No Exception| H["Return Result"]
-```
+![](https://raw.githubusercontent.com/Eladei/Eladei.Architecture/master/ef_query_executor_workflow.svg)
 
 ### 2. DDD Example (Application Layer + Domain Model)
 ```csharp
@@ -119,38 +92,10 @@ var foundBook = await queryExecutor.ExecuteAsync(query, CancellationToken.None);
 ```
 
 #### DDD Command Executor Workflow
-```mermaid
-flowchart TD
-    A["Input Command"] --> B["DddCommandExecutor"]
-    B --> C["Get Execution Policy (retry)"]
-    C --> D["Attempt Execution (up to MaxAttempts)"]
-    D --> E["BeforeExecuteAsync"]
-    E --> F["Create UnitOfWork Context & Begin Transaction"]
-    F --> G["ExecuteAsync"]
-    G --> H{"Are there domain events?"}
-    H -->|Yes| I["Save Domain Events (Outbox)"]
-    H -->|No| J["Skip domain events"]
-    I --> J["Save Changes (SaveChangesAsync)"]
-    J --> K["Commit Transaction"]
-    F -->|Exception| L["Rollback Transaction"]
-    L --> M{"Attempt < MaxAttempts?"}
-    M -->|Yes| D
-    M -->|No| N["Throw Exception"]
-    K --> O["Return Result / Finish"]
-```
+![](https://raw.githubusercontent.com/Eladei/Eladei.Architecture/master/ddd_command_executor_workflow.svg)
 
 #### DDD Query Executor Workflow
-```mermaid
-flowchart TD
-    A["Input Query"] --> B["DddQueryExecutor"]
-    B --> C["Create UnitOfWork Context"]
-    C --> D["ExecuteAsync Query"]
-    D --> E{"Exception?"}
-    E -->|OperationCanceledException| F["Log Cancelled & Throw"]
-    E -->|Other Exception| G["Wrap in QueryExecutingErrorException & Throw"]
-    E -->|No Exception| H["Log Success"]
-    H --> I["Return Result"]
-```
+![](https://raw.githubusercontent.com/Eladei/Eladei.Architecture/master/ddd_query_executor_workflow.svg)
 
 #### Notes
 - In the EF scenario, commands interact directly with the database through the DbContext (Transaction Script).
