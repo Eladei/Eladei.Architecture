@@ -10,12 +10,12 @@
     <Description>Base types for implementing tactical DDD patterns.</Description>
     <PackageTags>ddd</PackageTags>
     <Authors>Eladei</Authors>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.NUGET.md</PackageReadmeFile>
     <PackageId>Eladei.Architecture.Ddd</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\README.md">
+    <None Include="..\README.NUGET.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

@@ -9,13 +9,13 @@
     <RepositoryUrl>https://github.com/Eladei/Eladei.Architecture</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>cqrs;ddd;outbox;transaction</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.NUGET.md</PackageReadmeFile>
     <Authors>Eladei</Authors>
     <PackageId>Eladei.Architecture.Cqrs.Ddd</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\README.md">
+    <None Include="..\README.NUGET.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
