@@ -118,48 +118,48 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CantCreateDbContext" xml:space="preserve">
-    <value>Не удалось создать контекст БД</value>
+    <value>Failed to create database context</value>
   </data>
   <data name="CommandDbUpdateAttemptError" xml:space="preserve">
-    <value>При обработке команды '{0}' возникла ошибка обновления данных при попытке {1} из {2}</value>
+    <value>An error occurred while processing command '{0}' during data update attempt {1} of {2}</value>
   </data>
   <data name="CommandDbUpdateAttemptLimitReachedError" xml:space="preserve">
-    <value>При обработке команды '{0}' достигнут предел попыток обновления информации в БД. Всего {1} попыток</value>
+    <value>Execution attempt limit has been reached while processing command '{0}'. Total attempts: {1}</value>
   </data>
   <data name="CommandExecutingCancelled" xml:space="preserve">
-    <value>Выполнение команды '{0}' отменено</value>
+    <value>Execution of command '{0}' has been canceled</value>
   </data>
   <data name="CommandExecutingError" xml:space="preserve">
-    <value>Ошибка при выполнении команды '{0}'</value>
+    <value>Error occurred while executing command '{0}'</value>
   </data>
   <data name="CommandExecutingStarted" xml:space="preserve">
-    <value>Выполнение команды '{0}' началось</value>
+    <value>Execution of command '{0}' has started</value>
   </data>
   <data name="CommandExecutingSuccessfullyFinished" xml:space="preserve">
-    <value>Выполнение команды '{0}' успешно завершено</value>
+    <value>Execution of command '{0}' has completed successfully</value>
   </data>
   <data name="ModifiedObjectWasRemoved" xml:space="preserve">
-    <value>Изменяемый объект был удален в БД</value>
+    <value>The entity being modified has been deleted from the database</value>
   </data>
   <data name="QueryExecutingCancelled" xml:space="preserve">
-    <value>Выполнение запроса '{0}' отменено</value>
+    <value>Execution of query '{0}' has been canceled</value>
   </data>
   <data name="QueryExecutingError" xml:space="preserve">
-    <value>Ошибка при выполнении запроса '{0}'</value>
+    <value>Error occurred while executing query '{0}'</value>
   </data>
   <data name="QueryExecutingStarted" xml:space="preserve">
-    <value>Выполнение запроса '{0}' началось</value>
+    <value>Execution of query '{0}' has started</value>
   </data>
   <data name="QueryExecutingSuccessfullyFinished" xml:space="preserve">
-    <value>Выполнение запроса '{0}' успешно завершено</value>
+    <value>Execution of query '{0}' has completed successfully</value>
   </data>
   <data name="RemovingObjectWasAlreadyRemoved" xml:space="preserve">
-    <value>Удаляемый объект уже был удален в БД</value>
+    <value>The entity being deleted has already been removed from the database</value>
   </data>
   <data name="UnknownDbEntityState" xml:space="preserve">
-    <value>Неизвестное состояние объекта</value>
+    <value>The entity is in an unknown state</value>
   </data>
   <data name="UnreachableCodeError" xml:space="preserve">
-    <value>Код недостижим</value>
+    <value>Unreachable code</value>
   </data>
 </root>

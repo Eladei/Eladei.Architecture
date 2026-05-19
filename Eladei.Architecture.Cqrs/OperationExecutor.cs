@@ -4,19 +4,19 @@ using Eladei.Architecture.Cqrs.Queries;
 namespace Eladei.Architecture.Cqrs;
 
 /// <summary>
-/// Исполнитель операций, работающих с Entity Framework
+/// Operation executor for Entity Framework operations
 /// </summary>
-/// <typeparam name="T">Контекст данных</typeparam>
+/// <typeparam name="T">The data context type</typeparam>
 public class OperationExecutor : IOperationExecutor
 {
     private readonly ICommandExecutor _commandExecutor;
     private readonly IQueryExecutor _queryExecutor;
 
     /// <summary>
-    /// Создает объект класса EfOperationExecutor
+    /// Creates a new instance of <see cref="OperationExecutor"/>
     /// </summary>
-    /// <param name="commandExecutor">Исполнитель команды</param>
-    /// <param name="queryExecutor">Исполнитель запроса</param>
+    /// <param name="commandExecutor">The command executor</param>
+    /// <param name="queryExecutor">The query executor</param>
     /// <exception cref="ArgumentNullException"></exception>
     public OperationExecutor(
         ICommandExecutor commandExecutor,
@@ -29,12 +29,15 @@ public class OperationExecutor : IOperationExecutor
             ?? throw new ArgumentNullException(nameof(queryExecutor));
     }
 
+    /// <inheritdoc />
     public Task ExecuteAsync(ICommand command, CancellationToken ct)
         => _commandExecutor.ExecuteAsync(command, ct);
 
+    /// <inheritdoc />
     public Task<R> ExecuteAsync<R>(ICommand<R> command, CancellationToken ct)
         => _commandExecutor.ExecuteAsync(command, ct);
 
+    /// <inheritdoc />
     public Task<R> ExecuteAsync<R>(IQuery<R> query, CancellationToken ct)
         => _queryExecutor.ExecuteAsync(query, ct);
 }

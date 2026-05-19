@@ -3,33 +3,39 @@
 namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 
 /// <summary>
-/// Команда для работы с Ddd
+/// DDD command
 /// </summary>
-/// <typeparam name="R">Тип возвращаемого результата</typeparam>
+/// <typeparam name="R">The result type</typeparam>
 public abstract class DddCommandWithResultBase<R> : IDddCommand<R>
 {
     private readonly List<IDomainEvent> _events = [];
 
+    /// <inheritdoc />
     public IReadOnlyCollection<IDomainEvent> Events => _events.AsReadOnly();
 
+    /// <inheritdoc />
     public void ClearEvents()
     {
         _events.Clear();
     }
 
+    /// <inheritdoc />
     public virtual Task BeforeExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;
     }
 
+    /// <inheritdoc />
     public abstract Task<R> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Добавить доменные события
+    /// Adds domain events
     /// </summary>
-    /// <param name="domainEvents">Доменные события</param>
-    /// <remarks>Добавленные доменные события доступны через коллекцию Events.
-    /// Используются для возможности сохранения событий в outbox обработчиком команд</remarks>
+    /// <param name="domainEvents">The domain events</param>
+    /// <remarks>
+    /// Added domain events are available via the <see cref="Events"/> collection.
+    /// They are used to allow saving events to the outbox by the command handler
+    /// </remarks>
     protected void AddDomainEvents(params IDomainEvent[] domainEvents)
     {
         _events.AddRange(domainEvents);

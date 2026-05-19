@@ -1,28 +1,28 @@
 ﻿namespace Eladei.Architecture.Cqrs.Queries;
 
 /// <summary>
-/// Страничный результат поиска
+/// Paged search result
 /// </summary>
-/// <typeparam name="T">Тип найденных элементов</typeparam>
+/// <typeparam name="T">The type of the items</typeparam>
 public class PageResult<T>
 {
     /// <summary>
-    /// Номер текущей страницы
+    /// Current page number
     /// </summary>
     public uint CurrentPage { get; set; }
 
     /// <summary>
-    /// Общее количество страниц
+    /// Total number of pages
     /// </summary>
     public uint TotalPages { get; set; }
 
     /// <summary>
-    /// Общее количество элементов на всех страницах
+    /// Total number of elements across all pages
     /// </summary>
     public uint TotalElements { get; set; }
 
     /// <summary>
-    /// Элементы на странице
+    /// Items on the page
     /// </summary>
     public required IEnumerable<T> Result { get; set; }
 }

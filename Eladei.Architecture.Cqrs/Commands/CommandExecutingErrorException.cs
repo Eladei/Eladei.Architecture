@@ -1,7 +1,7 @@
 ﻿namespace Eladei.Architecture.Cqrs.Commands;
 
 /// <summary>
-/// Ошибка выполнения команды
+/// Command execution error
 /// </summary>
 public class CommandExecutingErrorException : Exception
 {

@@ -1,15 +1,15 @@
 ﻿namespace Eladei.Architecture.Messaging.IntegrationEvents;
 
 /// <summary>
-/// Событие интеграции
+/// Integration event
 /// </summary>
 public abstract class IntegrationEvent : IIntegrationEvent
 {
     /// <summary>
-    /// Конструктор класса IntegrationEvent
+    /// Constructor of the IntegrationEvent class
     /// </summary>
-    /// <param name="entityId">Id сущности, к которой относится событие</param>
-    /// <param name="correlationId">Id для сквозного отслеживания</param>
+    /// <param name="entityId">The ID of the entity associated with the event</param>
+    /// <param name="correlationId">The correlation ID for end-to-end tracing</param>
     public IntegrationEvent(Guid entityId, Guid correlationId)
     {
         EventId = Guid.NewGuid();
@@ -18,23 +18,15 @@ public abstract class IntegrationEvent : IIntegrationEvent
         CreatedOnUtc = DateTime.UtcNow;
     }
 
-    /// <summary>
-    /// Id события
-    /// </summary>
+    /// <inheritdoc />
     public Guid EventId { get; init; }
 
-    /// <summary>
-    /// Id сущности, к которой относится событие
-    /// </summary>
+    /// <inheritdoc />
     public Guid EntityId { get; init; }
 
-    /// <summary>
-    /// Id для сквозного отслеживания
-    /// </summary>
+    /// <inheritdoc />
     public Guid CorrelationId { get; init; }
 
-    /// <summary>
-    /// Дата создания события в стандарте UTC
-    /// </summary>
+    /// <inheritdoc />
     public DateTime CreatedOnUtc { get; init; }
 }

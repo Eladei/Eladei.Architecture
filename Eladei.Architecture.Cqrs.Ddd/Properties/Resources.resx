@@ -118,36 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CommandDataSourceUpdateAttemptLimitReachedError" xml:space="preserve">
-    <value>При обработке команды '{0}' достигнут предел попыток обновления информации в источнике данных. Всего {1} попыток</value>
+    <value>Execution attempt limit has been reached while processing command '{0}'. Total attempts: {1}</value>
   </data>
   <data name="CommandExecutingCancelled" xml:space="preserve">
-    <value>Выполнение команды '{0}' отменено</value>
+    <value>Execution of command '{0}' has been canceled</value>
   </data>
   <data name="CommandExecutingError" xml:space="preserve">
-    <value>Ошибка при выполнении команды '{0}'</value>
+    <value>Error occurred while executing command '{0}'</value>
   </data>
   <data name="CommandExecutingStarted" xml:space="preserve">
-    <value>Выполнение команды '{0}' началось</value>
+    <value>Execution of command '{0}' has started</value>
   </data>
   <data name="CommandExecutingSuccessfullyFinished" xml:space="preserve">
-    <value>Выполнение команды '{0}' успешно завершено</value>
+    <value>Execution of command '{0}' has completed successfully</value>
   </data>
   <data name="CommandUpdateDataSourceAttemptLimitReachedError" xml:space="preserve">
-    <value>При обработке команды '{0}' достигнут предел попыток обновления информации в источнике данных. Всего {1} попыток</value>
+    <value>Execution attempt limit has been reached while processing command '{0}'. Total attempts: {1}</value>
   </data>
   <data name="QueryExecutingCancelled" xml:space="preserve">
-    <value>Выполнение запроса '{0}' отменено</value>
+    <value>Execution of query '{0}' has been canceled</value>
   </data>
   <data name="QueryExecutingError" xml:space="preserve">
-    <value>Ошибка при выполнении запроса '{0}'</value>
+    <value>Error occurred while executing query '{0}'</value>
   </data>
   <data name="QueryExecutingStarted" xml:space="preserve">
-    <value>Выполнение запроса '{0}' началось</value>
+    <value>Execution of query '{0}' has started</value>
   </data>
   <data name="QueryExecutingSuccessfullyFinished" xml:space="preserve">
-    <value>Выполнение запроса '{0}' успешно завершено</value>
+    <value>Execution of query '{0}' has completed successfully</value>
   </data>
   <data name="UnreachableCodeError" xml:space="preserve">
-    <value>Код недостижим</value>
+    <value>Unreachable code</value>
   </data>
 </root>

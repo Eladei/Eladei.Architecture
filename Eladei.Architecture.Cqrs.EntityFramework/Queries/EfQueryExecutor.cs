@@ -5,19 +5,19 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 
 /// <summary>
-/// Исполнитель запроса, работающей с Entity Framework
+/// Query executor for working with Entity Framework
 /// </summary>
-/// <typeparam name="T">Контекст данных</typeparam>
+/// <typeparam name="T">The database context type</typeparam>
 public class EfQueryExecutor<T> : IEfQueryExecutor<T> where T : DbContext
 {
     protected readonly IDbContextFactory<T> _contextFactory;
     protected readonly IEfQueryExecutorLogger? _logger;
 
     /// <summary>
-    /// Создает объект класса EfQueryExecutor
+    /// Creates an instance of the EF query executor
     /// </summary>
-    /// <param name="contextFactory">Контекст данных</param>
-    /// <param name="logger">Логгер</param>
+    /// <param name="contextFactory">The database context factory</param>
+    /// <param name="logger">The optional logger</param>
     /// <exception cref="ArgumentNullException"></exception>
     public EfQueryExecutor(IDbContextFactory<T> contextFactory, IEfQueryExecutorLogger? logger = null)
     {
@@ -27,6 +27,7 @@ public class EfQueryExecutor<T> : IEfQueryExecutor<T> where T : DbContext
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public virtual async Task<R> ExecuteAsync<R>(IEfQuery<T, R> query, CancellationToken cancellationToken)
     {
         var queryName = query.GetType().Name;
@@ -59,6 +60,13 @@ public class EfQueryExecutor<T> : IEfQueryExecutor<T> where T : DbContext
         }
     }
 
+    /// <summary>
+    /// Creates a database context
+    /// </summary>
+    /// <param name="queryName">The query name</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The database context instance</returns>
+    /// <exception cref="InvalidOperationException"></exception>
     protected virtual async Task<T> CreateDbContextAsync(string queryName, CancellationToken cancellationToken)
     {
         T context = await _contextFactory.CreateDbContextAsync(cancellationToken);

@@ -1,27 +1,27 @@
 ﻿namespace Eladei.Architecture.Cqrs.Ddd;
 
 /// <summary>
-/// Единица работы
+/// Unit of work
 /// </summary>
 public interface IUnitOfWork
 {
     /// <summary>
-    /// Начать транзакцию
+    /// Begins a transaction
     /// </summary>
     Task BeginTransactionAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Подтвердить транзакцию
+    /// Commits the transaction
     /// </summary>
     Task CommitTransactionAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Откатить транзакцию
+    /// Rolls back the transaction
     /// </summary>
     Task RollbackTransactionAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Сохранить изменения
+    /// Saves changes
     /// </summary>
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -3,16 +3,16 @@
 namespace Eladei.Architecture.Messaging.IntegrationEvents;
 
 /// <summary>
-/// Фабрика для формирования событий интеграции
+/// Factory for creating integration events
 /// </summary>
 public interface IIntegrationEventFactory
 {
     /// <summary>
-    /// Создать событие интеграции на основе события предметной области
+    /// Creates an integration event based on a domain event
     /// </summary>
-    /// <remarks>Если событие интеграции не должно быть отправлено, то возвращает null</remarks>
-    /// <param name="domainEvent">Событие предметной области</param>
-    /// <param name="correlationId">Id для сквозного отслеживания</param>
-    /// <returns>Событие интеграции</returns>
+    /// <remarks>If the integration event should not be published, returns null</remarks>
+    /// <param name="domainEvent">The domain event</param>
+    /// <param name="correlationId">The correlation ID for end-to-end tracing</param>
+    /// <returns>The integration event</returns>
     IIntegrationEvent? Create(IDomainEvent domainEvent, Guid correlationId);
 }

@@ -1,12 +1,12 @@
 ﻿namespace Eladei.Architecture.Cqrs.Commands;
 
 /// <summary>
-/// Команда, возвращающая результат
+/// Command that does not return a result
 /// </summary>
 public interface ICommand : IOperation { }
 
 /// <summary>
-/// Команда, возвращающая результат
+/// Command that returns a result
 /// </summary>
-/// <typeparam name="R">Тип результата</typeparam>
+/// <typeparam name="R">The result type</typeparam>
 public interface ICommand<R> : ICommand { }

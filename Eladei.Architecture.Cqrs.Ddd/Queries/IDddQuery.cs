@@ -3,16 +3,16 @@
 namespace Eladei.Architecture.Cqrs.Ddd.Queries;
 
 /// <summary>
-/// Запрос для работы с EntityFramework
+/// Query
 /// </summary>
-/// <typeparam name="R">Тип результата</typeparam>
+/// <typeparam name="R">The result type</typeparam>
 public interface IDddQuery<R> : IQuery<R>
 {
     /// <summary>
-    /// Выполнить запрос
+    /// Executes the query
     /// </summary>
-    /// <param name="repositoryFactory">Фабрика репозиториев</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат выполнения операции</returns>
+    /// <param name="repositoryFactory">The repository factory</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The execution result</returns>
     Task<R> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken);
 }

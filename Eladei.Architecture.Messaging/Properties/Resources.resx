@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="IntegrationEventHandlingCancelled" xml:space="preserve">
-    <value>Обработка события интеграции '{0}' Id '{1}' отменена</value>
+    <value>Processing integration event '{0}' with Id '{1}' was cancelled</value>
   </data>
   <data name="IntegrationEventHandlingError" xml:space="preserve">
-    <value>Ошибка при обработке события интеграции '{0}' Id '{1}'</value>
+    <value>An error occurred while processing integration event '{0}' with Id '{1}'</value>
   </data>
   <data name="IntegrationEventHandlingErrorWillBeIgrored" xml:space="preserve">
-    <value>Ошибка при обработке события интеграции '{0}' Id '{1}' будет проигнорирована</value>
+    <value>An error occurred while processing integration event '{0}' with Id '{1}' and will be ignored</value>
   </data>
   <data name="IntegrationEventHandlingStarted" xml:space="preserve">
-    <value>Обработка события интеграции '{0}' Id '{1}' началась</value>
+    <value>Processing integration event '{0}' with Id '{1}' started</value>
   </data>
   <data name="IntegrationEventHandlingSuccessfullyFinished" xml:space="preserve">
-    <value>Обработка события интеграции '{0}' Id '{1}' завершена</value>
+    <value>Processing integration event '{0}' with Id '{1}' completed</value>
   </data>
 </root>

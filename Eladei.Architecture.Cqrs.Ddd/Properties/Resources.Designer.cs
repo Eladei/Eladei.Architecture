@@ -19,7 +19,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -61,7 +61,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to При обработке команды &apos;{0}&apos; достигнут предел попыток обновления информации в источнике данных. Всего {1} попыток.
+        ///   Looks up a localized string similar to Execution attempt limit has been reached while processing command &apos;{0}&apos;. Total attempts: {1}.
         /// </summary>
         public static string CommandDataSourceUpdateAttemptLimitReachedError {
             get {
@@ -70,7 +70,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение команды &apos;{0}&apos; отменено.
+        ///   Looks up a localized string similar to Execution of command &apos;{0}&apos; has been canceled.
         /// </summary>
         public static string CommandExecutingCancelled {
             get {
@@ -79,7 +79,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ошибка при выполнении команды &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Error occurred while executing command &apos;{0}&apos;.
         /// </summary>
         public static string CommandExecutingError {
             get {
@@ -88,7 +88,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение команды &apos;{0}&apos; началось.
+        ///   Looks up a localized string similar to Execution of command &apos;{0}&apos; has started.
         /// </summary>
         public static string CommandExecutingStarted {
             get {
@@ -97,7 +97,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение команды &apos;{0}&apos; успешно завершено.
+        ///   Looks up a localized string similar to Execution of command &apos;{0}&apos; has completed successfully.
         /// </summary>
         public static string CommandExecutingSuccessfullyFinished {
             get {
@@ -106,7 +106,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to При обработке команды &apos;{0}&apos; достигнут предел попыток обновления информации в источнике данных. Всего {1} попыток.
+        ///   Looks up a localized string similar to Execution attempt limit has been reached while processing command &apos;{0}&apos;. Total attempts: {1}.
         /// </summary>
         public static string CommandUpdateDataSourceAttemptLimitReachedError {
             get {
@@ -115,7 +115,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение запроса &apos;{0}&apos; отменено.
+        ///   Looks up a localized string similar to Execution of query &apos;{0}&apos; has been canceled.
         /// </summary>
         public static string QueryExecutingCancelled {
             get {
@@ -124,7 +124,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ошибка при выполнении запроса &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Error occurred while executing query &apos;{0}&apos;.
         /// </summary>
         public static string QueryExecutingError {
             get {
@@ -133,7 +133,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение запроса &apos;{0}&apos; началось.
+        ///   Looks up a localized string similar to Execution of query &apos;{0}&apos; has started.
         /// </summary>
         public static string QueryExecutingStarted {
             get {
@@ -142,7 +142,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение запроса &apos;{0}&apos; успешно завершено.
+        ///   Looks up a localized string similar to Execution of query &apos;{0}&apos; has completed successfully.
         /// </summary>
         public static string QueryExecutingSuccessfullyFinished {
             get {
@@ -151,7 +151,7 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Код недостижим.
+        ///   Looks up a localized string similar to Unreachable code.
         /// </summary>
         public static string UnreachableCodeError {
             get {

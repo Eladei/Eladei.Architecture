@@ -4,6 +4,6 @@ using Eladei.Architecture.Cqrs.Queries;
 namespace Eladei.Architecture.Cqrs;
 
 /// <summary>
-/// Исполнитель операций
+/// Operation executor
 /// </summary>
 public interface IOperationExecutor : ICommandExecutor, IQueryExecutor { }

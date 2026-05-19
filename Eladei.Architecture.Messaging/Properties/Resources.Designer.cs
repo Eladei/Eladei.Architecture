@@ -19,7 +19,7 @@ namespace Eladei.Architecture.Messaging.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,7 +61,7 @@ namespace Eladei.Architecture.Messaging.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Обработка события интеграции &apos;{0}&apos; Id &apos;{1}&apos; отменена.
+        ///   Looks up a localized string similar to Processing integration event &apos;{0}&apos; with Id &apos;{1}&apos; was cancelled.
         /// </summary>
         internal static string IntegrationEventHandlingCancelled {
             get {
@@ -70,7 +70,7 @@ namespace Eladei.Architecture.Messaging.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ошибка при обработке события интеграции &apos;{0}&apos; Id &apos;{1}&apos;.
+        ///   Looks up a localized string similar to An error occurred while processing integration event &apos;{0}&apos; with Id &apos;{1}&apos;.
         /// </summary>
         internal static string IntegrationEventHandlingError {
             get {
@@ -79,7 +79,7 @@ namespace Eladei.Architecture.Messaging.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ошибка при обработке события интеграции &apos;{0}&apos; Id &apos;{1}&apos; будет проигнорирована.
+        ///   Looks up a localized string similar to An error occurred while processing integration event &apos;{0}&apos; with Id &apos;{1}&apos; and will be ignored.
         /// </summary>
         internal static string IntegrationEventHandlingErrorWillBeIgrored {
             get {
@@ -88,7 +88,7 @@ namespace Eladei.Architecture.Messaging.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Обработка события интеграции &apos;{0}&apos; Id &apos;{1}&apos; началась.
+        ///   Looks up a localized string similar to Processing integration event &apos;{0}&apos; with Id &apos;{1}&apos; started.
         /// </summary>
         internal static string IntegrationEventHandlingStarted {
             get {
@@ -97,7 +97,7 @@ namespace Eladei.Architecture.Messaging.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Обработка события интеграции &apos;{0}&apos; Id &apos;{1}&apos; завершена.
+        ///   Looks up a localized string similar to Processing integration event &apos;{0}&apos; with Id &apos;{1}&apos; completed.
         /// </summary>
         internal static string IntegrationEventHandlingSuccessfullyFinished {
             get {

@@ -3,20 +3,25 @@
 namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 
 /// <summary>
-/// Служба сохранения доменных событий в outbox
+/// Outbox service for persisting domain events
 /// </summary>
-/// <remarks>Используется, если нужно сохранить доменные события в БД 
-/// с последующей публикацией в отдельном процессе, например в job.
-/// Сохраняйте события в той же транзакции, что и другие данные.
-/// Для этого передавайте в метод SaveAsync ту же фабрику репозиториев, 
-/// что используется в единице работы</remarks>
+/// <remarks>
+/// Used when domain events must be stored in the database
+/// and later published in a separate process, such as a background job.
+/// Events should be saved within the same transaction as other data.
+/// To achieve this, pass the same repository factory instance
+/// that is used by the unit of work
+/// </remarks>
 public interface IDddOutboxDomainEventDao
 {
     /// <summary>
-    /// Сохранить событие предметной области в постоянное хранилище
+    /// Persists domain events to storage
     /// </summary>
-    /// <param name="domainEvents">Событие предметной области</param>
-    /// <param name="repositoryFactory">Фабрика репозиториев</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
-    Task SaveAsync(IReadOnlyCollection<IDomainEvent> domainEvents, IRepositoryFactory repositoryFactory, CancellationToken cancellationToken);
+    /// <param name="domainEvents">The domain events</param>
+    /// <param name="repositoryFactory">The repository factory</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    Task SaveAsync(
+        IReadOnlyCollection<IDomainEvent> domainEvents,
+        IRepositoryFactory repositoryFactory,
+        CancellationToken cancellationToken);
 }

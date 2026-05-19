@@ -1,23 +1,23 @@
 ﻿namespace Eladei.Architecture.Cqrs.Commands;
 
 /// <summary>
-/// Исполнитель команд
+/// Command executor
 /// </summary>
 public interface ICommandExecutor
 {
     /// <summary>
-    /// Выполнить команду
+    /// Executes a command
     /// </summary>
-    /// <param name="command">Команда</param>
-    /// <param name="ct">Токен отмены операции</param>
+    /// <param name="command">The command</param>
+    /// <param name="ct">The cancellation token</param>
     Task ExecuteAsync(ICommand command, CancellationToken ct);
 
     /// <summary>
-    /// Выполнить команду
+    /// Executes a command
     /// </summary>
-    /// <typeparam name="R">Тип результата</typeparam>
-    /// <param name="command">Команда</param>
-    /// <param name="ct">Токен отмены операции</param>
-    /// <returns>Результат выполнения команды</returns>
+    /// <typeparam name="R">The result type</typeparam>
+    /// <param name="command">The command</param>
+    /// <param name="ct">The cancellation token</param>
+    /// <returns>The execution result</returns>
     Task<R> ExecuteAsync<R>(ICommand<R> command, CancellationToken ct);
 }

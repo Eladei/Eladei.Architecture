@@ -5,21 +5,22 @@ using Rebus.Handlers;
 namespace Eladei.Architecture.Messaging.Kafka.IntegrationEvents;
 
 /// <summary>
-/// Фабрика обработчиков событий интеграции
+/// Factory for integration event handlers
 /// </summary>
 public class KafkaEventHandlerFactory : IKafkaEventHandlerFactory
 {
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
-    /// Создает объект класса EventHandlerFactory
+    /// Creates an instance of the KafkaEventHandlerFactory class
     /// </summary>
-    /// <param name="serviceProvider">Поставщик сервисов</param>
+    /// <param name="serviceProvider">The service provider</param>
     public KafkaEventHandlerFactory(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
 
+    /// <inheritdoc />
     public H CreateHandler<H, E>(CancellationToken cancellationToken)
         where H : IHandleMessages<E>
         where E : IIntegrationEvent

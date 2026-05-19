@@ -1,27 +1,27 @@
 ﻿namespace Eladei.Architecture.Messaging.IntegrationEvents;
 
 /// <summary>
-/// Событие интеграции
+/// Integration event
 /// </summary>
 public interface IIntegrationEvent
 {
     /// <summary>
-    /// Id события
+    /// Event identifier
     /// </summary>
     Guid EventId { get; }
 
     /// <summary>
-    /// Id сущности, к которой относится событие
+    /// Identifier of the entity associated with the event
     /// </summary>
     Guid EntityId { get; }
 
     /// <summary>
-    /// Id для сквозного отслеживания
+    /// Correlation identifier used for end-to-end tracing
     /// </summary>
     Guid CorrelationId { get; }
 
     /// <summary>
-    /// Дата создания события в стандарте UTC
+    /// UTC timestamp when the event was created
     /// </summary>
     DateTime CreatedOnUtc { get; }
 }

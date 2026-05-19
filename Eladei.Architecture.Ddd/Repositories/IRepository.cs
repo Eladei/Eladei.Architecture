@@ -1,8 +1,9 @@
 ﻿namespace Eladei.Architecture.Ddd.Repositories;
 
 /// <summary>
-/// Репозиторий
+/// Repository marker interface
 /// </summary>
-/// <remarks>Пустой интерфейс для определения того, 
-/// что объект относится к репозиторию</remarks>
+/// <remarks>
+/// A marker interface used to indicate that a type is a repository.
+/// </remarks>
 public interface IRepository { }

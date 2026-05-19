@@ -1,16 +1,16 @@
 ﻿namespace Eladei.Architecture.Cqrs.Queries;
 
 /// <summary>
-/// Исполнитель запроса
+/// Query executor
 /// </summary>
 public interface IQueryExecutor
 {
     /// <summary>
-    /// Выполнить запрос
+    /// Executes a query
     /// </summary>
-    /// <typeparam name="T">Тип возвращаемого результата</typeparam>
-    /// <param name="query">Запрос</param>
-    /// <param name="ct">Токен отмены операции</param>
-    /// <returns>Результат запроса</returns>
+    /// <typeparam name="T">The result type</typeparam>
+    /// <param name="query">The query</param>
+    /// <param name="ct">The cancellation token</param>
+    /// <returns>The query result</returns>
     Task<T> ExecuteAsync<T>(IQuery<T> query, CancellationToken ct);
 }

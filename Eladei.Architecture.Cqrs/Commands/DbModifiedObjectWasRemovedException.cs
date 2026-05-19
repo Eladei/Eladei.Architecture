@@ -1,7 +1,7 @@
 ﻿namespace Eladei.Architecture.Cqrs.Commands;
 
 /// <summary>
-/// Изменяемый в БД объект был уже удален
+/// The entity being modified has already been deleted from the database
 /// </summary>
 public class DbModifiedObjectWasRemovedException : Exception
 {

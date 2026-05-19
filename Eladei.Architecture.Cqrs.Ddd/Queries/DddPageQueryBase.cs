@@ -3,7 +3,7 @@
 namespace Eladei.Architecture.Cqrs.Ddd.Queries;
 
 /// <summary>
-/// Страничный запрос
+/// Paged query
 /// </summary>
 public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
 {
@@ -11,17 +11,17 @@ public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
     protected readonly uint? _elementsPerPage;
 
     /// <summary>
-    /// Количество пропускаемых элементов при запросе
+    /// Number of elements to skip for the query
     /// </summary>
     protected uint ElementsToSkip => _elementsPerPage.HasValue
         ? _elementsPerPage.Value * (_page - 1)
         : 0;
 
     /// <summary>
-    /// Создает объект класса Query
+    /// Creates a new instance of <see cref="EfPageQueryBase{R}"/>
     /// </summary>
-    /// <param name="elementsPerPage">Число элементов на страницу</param>
-    /// <param name="page">Номер страницы, для которой будет вестись поиск</param>>
+    /// <param name="elementsPerPage">The number of elements per page</param>
+    /// <param name="page">The page number to query</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     protected EfPageQueryBase(uint? elementsPerPage = null, uint? page = null)
     {
@@ -35,6 +35,7 @@ public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
         _page = page ?? 1;
     }
 
+    /// <inheritdoc />
     public override async Task<PageResult<R>> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default)
     {
         var result = await PerformAsync(repositoryFactory, cancellationToken);
@@ -51,20 +52,24 @@ public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
     }
 
     /// <summary>
-    /// Выполнить операцию
+    /// Executes the query operation
     /// </summary>
-    /// <param name="repositoryFactory">Фабрика репозиториев</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
-    /// <returns>Результат выполнения операции</returns>
-    protected abstract Task<IEnumerable<R>> PerformAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken);
+    /// <param name="repositoryFactory">The repository factory</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The query result items</returns>
+    protected abstract Task<IEnumerable<R>> PerformAsync(
+        IRepositoryFactory repositoryFactory,
+        CancellationToken cancellationToken);
 
     /// <summary>
-    /// Определить общее количество элементов
+    /// Gets the total number of elements
     /// </summary>
-    /// <param name="repositoryFactory">Фабрика репозиториев</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
-    /// <returns>Общее количество элементов</returns>
-    protected abstract Task<uint> GetAllElementsCount(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken);
+    /// <param name="repositoryFactory">The repository factory</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The total number of elements</returns>
+    protected abstract Task<uint> GetAllElementsCount(
+        IRepositoryFactory repositoryFactory,
+        CancellationToken cancellationToken);
 
     private async Task<PageAdditionalInfo> GetPagesAdditionalInfo(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken)
     {
@@ -82,17 +87,17 @@ public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
     }
 
     /// <summary>
-    /// Дополнительная информация о странице
+    /// Paging metadata
     /// </summary>
     private record PageAdditionalInfo
     {
         /// <summary>
-        /// Общее количество страниц
+        /// Total number of pages
         /// </summary>
         public uint TotalPages { get; init; }
 
         /// <summary>
-        /// Общее количество элементов на всех страницах
+        /// Total number of elements across all pages
         /// </summary>
         public uint TotalElements { get; init; }
     }

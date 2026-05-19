@@ -1,14 +1,14 @@
 ﻿namespace Eladei.Architecture.Ddd.DomainEvents;
 
 /// <summary>
-/// Доменное событие
+/// Domain event base class
 /// </summary>
 public abstract class DomainEvent : IDomainEvent
 {
     /// <summary>
-    /// Конструктор класса DomainEvent
+    /// Creates an instance of the domain event
     /// </summary>
-    /// <param name="entityId">Id сущности, к которой относится событие</param>
+    /// <param name="entityId">The identifier of the entity associated with the event</param>
     public DomainEvent(Guid entityId)
     {
         EventId = Guid.NewGuid();
@@ -16,18 +16,16 @@ public abstract class DomainEvent : IDomainEvent
         CreatedOnUtc = DateTime.UtcNow;
     }
 
-    /// <summary>
-    /// Id события
-    /// </summary>
+    /// <inheritdoc />
     public Guid EventId { get; init; }
 
     /// <summary>
-    /// Id сущности, к которой относится событие
+    /// The identifier of the entity associated with the event
     /// </summary>
     public Guid EntityId { get; }
 
     /// <summary>
-    /// Дата создания события в стандарте UTC
+    /// The UTC timestamp when the event was created
     /// </summary>
     public DateTime CreatedOnUtc { get; init; }
 }

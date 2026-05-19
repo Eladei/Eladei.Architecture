@@ -1,7 +1,7 @@
 ﻿namespace Eladei.Architecture.Cqrs.Commands;
 
 /// <summary>
-/// Достигнут лимит попыток выполнения команды
+/// Execution attempt limit has been reached
 /// </summary>
 public class CommandExecutionAttemptLimitReachedException : Exception
 {

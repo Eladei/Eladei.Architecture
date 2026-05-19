@@ -19,7 +19,7 @@ namespace Eladei.Architecture.Cqrs.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,7 +61,7 @@ namespace Eladei.Architecture.Cqrs.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MaxAttepmtsCount должен быть больше 0.
+        ///   Looks up a localized string similar to MaxAttemptsCount must be greater than 0.
         /// </summary>
         internal static string MaxAttemptsCountMustBeGreaterThanZero {
             get {
@@ -70,7 +70,7 @@ namespace Eladei.Architecture.Cqrs.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Недопустимый тип исключения &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Invalid exception type &apos;{0}&apos;.
         /// </summary>
         internal static string UnsupportedExceptionType {
             get {

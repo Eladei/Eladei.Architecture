@@ -1,13 +1,13 @@
 ﻿namespace Eladei.Architecture.Ddd.Entities;
 
 /// <summary>
-/// Сущность
+/// Entity
 /// </summary>
-/// <typeparam name="T">Тип идентификатора сущности</typeparam>
+/// <typeparam name="T">The type of the entity identifier</typeparam>
 public interface IEntity<T>
 {
     /// <summary>
-    /// Идентификатор сущности
+    /// The entity identifier
     /// </summary>
     T Id { get; }
 }

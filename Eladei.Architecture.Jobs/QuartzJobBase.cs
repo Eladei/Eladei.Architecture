@@ -6,7 +6,7 @@ using Quartz;
 namespace Eladei.Architecture.Jobs.Quartz;
 
 /// <summary>
-/// Базовый Job для Quartz
+/// Base Quartz job
 /// </summary>
 public abstract class QuartzJobBase : IJob
 {
@@ -16,9 +16,10 @@ public abstract class QuartzJobBase : IJob
     protected readonly ILogger? _logger;
 
     /// <summary>
-    /// Создает объект класса QuartzJobBase
+    /// Creates an instance of the Quartz job
     /// </summary>
-    /// <param name="logger">Тип базового job</param>
+    /// <param name="correlationContext">The correlation context used for tracing job execution</param>
+    /// <param name="logger">Optional logger instance</param>
     public QuartzJobBase(ICorrelationContext correlationContext, ILogger? logger = null)
     {
         _correlationContext = correlationContext
@@ -29,6 +30,7 @@ public abstract class QuartzJobBase : IJob
         _jobName = GetType().Name;
     }
 
+    /// <inheritdoc />
     public async Task Execute(IJobExecutionContext context)
     {
         using (_correlationContext.SetCorrelationId(Guid.NewGuid()))
@@ -54,55 +56,51 @@ public abstract class QuartzJobBase : IJob
         }
     }
 
-    #region Методы логирования
+    #region Logging methods
 
     /// <summary>
-    /// Логировать начало работы job
+    /// Logs the start of job execution
     /// </summary>
     protected virtual void LogJobStarted()
     {
         var msg = string.Format(Resources.JobStarted, _jobName);
-
         _logger?.LogInformation(msg);
     }
 
     /// <summary>
-    /// Логировать завершение работы job
+    /// Logs successful job completion
     /// </summary>
     protected virtual void LogJobFinished()
     {
         var msg = string.Format(Resources.JobFinished, _jobName);
-
         _logger?.LogInformation(msg);
     }
 
     /// <summary>
-    /// Логировать отмены работы job
+    /// Logs job cancellation
     /// </summary>
-    /// <param name="ex">Данные по отмене операции</param>
+    /// <param name="ex">The cancellation exception</param>
     protected virtual void LogJobCancelled(OperationCanceledException ex)
     {
         var msg = string.Format(Resources.JobCancelled, _jobName);
-
         _logger?.LogInformation(ex, msg);
     }
 
     /// <summary>
-    /// Логировать ошибку в процессе выполнения job
+    /// Logs a job execution error
     /// </summary>
-    /// <param name="ex">Ошибка выполнения job</param>
+    /// <param name="ex">The exception that occurred during execution</param>
     protected virtual void LogJobError(Exception ex)
     {
         var errorMsg = string.Format(Resources.JobError, _jobName);
-
         _logger?.LogCritical(ex, errorMsg);
     }
 
     #endregion
 
     /// <summary>
-    /// Выполнить основные операции job
+    /// Executes the main job logic
     /// </summary>
-    /// <param name="cancellationToken">Токен отмены</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     protected abstract Task Perform(CancellationToken cancellationToken);
 }

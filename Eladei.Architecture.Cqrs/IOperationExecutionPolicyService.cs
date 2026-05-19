@@ -1,14 +1,14 @@
 ﻿namespace Eladei.Architecture.Cqrs;
 
 /// <summary>
-/// Служба запроса политики выполнения операции
+/// Provides execution policies for operations
 /// </summary>
 public interface IOperationExecutionPolicyService
 {
     /// <summary>
-    /// Возвращает политику выполнения операции
+    /// Returns the execution policy for the specified operation
     /// </summary>
-    /// <param name="operation">Операция</param>
-    /// <returns>Политика выполнения команды</returns>
+    /// <param name="operation">The operation</param>
+    /// <returns>The operation execution policy</returns>
     IOperationExecutionPolicy GetExecutionPolicy(IOperation operation);
 }

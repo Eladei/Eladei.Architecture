@@ -3,17 +3,17 @@
 namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 
 /// <summary>
-/// Исполнитель запроса, работающей с Entity Framework
+/// Query executor for working with Entity Framework
 /// </summary>
-/// <typeparam name="T">Контекст данных</typeparam>
+/// <typeparam name="T">The database context type</typeparam>
 public interface IEfQueryExecutor<T> where T : DbContext
 {
     /// <summary>
-    /// Выполнить запрос
+    /// Executes a query
     /// </summary>
-    /// <typeparam name="R">Тип возвращаемого результата</typeparam>
-    /// <param name="query">Запрос</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
-    /// <returns>Результат запроса</returns>
+    /// <typeparam name="R">The result type</typeparam>
+    /// <param name="query">The query</param>
+    /// <param name="cancellationToken">The operation cancellation token</param>
+    /// <returns>The query result</returns>
     Task<R> ExecuteAsync<R>(IEfQuery<T, R> query, CancellationToken cancellationToken);
 }

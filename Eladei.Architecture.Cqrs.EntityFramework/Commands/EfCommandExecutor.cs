@@ -8,14 +8,15 @@ using System.Diagnostics;
 namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 
 /// <summary>
-/// Исполнитель команды, работающий с Entity Framework
+/// Command executor for working with Entity Framework
 /// </summary>
-/// <remarks>Координирует процесс обработки команд: 
-/// повторные попытки на основе политик; сохранение результатов в одной транзакции; логирование.
-/// Для сохранение событий в БД (outbox) в одной транзакции с результатами работы команды 
-/// необходима реализация интерфейса IEfOutboxDomainEventDao
+/// <remarks>
+/// Coordinates command execution process:
+/// retry policies, transactional execution, and logging.
+/// To persist domain events in the database (outbox pattern) within the same transaction,
+/// an implementation of <see cref="IEfOutboxDomainEventDao{T}"/> is required
 /// </remarks>
-/// <typeparam name="T">Контекст данных</typeparam>
+/// <typeparam name="T">The database context type</typeparam>
 public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
 {
     protected readonly IDbContextFactory<T> _contextFactory;
@@ -24,13 +25,12 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
     protected readonly IEfCommandExecutorLogger? _logger;
 
     /// <summary>
-    /// Создает объект класса EfCommandExecutor
+    /// Creates an instance of the EF command executor
     /// </summary>
-    /// <param name="contextFactory">Фабрика контекста данных</param>
-    /// <param name="executionPolicyService">Служба запроса политики выполнения операции</param>
-    /// <param name="domainEventDao">Служба для сохранения событий предметной области</param>
-    /// <param name="logger">Логгер</param>
-    /// <exception cref="ArgumentNullException"></exception>
+    /// <param name="contextFactory">The database context factory</param>
+    /// <param name="executionPolicyService">The operation execution policy service</param>
+    /// <param name="domainEventDao">The domain event outbox storage</param>
+    /// <param name="logger">The optional logger</param>
     public EfCommandExecutor(
         IDbContextFactory<T> contextFactory,
         IOperationExecutionPolicyService executionPolicyService,
@@ -49,6 +49,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public virtual async Task ExecuteAsync(IEfCommand<T> command, CancellationToken cancellationToken)
     {
         var commandName = command.GetType().Name;
@@ -149,6 +150,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
         }
     }
 
+    /// <inheritdoc />
     public virtual async Task<R> ExecuteAsync<R>(IEfCommand<T, R> command, CancellationToken cancellationToken)
     {
         var commandName = command.GetType().Name;
@@ -246,6 +248,13 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
         throw new UnreachableException(Resources.UnreachableCodeError);
     }
 
+    /// <summary>
+    /// Creates a database context
+    /// </summary>
+    /// <param name="commandName">The command name</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The database context instance</returns>
+    /// <exception cref="InvalidOperationException"></exception>
     protected virtual async Task<T> CreateDbContextAsync(string commandName, CancellationToken cancellationToken)
     {
         T context = await _contextFactory.CreateDbContextAsync(cancellationToken);
@@ -263,13 +272,13 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
     }
 
     /// <summary>
-    /// Обрабатывает ошибку конкуретного обновления БД
+    /// Handles database concurrency update exceptions
     /// </summary>
-    /// <param name="commandName">Название команды</param>
-    /// <param name="ex">Исключение конкуретного обновления БД</param>
-    /// <param name="attempt">Число попыток обновления БД</param>
-    /// <param name="maxAttemptsCount">Максимальное число попыток обновление БД</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <param name="commandName">The command name</param>
+    /// <param name="ex">The database update exception</param>
+    /// <param name="attempt">The current retry attempt</param>
+    /// <param name="maxAttemptsCount">The maximum number of retry attempts</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     /// <exception cref="DbModifiedObjectWasRemovedException"></exception>
     /// <exception cref="DbRemovingObjectWasRemovedException"></exception>
     /// <exception cref="DbUnknownEntityStateException"></exception>
@@ -281,8 +290,8 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
         {
             var databaseValues = await entry.GetDatabaseValuesAsync(cancellationToken);
 
-            // Выбросить исключение, если изменяемый или удаляемый объект уже был удален,
-            // или если добавляемый объект уже был добавлен
+            // Throw an exception if the modified or deleted object has already been removed,
+            // or if the added object has already been added
             if (databaseValues == null)
             {
                 switch (entry.State)
@@ -318,28 +327,34 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
     }
 
     /// <summary>
-    /// Сделать задержку перед новой попыткой выполнения команды
+    /// Calculates and applies a delay before the next retry attempt using exponential backoff with jitter
     /// </summary>
-    /// <param name="currentAttempt">Текущая попытка</param>
-    /// <param name="maxDelayInMilliseconds">Максимальная величина задержки в миллисекундах</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <param name="currentAttempt">The current attempt number</param>
+    /// <param name="maxDelayInMilliseconds">The maximum delay in milliseconds</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     protected virtual async Task DelayBeforeNewAttempt(
         uint currentAttempt, uint maxDelayInMilliseconds, CancellationToken cancellationToken)
     {
 
         uint baseDelay = Math.Min(1000 * (uint)Math.Pow(2, currentAttempt - 1), maxDelayInMilliseconds);
 
-        // Добавляем jitter ±20%
+        // Add jitter ±20%
         var jitterFactor = 0.2;
         var jitter = (float)(Random.Shared.NextDouble() * 2 - 1) * jitterFactor; // [-0.2, +0.2]
         var delayWithJitter = baseDelay * (1 + jitter);
 
-        // Безопасное приведение к int (не превышаем int.MaxValue)
+        // Safe cast to int (do not exceed int.MaxValue)
         var delayMs = Math.Min((int)Math.Round(delayWithJitter), int.MaxValue);
 
         await Task.Delay(delayMs, cancellationToken);
     }
 
+    /// <summary>
+    /// Saves domain events using the outbox storage mechanism
+    /// </summary>
+    /// <param name="domainEvents">The domain events to persist</param>
+    /// <param name="context">The database context</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     protected virtual Task SaveDomainEvents(IReadOnlyCollection<IDomainEvent> domainEvents, T context, CancellationToken cancellationToken)
     {
         if (domainEvents.Any())

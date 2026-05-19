@@ -4,65 +4,64 @@ using Eladei.Architecture.Ddd.DomainEvents;
 namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 
 /// <summary>
-/// Команда
+/// Command
 /// </summary>
 public interface IDddCommand : ICommand
 {
     /// <summary>
-    /// Доменные события
+    /// Domain events
     /// </summary>
     IReadOnlyCollection<IDomainEvent> Events { get; }
 
     /// <summary>
-    /// Очистка доменных событий
+    /// Clears domain events
     /// </summary>
     void ClearEvents();
 
     /// <summary>
-    /// Действия перед выполнением команды
+    /// Actions before command execution
     /// </summary>
-    /// <param name="repositoryFactory">Фабрика репозиториев</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Необходимость выполнения команды</returns>
+    /// <param name="repositoryFactory">The repository factory</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>Whether the command should be executed</returns>
     Task<bool> BeforeExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Выполнить команду
+    /// Executes the command
     /// </summary>
-    /// <param name="repositoryFactory">Фабрика репозиториев</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат выполнения команды</returns>
+    /// <param name="repositoryFactory">The repository factory</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     Task ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken);
 }
 
 /// <summary>
-/// Команда, возвращающая результат
+/// Command that returns a result
 /// </summary>
-/// <typeparam name="R">Тип результата</typeparam>
+/// <typeparam name="R">The result type</typeparam>
 public interface IDddCommand<R> : ICommand<R>
 {
     /// <summary>
-    /// Доменные события
+    /// Domain events
     /// </summary>
     IReadOnlyCollection<IDomainEvent> Events { get; }
 
     /// <summary>
-    /// Очистка доменных событий
+    /// Clears domain events
     /// </summary>
     void ClearEvents();
 
     /// <summary>
-    /// Действия перед выполнением команды
+    /// Actions before command execution
     /// </summary>
-    /// <param name="repositoryFactory">Фабрика репозиториев</param>
-    /// <param name="cancellationToken">Токен отмены</param>
+    /// <param name="repositoryFactory">The repository factory</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     Task BeforeExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Выполнить команду
+    /// Executes the command
     /// </summary>
-    /// <param name="repositoryFactory">Фабрика репозиториев</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат выполнения операции</returns>
+    /// <param name="repositoryFactory">The repository factory</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The execution result</returns>
     Task<R> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken);
 }

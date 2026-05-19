@@ -4,39 +4,16 @@ using Eladei.Architecture.Cqrs.Queries;
 namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 
 /// <summary>
-/// Запрос для работы с Entity Framework
+/// Base paged query for working with Entity Framework
 /// </summary>
-/// <typeparam name="T">Контекст данных</typeparam>
+/// <typeparam name="T">The database context type</typeparam>
+/// <typeparam name="R">The result item type</typeparam>
 public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> where T : DbContext
 {
     private readonly uint _page;
     protected readonly uint? _elementsPerPage;
 
-    /// <summary>
-    /// Количество пропускаемых элементов при запросе
-    /// </summary>
-    protected uint ElementsToSkip => _elementsPerPage.HasValue
-        ? _elementsPerPage.Value * (_page - 1)
-        : 0;
-
-    /// <summary>
-    /// Создает объект класса Query
-    /// </summary>
-    /// <param name="elementsPerPage">Число элементов на страницу</param>
-    /// <param name="page">Номер страницы, для которой будет вестись поиск</param>>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    protected EfPageQueryBase(uint? elementsPerPage = null, uint? page = null)
-    {
-        if (elementsPerPage.HasValue)
-            ArgumentOutOfRangeException.ThrowIfZero(elementsPerPage.Value);
-
-        if (page.HasValue)
-            ArgumentOutOfRangeException.ThrowIfZero(page.Value);
-
-        _elementsPerPage = elementsPerPage;
-        _page = page ?? 1;
-    }
-
+    /// <inheritdoc />
     public override async Task<PageResult<R>> ExecuteAsync(T context, CancellationToken cancellationToken = default)
     {
         var result = await PerformAsync(context, cancellationToken);
@@ -53,20 +30,45 @@ public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> wher
     }
 
     /// <summary>
-    /// Выполнить операцию
+    /// Executes the query
     /// </summary>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
-    /// <returns>Результат выполнения операции</returns>
+    /// <param name="context">The database context</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The query result</returns>
     protected abstract Task<IEnumerable<R>> PerformAsync(T context, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Определить общее количество элементов
+    /// Gets the total number of elements
     /// </summary>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
-    /// <returns>Общее количество элементов</returns>
+    /// <param name="context">The database context</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>Total number of elements</returns>
     protected abstract Task<uint> GetAllElementsCount(T context, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Number of elements to skip in the query
+    /// </summary>
+    protected uint ElementsToSkip => _elementsPerPage.HasValue
+        ? _elementsPerPage.Value * (_page - 1)
+        : 0;
+
+    /// <summary>
+    /// Creates a query instance
+    /// </summary>
+    /// <param name="elementsPerPage">Number of items per page</param>
+    /// <param name="page">Page number to retrieve</param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    protected EfPageQueryBase(uint? elementsPerPage = null, uint? page = null)
+    {
+        if (elementsPerPage.HasValue)
+            ArgumentOutOfRangeException.ThrowIfZero(elementsPerPage.Value);
+
+        if (page.HasValue)
+            ArgumentOutOfRangeException.ThrowIfZero(page.Value);
+
+        _elementsPerPage = elementsPerPage;
+        _page = page ?? 1;
+    }
 
     private async Task<PageAdditionalInfo> GetPagesAdditionalInfo(T context, CancellationToken cancellationToken)
     {
@@ -84,17 +86,17 @@ public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> wher
     }
 
     /// <summary>
-    /// Дополнительная информация о странице
+    /// Additional paging information
     /// </summary>
     private record PageAdditionalInfo
     {
         /// <summary>
-        /// Общее количество страниц
+        /// Total number of pages
         /// </summary>
         public uint TotalPages { get; init; }
 
         /// <summary>
-        /// Общее количество элементов на всех страницах
+        /// Total number of elements across all pages
         /// </summary>
         public uint TotalElements { get; init; }
     }

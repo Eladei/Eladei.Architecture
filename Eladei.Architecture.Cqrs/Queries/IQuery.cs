@@ -1,7 +1,7 @@
 ﻿namespace Eladei.Architecture.Cqrs.Queries;
 
 /// <summary>
-/// Запрос
+/// Query
 /// </summary>
-/// <typeparam name="R">Тип результата</typeparam>
+/// <typeparam name="R">The result type</typeparam>
 public interface IQuery<R> : IOperation { }

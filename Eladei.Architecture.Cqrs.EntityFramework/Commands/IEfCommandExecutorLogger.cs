@@ -3,56 +3,55 @@
 namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 
 /// <summary>
-/// Логгер исполнителя команд
+/// Entity Framework command executor logger
 /// </summary>
 public interface IEfCommandExecutorLogger
 {
     /// <summary>
-    /// Логировать начало обработки команды
+    /// Logs the start of command execution
     /// </summary>
     void ExecutingStarted(string commandName);
 
     /// <summary>
-    /// Логировать успешное завершение обработки команды
+    /// Logs successful completion of command execution
     /// </summary>
     void ExecutingSuccessfulFinished(string commandName);
 
     /// <summary>
-    /// Логировать завершение обработки команды
+    /// Logs command cancellation
     /// </summary>
-    /// <param name="commandName">Название команды</param>
-    /// <param name="ex">Данные по отмене операции</param>
+    /// <param name="commandName">The command name</param>
+    /// <param name="ex">The cancellation exception</param>
     void ExecutingCancelled(string commandName, OperationCanceledException ex);
 
     /// <summary>
-    /// Логировать ошибку доменной логики
+    /// Logs a domain logic error
     /// </summary>
-    /// <param name="commandName">Название команды</param>
-    /// <param name="ex">Ошибка доменной логики</param>
+    /// <param name="commandName">The command name</param>
+    /// <param name="ex">The domain logic exception</param>
     void DomainLogicError(string commandName, DomainLogicException ex);
 
     /// <summary>
-    /// Логировать критическую ошибку обработки команды
+    /// Logs a critical command execution error
     /// </summary>
-    /// <param name="commandName">Название команды</param>
-    /// <param name="ex">Ошибка обработки команды</param>
+    /// <param name="commandName">The command name</param>
+    /// <param name="ex">The exception</param>
     void CriticalError(string commandName, Exception ex);
 
     /// <summary>
-    /// Логировать ошибку обновления информации в БД
+    /// Logs a database update conflict error
     /// </summary>
-    /// <param name="commandName">Название команды</param>
-    /// <param name="ex">Ошибка конкурентного доступа</param>
-    /// <param name="attempt">Текущая попытка обновления БД</param>
-    /// <param name="maxAttemptsCount">Общее количество попыток обновления БД</param>
+    /// <param name="commandName">The command name</param>
+    /// <param name="ex">The concurrency exception</param>
+    /// <param name="attempt">The current retry attempt</param>
+    /// <param name="maxAttemptsCount">The maximum number of retry attempts</param>
     void UpdateError(string commandName, Exception ex, uint attempt, uint maxAttemptsCount);
 
     /// <summary>
-    /// Логировать ошибку достижения предела попыток обновления информации в БД
-    /// в процессе обработки команды
+    /// Logs reaching the retry limit for database updates during command execution
     /// </summary>
-    /// <param name="commandName">Название команды</param>
-    /// <param name="ex">Ошибка обработки команды</param>
-    /// <param name="maxAttemptsCount">Общее количество попыток обновления БД</param>
+    /// <param name="commandName">The command name</param>
+    /// <param name="ex">The exception</param>
+    /// <param name="maxAttemptsCount">The maximum number of retry attempts</param>
     void AttemptLimitReachedError(string commandName, Exception ex, uint maxAttemptsCount);
 }
