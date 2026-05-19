@@ -1,6 +1,6 @@
 ﻿namespace Eladei.Architecture.Cqrs;
 
 /// <summary>
-/// Операция
+/// Marker interface for CQRS operations.
 /// </summary>
 public interface IOperation { }

@@ -4,10 +4,12 @@ using Eladei.Architecture.Ddd.Entities;
 namespace Eladei.Architecture.Cqrs;
 
 /// <summary>
-/// Строитель для формирования политик выполнения операций
+/// Builder for creating operation execution policies
 /// </summary>
-/// <remarks>По умолчанию не допускает повторные попытки 
-/// выполнения операции при ошибке доменной логики</remarks>
+/// <remarks>
+/// By default, retry attempts are not allowed
+/// for domain logic failures
+/// </remarks>
 public class OperationExecutionPolicyBuilder
 {
     private IReadOnlyCollection<Type>? _exceptionTypesForRetry;
@@ -15,9 +17,12 @@ public class OperationExecutionPolicyBuilder
     private uint _maxDelayInMilliseconds;
 
     /// <summary>
-    /// Создает объект класса OperationExecutionPolicyBuilder
+    /// Creates a new instance of <see cref="OperationExecutionPolicyBuilder"/>
     /// </summary>
-    /// <remarks>По умолчанию не допускает повторные попытки выполнения операции при ошибке доменной логики</remarks>
+    /// <remarks>
+    /// By default, retry attempts are not allowed
+    /// for domain logic failures
+    /// </remarks>
     public OperationExecutionPolicyBuilder()
     {
         _maxAttemptsCount = 1;
@@ -25,12 +30,15 @@ public class OperationExecutionPolicyBuilder
     }
 
     /// <summary>
-    /// Установить количество повторных попыток выполнения операции
+    /// Configures retry attempts for the specified exception types
     /// </summary>
-    /// <param name="exceptionTypesForRetry">Количество повторных попыток выполнения</param>
-    /// <returns>Политика выполнения операции</returns>
+    /// <param name="exceptionTypesForRetry">Exception types that allow retry attempts</param>
+    /// <returns>The current builder instance</returns>
     /// <exception cref="ArgumentException"></exception>
-    /// <remarks>По умолчанию метод не допускает повторные попытки выполнения операции при ошибке доменной логики</remarks>
+    /// <remarks>
+    /// By default, retry attempts are not allowed
+    /// for domain logic failures
+    /// </remarks>
     public virtual OperationExecutionPolicyBuilder RetryOn(params Type[] exceptionTypesForRetry)
     {
         if (exceptionTypesForRetry.Any(e => typeof(DomainLogicException).IsAssignableFrom(e)))
@@ -45,6 +53,13 @@ public class OperationExecutionPolicyBuilder
         return this;
     }
 
+    /// <summary>
+    /// Configures the maximum number of execution attempts
+    /// </summary>
+    /// <param name="maxAttemptsCount">
+    /// Maximum number of execution attempts
+    /// </param>
+    /// <returns>The current builder instance</returns>
     public virtual OperationExecutionPolicyBuilder MaxAttemptsCount(uint maxAttemptsCount)
     {
         if (maxAttemptsCount == 0)
@@ -55,6 +70,13 @@ public class OperationExecutionPolicyBuilder
         return this;
     }
 
+    /// <summary>
+    /// Configures the maximum delay before the next retry attempt
+    /// </summary>
+    /// <param name="maxDelayInMilliseconds">
+    /// Maximum delay, in milliseconds, before the next retry attempt
+    /// </param>
+    /// <returns>The current builder instance</returns>
     public virtual OperationExecutionPolicyBuilder MaxDelayInMilliseconds(uint maxDelayInMilliseconds)
     {
         _maxDelayInMilliseconds = maxDelayInMilliseconds;
@@ -62,6 +84,10 @@ public class OperationExecutionPolicyBuilder
         return this;
     }
 
+    /// <summary>
+    /// Builds the operation execution policy based on the configured parameters
+    /// </summary>
+    /// <returns></returns>
     public IOperationExecutionPolicy Build()
     {
         return new OperationExecutionPolicy()
@@ -73,22 +99,32 @@ public class OperationExecutionPolicyBuilder
     }
 
     /// <summary>
-    /// Политика выполнения операции
+    /// Operation execution policy
     /// </summary>
     internal sealed class OperationExecutionPolicy : IOperationExecutionPolicy
     {
         internal IReadOnlyCollection<Type>? ExceptionTypesForRetry { get; init; }
 
         /// <summary>
-        /// Допустимое число попыток выполнения операции
+        /// Maximum number of execution attempts
         /// </summary>
         public uint MaxAttemptsCount { get; init; }
 
         /// <summary>
-        /// Максимальная задержка перед следующей попыткой выполнения операции
+        /// Maximum delay before the next retry attempt
         /// </summary>
         public uint MaxDelayInMilliseconds { get; init; }
 
+        /// <summary>
+        /// Determines whether the operation should be retried
+        /// </summary>
+        /// <typeparam name="T">The type of the thrown exception</typeparam>
+        /// <param name="ex">The exception that caused the operation failure</param>
+        /// <param name="currentAttempt">The current attempt number</param>
+        /// <returns>
+        /// <see langword="true"/> if the operation should be retried;
+        /// otherwise, <see langword="false"/>
+        /// </returns>
         public bool ShouldRetry<T>(T ex, uint currentAttempt) where T : Exception
         {
             if (currentAttempt >= MaxAttemptsCount)

@@ -1,7 +1,7 @@
 ﻿namespace Eladei.Architecture.Cqrs.Commands;
 
 /// <summary>
-/// Неизвестное состояние объекта БД
+/// The database entity is in an unknown state
 /// </summary>
 public class DbUnknownEntityStateException : Exception
 {

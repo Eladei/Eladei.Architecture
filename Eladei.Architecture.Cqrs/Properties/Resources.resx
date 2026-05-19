@@ -118,9 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaxAttemptsCountMustBeGreaterThanZero" xml:space="preserve">
-    <value>MaxAttepmtsCount должен быть больше 0</value>
+    <value>MaxAttemptsCount must be greater than 0</value>
   </data>
   <data name="UnsupportedExceptionType" xml:space="preserve">
-    <value>Недопустимый тип исключения '{0}'</value>
+    <value>Invalid exception type '{0}'</value>
   </data>
 </root>

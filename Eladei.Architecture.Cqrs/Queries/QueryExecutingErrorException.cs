@@ -1,7 +1,7 @@
 ﻿namespace Eladei.Architecture.Cqrs.Queries;
 
 /// <summary>
-/// Ошибка выполнения запроса
+/// Query execution error
 /// </summary>
 public class QueryExecutingErrorException : Exception
 {

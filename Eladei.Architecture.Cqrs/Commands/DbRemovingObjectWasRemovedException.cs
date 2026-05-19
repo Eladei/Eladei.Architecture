@@ -1,7 +1,7 @@
 ﻿namespace Eladei.Architecture.Cqrs.Commands;
 
 /// <summary>
-/// Удаляемый в БД объект был уже удален
+/// The entity being deleted has already been removed from the database
 /// </summary>
 public class DbRemovingObjectWasRemovedException : Exception
 {
