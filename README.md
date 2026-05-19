@@ -53,7 +53,7 @@ var commandExecutor = new EfCommandExecutor<BookRatingDbContext>(
 var queryExecutor = new EfQueryExecutor<BookRatingDbContext>(contextFactory);
 
 // Execute command
-var registerBookCommand = new RegisterBookCommand("Капитанская дочка", "А.С.Пушкин");
+var registerBookCommand = new RegisterBookCommand("The Captain's Daughter", "A.S. Pushkin");
 
 var bookId = await commandExecutor.ExecuteAsync(registerBookCommand, CancellationToken.None);
 
@@ -108,7 +108,7 @@ var commandExecutor = new DddCommandExecutor(
 var queryExecutor = new DddQueryExecutor(contextFactory);
 
  // Execute command
-var registerBookCommand = new RegisterBookCommand("Капитанская дочка", "А.С. Пушкин");
+var registerBookCommand = new RegisterBookCommand("The Captain's Daughter", "A.S. Pushkin");
 
 var bookId = await _commandExecutor.ExecuteAsync(registerBookCommand, CancellationToken.None);
 
