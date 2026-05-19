@@ -19,6 +19,7 @@ public sealed class DddQueryExecutorLogger : IDddQueryExecutorLogger
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    /// <inheritdoc />
     public void ExecutingStarted(string queryName)
     {
         var msg = string.Format(Resources.QueryExecutingStarted, queryName);
@@ -26,6 +27,7 @@ public sealed class DddQueryExecutorLogger : IDddQueryExecutorLogger
         _logger?.LogInformation(msg);
     }
 
+    /// <inheritdoc />
     public void ExecutingSuccessfulFinished(string queryName)
     {
         var msg = string.Format(Resources.QueryExecutingSuccessfullyFinished, queryName);
@@ -33,6 +35,7 @@ public sealed class DddQueryExecutorLogger : IDddQueryExecutorLogger
         _logger?.LogInformation(msg);
     }
 
+    /// <inheritdoc />
     public void ExecutingCancelled(string queryName, OperationCanceledException ex)
     {
         var msg = string.Format(Resources.QueryExecutingCancelled, queryName);
@@ -40,6 +43,7 @@ public sealed class DddQueryExecutorLogger : IDddQueryExecutorLogger
         _logger?.LogInformation(ex, msg);
     }
 
+    /// <inheritdoc />
     public void CriticalError<E>(string queryName, E ex) where E : Exception
     {
         var errorMsg = string.Format(Resources.QueryExecutingError, queryName);

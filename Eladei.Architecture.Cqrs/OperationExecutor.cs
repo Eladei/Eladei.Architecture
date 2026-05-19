@@ -29,12 +29,15 @@ public class OperationExecutor : IOperationExecutor
             ?? throw new ArgumentNullException(nameof(queryExecutor));
     }
 
+    /// <inheritdoc />
     public Task ExecuteAsync(ICommand command, CancellationToken ct)
         => _commandExecutor.ExecuteAsync(command, ct);
 
+    /// <inheritdoc />
     public Task<R> ExecuteAsync<R>(ICommand<R> command, CancellationToken ct)
         => _commandExecutor.ExecuteAsync(command, ct);
 
+    /// <inheritdoc />
     public Task<R> ExecuteAsync<R>(IQuery<R> query, CancellationToken ct)
         => _queryExecutor.ExecuteAsync(query, ct);
 }

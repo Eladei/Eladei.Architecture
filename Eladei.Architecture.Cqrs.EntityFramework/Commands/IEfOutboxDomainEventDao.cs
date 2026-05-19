@@ -4,20 +4,22 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 
 /// <summary>
-/// Служба сохранения доменных событий в outbox
+/// Outbox service for storing domain events
 /// </summary>
-/// <typeparam name="T">Тип контекста данных</typeparam>
-/// <remarks>Используется, если нужно сохранить доменные события в БД 
-/// с последующей публикацией в отдельном процессе, например в job.
-/// Сохраняйте события в той же транзакции, что и другие данные.
-/// Для этого передавайте в метод SaveAsync тот же контекст данных</remarks>
+/// <typeparam name="T">The database context type</typeparam>
+/// <remarks>
+/// Used when domain events need to be persisted in the database
+/// and later published in a separate process (e.g., a background job).
+/// Events must be saved within the same transaction as other data.
+/// For this purpose, pass the same database context to the SaveAsync method.
+/// </remarks>
 public interface IEfOutboxDomainEventDao<T> where T : DbContext
 {
     /// <summary>
-    /// Сохранить доменное событие в постоянное хранилище
+    /// Saves a domain event to persistent storage
     /// </summary>
-    /// <param name="domainEvents">Доменные события</param>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <param name="domainEvents">The domain events</param>
+    /// <param name="context">The database context</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     Task SaveAsync(IReadOnlyCollection<IDomainEvent> domainEvents, T context, CancellationToken cancellationToken);
 }

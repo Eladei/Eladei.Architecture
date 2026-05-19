@@ -48,6 +48,7 @@ public class DddCommandExecutor : IDddCommandExecutor
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public virtual async Task ExecuteAsync(IDddCommand command, CancellationToken cancellationToken)
     {
         var commandName = command.GetType().Name;
@@ -137,6 +138,7 @@ public class DddCommandExecutor : IDddCommandExecutor
         }
     }
 
+    /// <inheritdoc />
     public virtual async Task<R> ExecuteAsync<R>(IDddCommand<R> command, CancellationToken cancellationToken)
     {
         var commandName = command.GetType().Name;

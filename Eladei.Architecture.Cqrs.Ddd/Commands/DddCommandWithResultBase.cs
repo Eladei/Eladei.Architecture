@@ -10,18 +10,22 @@ public abstract class DddCommandWithResultBase<R> : IDddCommand<R>
 {
     private readonly List<IDomainEvent> _events = [];
 
+    /// <inheritdoc />
     public IReadOnlyCollection<IDomainEvent> Events => _events.AsReadOnly();
 
+    /// <inheritdoc />
     public void ClearEvents()
     {
         _events.Clear();
     }
 
+    /// <inheritdoc />
     public virtual Task BeforeExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;
     }
 
+    /// <inheritdoc />
     public abstract Task<R> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default);
 
     /// <summary>

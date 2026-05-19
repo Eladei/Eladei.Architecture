@@ -9,27 +9,16 @@ public abstract class DddCommandBase : IDddCommand
 {
     private readonly List<IDomainEvent> _events = [];
 
-    /// <summary>
-    /// Domain events raised by the command
-    /// </summary>
+    /// <inheritdoc />
     public IReadOnlyCollection<IDomainEvent> Events => _events;
 
-    /// <summary>
-    /// Clears all domain events
-    /// </summary>
+    /// <inheritdoc />
     public void ClearEvents()
     {
         _events.Clear();
     }
 
-    /// <summary>
-    /// Executes logic before command execution
-    /// </summary>
-    /// <param name="repositoryFactory">The repository factory</param>
-    /// <param name="cancellationToken">The cancellation token</param>
-    /// <returns>
-    /// True if execution can continue; otherwise false
-    /// </returns>
+    /// <inheritdoc />
     public virtual Task<bool> BeforeExecuteAsync(
         IRepositoryFactory repositoryFactory,
         CancellationToken cancellationToken = default)
@@ -37,11 +26,7 @@ public abstract class DddCommandBase : IDddCommand
         return Task.FromResult(true);
     }
 
-    /// <summary>
-    /// Executes the command
-    /// </summary>
-    /// <param name="repositoryFactory">The repository factory</param>
-    /// <param name="cancellationToken">The cancellation token</param>
+    /// <inheritdoc />
     public abstract Task ExecuteAsync(
         IRepositoryFactory repositoryFactory,
         CancellationToken cancellationToken = default);

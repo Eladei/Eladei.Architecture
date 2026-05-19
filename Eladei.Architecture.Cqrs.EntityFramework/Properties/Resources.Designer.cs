@@ -19,7 +19,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,7 +61,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не удалось создать контекст БД.
+        ///   Looks up a localized string similar to Failed to create database context.
         /// </summary>
         internal static string CantCreateDbContext {
             get {
@@ -70,7 +70,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to При обработке команды &apos;{0}&apos; возникла ошибка обновления данных при попытке {1} из {2}.
+        ///   Looks up a localized string similar to An error occurred while processing command &apos;{0}&apos; during data update attempt {1} of {2}.
         /// </summary>
         internal static string CommandDbUpdateAttemptError {
             get {
@@ -79,7 +79,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to При обработке команды &apos;{0}&apos; достигнут предел попыток обновления информации в БД. Всего {1} попыток.
+        ///   Looks up a localized string similar to Execution attempt limit has been reached while processing command &apos;{0}&apos;. Total attempts: {1}.
         /// </summary>
         internal static string CommandDbUpdateAttemptLimitReachedError {
             get {
@@ -88,7 +88,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение команды &apos;{0}&apos; отменено.
+        ///   Looks up a localized string similar to Execution of command &apos;{0}&apos; has been canceled.
         /// </summary>
         internal static string CommandExecutingCancelled {
             get {
@@ -97,7 +97,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ошибка при выполнении команды &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Error occurred while executing command &apos;{0}&apos;.
         /// </summary>
         internal static string CommandExecutingError {
             get {
@@ -106,7 +106,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение команды &apos;{0}&apos; началось.
+        ///   Looks up a localized string similar to Execution of command &apos;{0}&apos; has started.
         /// </summary>
         internal static string CommandExecutingStarted {
             get {
@@ -115,7 +115,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение команды &apos;{0}&apos; успешно завершено.
+        ///   Looks up a localized string similar to Execution of command &apos;{0}&apos; has completed successfully.
         /// </summary>
         internal static string CommandExecutingSuccessfullyFinished {
             get {
@@ -124,7 +124,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Изменяемый объект был удален в БД.
+        ///   Looks up a localized string similar to The entity being modified has been deleted from the database.
         /// </summary>
         internal static string ModifiedObjectWasRemoved {
             get {
@@ -133,7 +133,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение запроса &apos;{0}&apos; отменено.
+        ///   Looks up a localized string similar to Execution of query &apos;{0}&apos; has been canceled.
         /// </summary>
         internal static string QueryExecutingCancelled {
             get {
@@ -142,7 +142,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ошибка при выполнении запроса &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Error occurred while executing query &apos;{0}&apos;.
         /// </summary>
         internal static string QueryExecutingError {
             get {
@@ -151,7 +151,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение запроса &apos;{0}&apos; началось.
+        ///   Looks up a localized string similar to Execution of query &apos;{0}&apos; has started.
         /// </summary>
         internal static string QueryExecutingStarted {
             get {
@@ -160,7 +160,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выполнение запроса &apos;{0}&apos; успешно завершено.
+        ///   Looks up a localized string similar to Execution of query &apos;{0}&apos; has completed successfully.
         /// </summary>
         internal static string QueryExecutingSuccessfullyFinished {
             get {
@@ -169,7 +169,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Удаляемый объект уже был удален в БД.
+        ///   Looks up a localized string similar to The entity being deleted has already been removed from the database.
         /// </summary>
         internal static string RemovingObjectWasAlreadyRemoved {
             get {
@@ -178,7 +178,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Неизвестное состояние объекта.
+        ///   Looks up a localized string similar to The entity is in an unknown state.
         /// </summary>
         internal static string UnknownDbEntityState {
             get {
@@ -187,7 +187,7 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Код недостижим.
+        ///   Looks up a localized string similar to Unreachable code.
         /// </summary>
         internal static string UnreachableCodeError {
             get {

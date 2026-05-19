@@ -5,71 +5,74 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 
 /// <summary>
-/// Команда
+/// Command for working with Entity Framework
 /// </summary>
-/// <remarks>Интерфейс описывает команду, напрямую работающую с контекстом данных.
-/// Такие команды реализуют transaction script</remarks>
-/// <typeparam name="T">Тип контекста данных</typeparam>
+/// <remarks>
+/// The interface defines a command that works directly with the database context.
+/// Such commands implement the transaction script pattern.
+/// </remarks>
+/// <typeparam name="T">The database context type</typeparam>
 public interface IEfCommand<T> : ICommand where T : DbContext
 {
     /// <summary>
-    /// Доменные события
+    /// Domain events
     /// </summary>
     IReadOnlyCollection<IDomainEvent> Events { get; }
 
     /// <summary>
-    /// Очистка доменных событий
+    /// Clears domain events
     /// </summary>
     void ClearEvents();
 
     /// <summary>
-    /// Действия перед выполнением команды
+    /// Actions executed before the command execution
     /// </summary>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Необходимость выполнения команды</returns>
+    /// <param name="context">The database context</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>Indicates whether the command should be executed</returns>
     Task<bool> BeforeExecuteAsync(T context, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Выполнить команду
+    /// Executes the command
     /// </summary>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат выполнения команды</returns>
+    /// <param name="context">The database context</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     Task ExecuteAsync(T context, CancellationToken cancellationToken);
 }
 
 /// <summary>
-/// Команда, возвращающая результат
+/// Command that returns a result
 /// </summary>
-/// <typeparam name="T">Тип контекста данных</typeparam>
-/// <typeparam name="R">Тип результата</typeparam>
-/// <remarks>Интерфейс описывает команду, напрямую работающую с контекстом данных.
-/// Такие команды реализуют transaction script</remarks>
+/// <typeparam name="T">The database context type</typeparam>
+/// <typeparam name="R">The result type</typeparam>
+/// <remarks>
+/// The interface defines a command that works directly with the database context.
+/// Such commands implement the transaction script pattern.
+/// </remarks>
 public interface IEfCommand<T, R> : ICommand<R> where T : DbContext
 {
     /// <summary>
-    /// Доменные события
+    /// Domain events
     /// </summary>
     IReadOnlyCollection<IDomainEvent> Events { get; }
 
     /// <summary>
-    /// Очистка доменных событий
+    /// Clears domain events
     /// </summary>
     void ClearEvents();
 
     /// <summary>
-    /// Действия перед выполнением команды
+    /// Actions executed before the command execution
     /// </summary>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены</param>
+    /// <param name="context">The database context</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     Task BeforeExecuteAsync(T context, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Выполнить команду
+    /// Executes the command
     /// </summary>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат выполнения операции</returns>
+    /// <param name="context">The database context</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The result of the operation</returns>
     Task<R> ExecuteAsync(T context, CancellationToken cancellationToken);
 }

@@ -3,16 +3,17 @@
 namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 
 /// <summary>
-/// Запрос для работы с EntityFramework
+/// Query for working with Entity Framework
 /// </summary>
-/// <typeparam name="R">Тип результата</typeparam>
+/// <typeparam name="T">The database context type</typeparam>
+/// <typeparam name="R">The result type</typeparam>
 public interface IEfQuery<T, R> : IQuery<R>
 {
     /// <summary>
-    /// Выполнить запрос
+    /// Executes the query
     /// </summary>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат выполнения операции</returns>
+    /// <param name="context">The database context</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The operation result</returns>
     Task<R> ExecuteAsync(T context, CancellationToken cancellationToken);
 }

@@ -89,14 +89,12 @@ public class OperationExecutionPolicyBuilder
     /// </summary>
     /// <returns></returns>
     public IOperationExecutionPolicy Build()
-    {
-        return new OperationExecutionPolicy()
+        => new OperationExecutionPolicy()
         {
             ExceptionTypesForRetry = _exceptionTypesForRetry,
             MaxAttemptsCount = _maxAttemptsCount,
             MaxDelayInMilliseconds = _maxDelayInMilliseconds,
         };
-    }
 
     /// <summary>
     /// Operation execution policy
@@ -105,26 +103,13 @@ public class OperationExecutionPolicyBuilder
     {
         internal IReadOnlyCollection<Type>? ExceptionTypesForRetry { get; init; }
 
-        /// <summary>
-        /// Maximum number of execution attempts
-        /// </summary>
+        /// <inheritdoc />
         public uint MaxAttemptsCount { get; init; }
 
-        /// <summary>
-        /// Maximum delay before the next retry attempt
-        /// </summary>
+        /// <inheritdoc />
         public uint MaxDelayInMilliseconds { get; init; }
 
-        /// <summary>
-        /// Determines whether the operation should be retried
-        /// </summary>
-        /// <typeparam name="T">The type of the thrown exception</typeparam>
-        /// <param name="ex">The exception that caused the operation failure</param>
-        /// <param name="currentAttempt">The current attempt number</param>
-        /// <returns>
-        /// <see langword="true"/> if the operation should be retried;
-        /// otherwise, <see langword="false"/>
-        /// </returns>
+        /// <inheritdoc />
         public bool ShouldRetry<T>(T ex, uint currentAttempt) where T : Exception
         {
             if (currentAttempt >= MaxAttemptsCount)
