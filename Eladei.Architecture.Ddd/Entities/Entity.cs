@@ -1,22 +1,22 @@
 ﻿namespace Eladei.Architecture.Ddd.Entities;
 
 /// <summary>
-/// Сущность
+/// Entity base class
 /// </summary>
-/// <typeparam name="T">Тип идентификатора сущности</typeparam>
+/// <typeparam name="T">The type of the entity identifier</typeparam>
 public abstract class Entity<T> : IEntity<T>
 {
     /// <summary>
-    /// Создает объект класса Entity
+    /// Creates an instance of the entity
     /// </summary>
-    /// <param name="id">Идентификатор сущности</param>
+    /// <param name="id">The entity identifier</param>
     public Entity(T id)
     {
         Id = id;
     }
 
     /// <summary>
-    /// Идентификатор сущности
+    /// The entity identifier
     /// </summary>
     public T Id { get; }
 }

@@ -35,6 +35,7 @@ public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
         _page = page ?? 1;
     }
 
+    /// <inheritdoc />
     public override async Task<PageResult<R>> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default)
     {
         var result = await PerformAsync(repositoryFactory, cancellationToken);

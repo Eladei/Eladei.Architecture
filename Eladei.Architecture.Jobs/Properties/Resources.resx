@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="JobCancelled" xml:space="preserve">
-    <value>Выполнение job '{0}' отменено</value>
+    <value>Execution of job '{0}' was cancelled</value>
   </data>
   <data name="JobError" xml:space="preserve">
-    <value>Ошибка выполнения job '{0}'</value>
+    <value>Error executing job '{0}'</value>
   </data>
   <data name="JobFinished" xml:space="preserve">
-    <value>Выполнение job '{0}' завершено</value>
+    <value>Execution of job '{0}' completed</value>
   </data>
   <data name="JobStarted" xml:space="preserve">
-    <value>Выполнение job '{0}' началось</value>
+    <value>Execution of job '{0}' started</value>
   </data>
 </root>

@@ -1,12 +1,12 @@
 ﻿namespace Eladei.Architecture.Ddd.DomainEvents;
 
 /// <summary>
-/// Доменное событие
+/// Domain event
 /// </summary>
 public interface IDomainEvent
 {
     /// <summary>
-    /// Id события
+    /// Event identifier
     /// </summary>
     Guid EventId { get; }
 }

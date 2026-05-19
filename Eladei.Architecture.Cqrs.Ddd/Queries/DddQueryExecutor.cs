@@ -27,6 +27,7 @@ public class DddQueryExecutor : IDddQueryExecutor
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public virtual async Task<R> ExecuteAsync<R>(IDddQuery<R> query, CancellationToken cancellationToken)
     {
         var queryName = query.GetType().Name;

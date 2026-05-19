@@ -3,37 +3,30 @@
 namespace Eladei.Architecture.Ddd.Entities;
 
 /// <summary>
-/// Агрегат
+/// Aggregate root base class
 /// </summary>
-/// <typeparam name="T">Тип идентификатора агрегата</typeparam>
+/// <typeparam name="T">The type of the aggregate identifier</typeparam>
 public abstract class Aggregate<T> : IAggregate<T>
 {
     private readonly List<IDomainEvent> _domainEvents;
 
     /// <summary>
-    /// Создает объект класса Aggregate
+    /// Creates an instance of the aggregate
     /// </summary>
-    /// <param name="id">Идентификатор сущности</param>
+    /// <param name="id">The entity identifier</param>
     public Aggregate(T id)
     {
         Id = id;
         _domainEvents = [];
     }
 
-    /// <summary>
-    /// Идентификатор агрегата
-    /// </summary>
+    /// <inheritdoc />
     public T Id { get; }
 
-    /// <summary>
-    /// Доменные события
-    /// </summary>
+    /// <inheritdoc />
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-    /// <summary>
-    /// Добавить доменное событие
-    /// </summary>
-    /// <param name="domainEvent">Доменное событие</param>
+    /// <inheritdoc />
     public void AddDomainEvent(IDomainEvent domainEvent)
     {
         if (_domainEvents.Any(x => x.EventId == domainEvent.EventId))
