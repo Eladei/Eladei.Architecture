@@ -9,8 +9,8 @@ namespace Eladei.Architecture.Messaging.Kafka.IntegrationEvents;
 /// Base class for Kafka integration event handlers
 /// </summary>
 /// <typeparam name="E">The type of the integration event</typeparam>
-public abstract class KafkaIntegrationEventHandlerBase<E> 
-    : IntegrationEventHandlerBase<E>, IHandleMessages<E> 
+public abstract class KafkaIntegrationEventHandlerBase<E>
+    : IntegrationEventHandlerBase<E>, IHandleMessages<E>
     where E : IIntegrationEvent
 {
     /// <summary>
