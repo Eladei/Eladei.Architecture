@@ -4,21 +4,22 @@ using Eladei.Architecture.Cqrs.Queries;
 namespace Eladei.Architecture.Cqrs.Ddd.Queries;
 
 /// <summary>
-/// Исполнитель запроса, работающей с Entity Framework
+/// Query executor
 /// </summary>
-/// <typeparam name="T">Контекст данных</typeparam>
 public class DddQueryExecutor : IDddQueryExecutor
 {
     protected readonly IUnitOfWorkContextFactory _unitOfWorkContextFactory;
     protected readonly IDddQueryExecutorLogger? _logger;
 
     /// <summary>
-    /// Создает объект класса EfQueryExecutor
+    /// Creates a new instance of <see cref="DddQueryExecutor"/>
     /// </summary>
-    /// <param name="unitOfWorkContextFactory">Фабрика контекста данных</param>
-    /// <param name="logger">Логгер</param>
+    /// <param name="unitOfWorkContextFactory">The unit of work context factory</param>
+    /// <param name="logger">The logger</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public DddQueryExecutor(IUnitOfWorkContextFactory unitOfWorkContextFactory, IDddQueryExecutorLogger? logger = null)
+    public DddQueryExecutor(
+        IUnitOfWorkContextFactory unitOfWorkContextFactory,
+        IDddQueryExecutorLogger? logger = null)
     {
         _unitOfWorkContextFactory = unitOfWorkContextFactory
             ?? throw new ArgumentNullException(nameof(unitOfWorkContextFactory));

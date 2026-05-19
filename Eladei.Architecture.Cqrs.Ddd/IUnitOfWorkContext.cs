@@ -1,6 +1,6 @@
 ﻿namespace Eladei.Architecture.Cqrs.Ddd;
 
 /// <summary>
-/// Контекст единицы работы
+/// Unit of work context
 /// </summary>
 public interface IUnitOfWorkContext : IUnitOfWork, IRepositoryFactory { }

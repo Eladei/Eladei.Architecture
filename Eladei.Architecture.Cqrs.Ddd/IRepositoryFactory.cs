@@ -3,17 +3,19 @@
 namespace Eladei.Architecture.Cqrs.Ddd;
 
 /// <summary>
-/// Фабрика репозиториев
+/// Repository factory
 /// </summary>
-/// <remarks>Учитывайте, что создаваемый репозиторий 
-/// должен работать с тем же контекстом, что и единица работы. 
-/// Это необходимо для сохранения изменений единицей работы в одной транзакции</remarks>
+/// <remarks>
+/// Note that the created repository must operate on the same context
+/// as the unit of work. This is required to ensure that changes are
+/// persisted by the unit of work within a single transaction
+/// </remarks>
 public interface IRepositoryFactory
 {
     /// <summary>
-    /// Создает репозиторий
+    /// Creates a repository
     /// </summary>
-    /// <typeparam name="R">Тип репозитория</typeparam>
-    /// <returns>Репозиторий</returns>
+    /// <typeparam name="R">The repository type</typeparam>
+    /// <returns>The repository</returns>
     R CreateRepository<R>() where R : IRepository;
 }

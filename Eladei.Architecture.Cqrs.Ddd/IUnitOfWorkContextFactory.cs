@@ -1,13 +1,13 @@
 ﻿namespace Eladei.Architecture.Cqrs.Ddd;
 
 /// <summary>
-/// Фабрика контекста единицы работы
+/// Unit of work context factory
 /// </summary>
 public interface IUnitOfWorkContextFactory
 {
     /// <summary>
-    /// Создает контекст единицы работы
+    /// Creates a unit of work context
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The unit of work context</returns>
     IUnitOfWorkContext CreateContext();
 }

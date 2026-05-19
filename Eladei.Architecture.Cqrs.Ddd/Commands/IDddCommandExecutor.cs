@@ -1,22 +1,22 @@
 ﻿namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 
 /// <summary>
-/// Исполнитель команд
+/// Command executor
 /// </summary>
 public interface IDddCommandExecutor
 {
     /// <summary>
-    /// Выполнить команду
+    /// Executes a command
     /// </summary>
-    /// <param name="command">Команда</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <param name="command">The command</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     Task ExecuteAsync(IDddCommand command, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Выполнить команду и вернуть результат
+    /// Executes a command and returns a result
     /// </summary>
-    /// <typeparam name="R">Тип результата</typeparam>
-    /// <param name="command">Команда</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <typeparam name="R">The result type</typeparam>
+    /// <param name="command">The command</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     Task<R> ExecuteAsync<R>(IDddCommand<R> command, CancellationToken cancellationToken);
 }

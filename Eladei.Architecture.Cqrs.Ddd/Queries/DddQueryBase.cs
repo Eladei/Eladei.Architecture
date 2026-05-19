@@ -1,9 +1,17 @@
 ﻿namespace Eladei.Architecture.Cqrs.Ddd.Queries;
 
 /// <summary>
-/// Запрос
+/// Query base class
 /// </summary>
 public abstract class DddQueryBase<R> : IDddQuery<R>
 {
-    public abstract Task<R> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Executes the query
+    /// </summary>
+    /// <param name="repositoryFactory">The repository factory</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The query result</returns>
+    public abstract Task<R> ExecuteAsync(
+        IRepositoryFactory repositoryFactory,
+        CancellationToken cancellationToken = default);
 }

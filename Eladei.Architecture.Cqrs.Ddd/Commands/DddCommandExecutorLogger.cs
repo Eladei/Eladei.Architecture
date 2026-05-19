@@ -5,12 +5,16 @@ using Microsoft.Extensions.Logging;
 namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 
 /// <summary>
-/// Логгер исполнителя команд
+/// Command executor logger
 /// </summary>
 public sealed class DddCommandExecutorLogger : IDddCommandExecutorLogger
 {
     private readonly ILogger<DddCommandExecutorLogger> _logger;
 
+    /// <summary>
+    /// Creates a new instance of <see cref="DddCommandExecutorLogger"/>
+    /// </summary>
+    /// <param name="logger">The logger</param>
     public DddCommandExecutorLogger(ILogger<DddCommandExecutorLogger> logger)
     {
         _logger = logger;
