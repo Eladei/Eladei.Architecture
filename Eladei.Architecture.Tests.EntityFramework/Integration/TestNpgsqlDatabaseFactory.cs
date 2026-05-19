@@ -3,8 +3,20 @@ using Npgsql;
 
 namespace Eladei.Architecture.Tests.EntityFramework.Integration;
 
+/// <summary>
+/// Factory for creating and managing PostgreSQL test databases.
+/// Responsible for database creation, migration execution, and cleanup.
+/// </summary>
 public static class TestNpgsqlDatabaseFactory
 {
+    /// <summary>
+    /// Creates a new isolated PostgreSQL database for integration testing
+    /// and applies EF Core migrations.
+    /// </summary>
+    /// <typeparam name="TContext">DbContext type</typeparam>
+    /// <param name="connectionString">Base PostgreSQL connection string</param>
+    /// <param name="contextFactory">Factory for creating DbContext instances</param>
+    /// <returns>Configured DbContext options for the created test database</returns>
     public static async Task<DbContextOptions<TContext>> CreateDatabaseAsync<TContext>(
         string connectionString,
         Func<DbContextOptions<TContext>, TContext> contextFactory)
@@ -44,6 +56,11 @@ public static class TestNpgsqlDatabaseFactory
         return options;
     }
 
+    /// <summary>
+    /// Drops a previously created PostgreSQL test database.
+    /// Terminates active connections before deletion.
+    /// </summary>
+    /// <param name="connectionString">Connection string pointing to the target database</param>
     public static async Task DropDatabaseAsync(string connectionString)
     {
         var builder = new NpgsqlConnectionStringBuilder(connectionString);
@@ -57,7 +74,7 @@ public static class TestNpgsqlDatabaseFactory
         using var connection = new NpgsqlConnection(masterConnectionString);
         await connection.OpenAsync();
 
-        // Завершаем активные подключения
+        // Terminate active connections to the database
         using (var terminateCmd = connection.CreateCommand())
         {
             terminateCmd.CommandText = $@"
@@ -68,7 +85,7 @@ public static class TestNpgsqlDatabaseFactory
             await terminateCmd.ExecuteNonQueryAsync();
         }
 
-        // Удаляем БД
+        // Drop database
         using var dropCmd = connection.CreateCommand();
         dropCmd.CommandText = $"DROP DATABASE IF EXISTS \"{dbName}\"";
 

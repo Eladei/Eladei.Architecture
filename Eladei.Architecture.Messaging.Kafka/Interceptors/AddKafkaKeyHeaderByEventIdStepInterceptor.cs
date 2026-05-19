@@ -6,7 +6,7 @@ using Rebus.Pipeline;
 namespace Eladei.Architecture.Messaging.Kafka.Interceptors;
 
 /// <summary>
-/// Добавляет "kafka-key" заголовок с идентификатором события интеграции {IIntegrationEvent.EventId}.
+/// Adds a "kafka-key" header with the integration event identifier (IIntegrationEvent.EntityId).
 /// </summary>
 public sealed class AddKafkaKeyHeaderByEventIdStepInterceptor : IOutgoingStep
 {

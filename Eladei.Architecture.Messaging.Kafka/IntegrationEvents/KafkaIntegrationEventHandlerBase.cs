@@ -6,17 +6,24 @@ using Rebus.Handlers;
 namespace Eladei.Architecture.Messaging.Kafka.IntegrationEvents;
 
 /// <summary>
-/// Базовый класс обработчика события интеграции для Kafka
+/// Base class for Kafka integration event handlers
 /// </summary>
-/// <typeparam name="E">Тип события интеграции</typeparam>
-public abstract class KafkaIntegrationEventHandlerBase<E> : IntegrationEventHandlerBase<E>, IHandleMessages<E> where E : IIntegrationEvent
+/// <typeparam name="E">The type of the integration event</typeparam>
+public abstract class KafkaIntegrationEventHandlerBase<E> 
+    : IntegrationEventHandlerBase<E>, IHandleMessages<E> 
+    where E : IIntegrationEvent
 {
     /// <summary>
-    /// Создает объект класса KafkaStatelessIntegrationEventHandlerBase
+    /// Creates an instance of the KafkaIntegrationEventHandlerBase class
     /// </summary>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <param name="correlationContext">Контекст корреляции</param>
-    /// <param name="logger">Логгер</param>
-    public KafkaIntegrationEventHandlerBase(CancellationToken cancellationToken, ICorrelationContext correlationContext, ILogger? logger = null)
-        : base(cancellationToken, correlationContext, logger) { }
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="correlationContext">Correlation context</param>
+    /// <param name="logger">Optional logger</param>
+    public KafkaIntegrationEventHandlerBase(
+        CancellationToken cancellationToken,
+        ICorrelationContext correlationContext,
+        ILogger? logger = null)
+        : base(cancellationToken, correlationContext, logger)
+    {
+    }
 }

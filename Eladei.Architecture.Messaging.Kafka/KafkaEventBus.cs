@@ -1,12 +1,11 @@
 ﻿using Eladei.Architecture.Messaging.IntegrationEvents;
+using Eladei.Architecture.Messaging.Kafka;
 using Eladei.Architecture.Messaging.Kafka.Properties;
 using Microsoft.Extensions.Logging;
 using Rebus.Bus;
 
-namespace Eladei.Architecture.Messaging.Kafka;
-
 /// <summary>
-/// Шина событий на основе Kafka
+/// Kafka-based event bus
 /// </summary>
 public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable
 {
@@ -15,11 +14,11 @@ public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable
     private readonly string _topic;
 
     /// <summary>
-    /// Создает объект класса KafkaEventBus
+    /// Creates an instance of KafkaEventBus
     /// </summary>
-    /// <param name="kafkaBus">Активатор Kafka</param>
-    /// <param name="topic">Топик, в который будет осуществляться публикация событий</param>
-    /// <param name="logger">Логгер</param>
+    /// <param name="kafkaBus">Kafka bus instance</param>
+    /// <param name="topic">Topic to which events will be published</param>
+    /// <param name="logger">Optional logger</param>
     public KafkaEventBus(IBus kafkaBus, string topic, ILogger<KafkaEventBus>? logger = null)
     {
         ArgumentNullException.ThrowIfNull(kafkaBus, nameof(kafkaBus));
@@ -30,6 +29,7 @@ public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public async Task PublishEventAsync(IIntegrationEvent integrationEvent)
     {
         try
@@ -59,6 +59,7 @@ public sealed class KafkaEventBus : IIntegrationEventBus, IDisposable
         }
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         _eventBus.Dispose();

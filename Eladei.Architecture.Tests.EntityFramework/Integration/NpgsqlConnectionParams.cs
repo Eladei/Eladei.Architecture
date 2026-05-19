@@ -1,12 +1,12 @@
 ﻿namespace Eladei.Architecture.Tests.EntityFramework.Integration;
 
 /// <summary>
-/// Параметры соединения с сервером PostgreSQL
+/// PostgreSQL connection parameters
 /// </summary>
 public record NpgsqlConnectionParams
 {
     /// <summary>
-    /// Строка подключения
+    /// Connection string
     /// </summary>
     public string ConnectionString { get; init; } = null!;
 }

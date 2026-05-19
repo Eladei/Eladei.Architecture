@@ -19,7 +19,7 @@ namespace Eladei.Architecture.Messaging.Kafka.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,7 +61,7 @@ namespace Eladei.Architecture.Messaging.Kafka.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ошибка при публикации события интеграции &apos;{0}&apos; Id = &apos;{1}&apos; в топик &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Error while publishing integration event &apos;{0}&apos; with Id &apos;{1}&apos; to topic &apos;{2}&apos;.
         /// </summary>
         internal static string IntegrationEventPublishingError {
             get {
@@ -70,7 +70,7 @@ namespace Eladei.Architecture.Messaging.Kafka.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Публикация события интеграции &apos;{0}&apos; Id = &apos;{1}&apos; в топик &apos;{2}&apos; завершена.
+        ///   Looks up a localized string similar to Publishing integration event &apos;{0}&apos; with Id &apos;{1}&apos; to topic &apos;{2}&apos; completed.
         /// </summary>
         internal static string IntegrationEventWasPublished {
             get {
