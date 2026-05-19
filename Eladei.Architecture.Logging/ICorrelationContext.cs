@@ -1,21 +1,23 @@
 ﻿namespace Eladei.Architecture.Logging;
 
 /// <summary>
-/// Контекст корреляции
+/// Correlation context
 /// </summary>
-/// <remarks>Необходим для проброса correlationId при логировании
-/// для отслеживания всей цепочки операций</remarks>
+/// <remarks>
+/// Used to propagate a correlationId across the system for tracing
+/// the full execution flow of operations
+/// </remarks>
 public interface ICorrelationContext
 {
     /// <summary>
-    /// Id для сквозного отслеживания
+    /// The correlation identifier used for end-to-end tracing
     /// </summary>
     Guid CorrelationId { get; }
 
     /// <summary>
-    /// Установить Id для сквозного отслеживания
+    /// Sets the correlation identifier for the current execution scope
     /// </summary>
-    /// <param name="correlationId">Id для сквозного отслеживания</param>
-    /// <returns></returns>
+    /// <param name="correlationId">The correlation identifier</param>
+    /// <returns>A disposable scope that restores the previous correlation context</returns>
     IDisposable SetCorrelationId(Guid correlationId);
 }

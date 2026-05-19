@@ -29,7 +29,7 @@ public abstract class QuartzJobBase : IJob
 
         _jobName = GetType().Name;
     }
-    
+
     /// <inheritdoc />
     public async Task Execute(IJobExecutionContext context)
     {

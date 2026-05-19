@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace Eladei.Architecture.Messaging.IntegrationEvents;
 
 /// <summary>
-/// Базовый класс обработчика события интеграции
+/// Base class for integration event handlers
 /// </summary>
 public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
 {
@@ -14,10 +14,11 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
     protected readonly ILogger? _logger;
 
     /// <summary>
-    /// Создает объект класса IntegrationEventHandlerBase
+    /// Creates an instance of the IntegrationEventHandlerBase class
     /// </summary>
-    /// <param name="cancellationToken">Токена отмены</param>
-    /// <param name="logger">Логгер</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="correlationContext">Correlation context</param>
+    /// <param name="logger">Optional logger</param>
     public IntegrationEventHandlerBase(
         CancellationToken cancellationToken,
         ICorrelationContext correlationContext,
@@ -32,16 +33,17 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
     }
 
     /// <summary>
-    /// Обрабатывает событие интеграции
+    /// Handles an integration event
     /// </summary>
-    /// <param name="integrationEvent">Событие интеграции</param>
+    /// <param name="integrationEvent">The integration event</param>
     public virtual async Task Handle(E integrationEvent)
     {
         using (_correlationContext.SetCorrelationId(integrationEvent.CorrelationId))
         {
             LogHandlingStarted(integrationEvent);
 
-            using var innerTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancellationToken);
+            using var innerTokenSource =
+                CancellationTokenSource.CreateLinkedTokenSource(_cancellationToken);
 
             try
             {
@@ -54,7 +56,6 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
                 if (IgnoreException(ex))
                 {
                     LogHandlingErrorIgnorance(integrationEvent, ex);
-
                     return;
                 }
 
@@ -63,6 +64,7 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
                     case OperationCanceledException:
                         LogHandlingCancelled(integrationEvent, (OperationCanceledException)ex);
                         break;
+
                     default:
                         LogCriticalError(integrationEvent, ex);
                         break;
@@ -73,12 +75,12 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
         }
     }
 
-    #region Методы логирования
+    #region Logging methods
 
     /// <summary>
-    /// Логировать начало обработки события интеграции
+    /// Logs the start of integration event handling
     /// </summary>
-    /// <param name="integrationEvent">Событие интеграции</param>
+    /// <param name="integrationEvent">The integration event</param>
     protected virtual void LogHandlingStarted(E integrationEvent)
     {
         var msg = string.Format(
@@ -90,9 +92,9 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
     }
 
     /// <summary>
-    /// Логировать успешное завершение обработки события интеграции
+    /// Logs successful completion of integration event handling
     /// </summary>
-    /// <param name="integrationEvent">Событие интеграции</param>
+    /// <param name="integrationEvent">The integration event</param>
     protected virtual void LogHandlingSuccessfullFinished(E integrationEvent)
     {
         var msg = string.Format(
@@ -104,10 +106,10 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
     }
 
     /// <summary>
-    /// Логировать отмену обработки события интеграции
+    /// Logs cancellation of integration event handling
     /// </summary>
-    /// <param name="integrationEvent">Событие интеграции</param>
-    /// <param name="ex">Данные по отмене операции</param>
+    /// <param name="integrationEvent">The integration event</param>
+    /// <param name="ex">Cancellation details</param>
     protected virtual void LogHandlingCancelled(E integrationEvent, OperationCanceledException ex)
     {
         var msg = string.Format(
@@ -119,10 +121,10 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
     }
 
     /// <summary>
-    /// Логировать игнорирование ошибки обработки события интеграции
+    /// Logs ignored error during integration event handling
     /// </summary>
-    /// <param name="integrationEvent">Событие интеграции</param>
-    /// <param name="ex">Ошибка, которая будет проигнорирована</param>
+    /// <param name="integrationEvent">The integration event</param>
+    /// <param name="ex">The exception that will be ignored</param>
     protected virtual void LogHandlingErrorIgnorance(E integrationEvent, Exception ex)
     {
         var msg = string.Format(
@@ -134,12 +136,13 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
     }
 
     /// <summary>
-    /// Логировать ошибку обработки события интеграции
+    /// Logs a critical error during integration event handling
     /// </summary>
-    /// <typeparam name="F">Тип ошибки</typeparam>
-    /// <param name="integrationEvent">Событие интеграции</param>
-    /// <param name="ex">Ошибка</param>
-    protected virtual void LogCriticalError<F>(E integrationEvent, F ex) where F : Exception
+    /// <typeparam name="F">Exception type</typeparam>
+    /// <param name="integrationEvent">The integration event</param>
+    /// <param name="ex">The exception</param>
+    protected virtual void LogCriticalError<F>(E integrationEvent, F ex)
+        where F : Exception
     {
         var errorMsg = string.Format(
             Resources.IntegrationEventHandlingError,
@@ -152,19 +155,18 @@ public abstract class IntegrationEventHandlerBase<E> where E : IIntegrationEvent
     #endregion
 
     /// <summary>
-    /// Определение необходимости игнорирования ошибки
+    /// Determines whether an exception should be ignored
     /// </summary>
-    /// <param name="ex">Ошибка, которая может быть проигнорирована</param>
+    /// <param name="ex">The exception that may be ignored</param>
     protected virtual bool IgnoreException(Exception ex)
     {
         return false;
     }
 
     /// <summary>
-    /// Обработать событие интеграции
+    /// Handles the integration event
     /// </summary>
-    /// <param name="integrationEvent">Событие интеграции</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат выполнения операции</returns>
+    /// <param name="integrationEvent">The integration event</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     protected abstract Task HandleAsync(E integrationEvent, CancellationToken cancellationToken);
 }

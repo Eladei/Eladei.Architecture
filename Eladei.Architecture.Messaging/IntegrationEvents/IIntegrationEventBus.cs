@@ -1,18 +1,18 @@
 ﻿namespace Eladei.Architecture.Messaging.IntegrationEvents;
 
 /// <summary>
-/// Шина событий интеграции
+/// Integration event bus
 /// </summary>
 public interface IIntegrationEventBus
 {
     /// <summary>
-    /// Опубликовать событие интеграции
+    /// Publishes an integration event
     /// </summary>
-    /// <param name="integrationEvent">Событие интеграции</param>
+    /// <param name="integrationEvent">The integration event</param>
     Task PublishEventAsync(IIntegrationEvent integrationEvent);
 }
 
 /// <summary>
-/// Шина событий интеграции, которые должны обрабатываться параллельно
+/// Integration event bus that processes events in parallel (without ordering guarantees).
 /// </summary>
 public interface IParallelIntegrationEventBus : IIntegrationEventBus { }
