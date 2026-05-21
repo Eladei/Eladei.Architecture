@@ -6,16 +6,16 @@ using Grpc.Core;
 namespace Eladei.BookRating.Api.Services;
 
 /// <summary>
-/// Сервис работы с рейтингом книг
+/// Service for working with book rating
 /// </summary>
 public sealed class BookRatingServiceV1 : BookRating.BookRatingBase
 {
     private readonly IOperationExecutor _operationExecutor;
 
     /// <summary>
-    /// Создает объект класса BookRatingServiceV1
+    /// Creates an instance of the BookRatingServiceV1 class
     /// </summary>
-    /// <param name="operationExecutor">Исполнитель операций</param>
+    /// <param name="operationExecutor">Operation executor</param>
     public BookRatingServiceV1(IOperationExecutor operationExecutor)
     {
         _operationExecutor = operationExecutor
@@ -23,13 +23,14 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase
     }
 
     /// <summary>
-    /// Регистрирует книгу в рейтинге
+    /// Registers a book in the rating
     /// </summary>
-    /// <param name="request">Запрос на добавление книги в рейтинг</param>
-    /// <param name="context">Контекст для вызова на стороне сервера</param>
-    /// <returns>Ответ, содержащий результаты операции 
-    /// регистрации книги в рейтинге</returns>
-    public override async Task<RegisterBookApiResponse> RegisterBook(RegisterBookApiRequest request, ServerCallContext context)
+    /// <param name="request">Request to add a book to the rating</param>
+    /// <param name="context">Server call context</param>
+    /// <returns>Response containing the result of the book registration operation</returns>
+    public override async Task<RegisterBookApiResponse> RegisterBook(
+        RegisterBookApiRequest request,
+        ServerCallContext context)
     {
         var command = new RegisterBookCommand(request.Name, request.Author);
 
@@ -42,13 +43,14 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase
     }
 
     /// <summary>
-    /// Обновляет информацию о книге в рейтинге
+    /// Updates book information in the rating
     /// </summary>
-    /// <param name="request">Запрос на изменение информации о книге в рейтинге</param>
-    /// <param name="context">Контекст для вызова на стороне сервера</param>
-    /// <returns>Ответ, содержащий результаты операции изменения 
-    /// информации о книге в рейтинге</returns>
-    public override async Task<UpdateBookApiResponse> UpdateBook(UpdateBookApiRequest request, ServerCallContext context)
+    /// <param name="request">Request to update book information in the rating</param>
+    /// <param name="context">Server call context</param>
+    /// <returns>Response containing the result of the book update operation</returns>
+    public override async Task<UpdateBookApiResponse> UpdateBook(
+        UpdateBookApiRequest request,
+        ServerCallContext context)
     {
         var bookId = new Guid(request.BookId);
 
@@ -60,13 +62,14 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase
     }
 
     /// <summary>
-    /// Удаляет книгу из рейтинга
+    /// Removes a book from the rating
     /// </summary>
-    /// <param name="request">Запрос на удаление книги из рейтинга</param>
-    /// <param name="context">Контекст для вызова на стороне сервера</param>
-    /// <returns>Ответ, содержащий результаты операции удаления
-    /// книги из рейтинга</returns>
-    public override async Task<RemoveBookApiResponse> RemoveBook(RemoveBookApiRequest request, ServerCallContext context)
+    /// <param name="request">Request to remove a book from the rating</param>
+    /// <param name="context">Server call context</param>
+    /// <returns>Response containing the result of the book removal operation</returns>
+    public override async Task<RemoveBookApiResponse> RemoveBook(
+        RemoveBookApiRequest request,
+        ServerCallContext context)
     {
         var bookId = new Guid(request.BookId);
 
@@ -78,13 +81,14 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase
     }
 
     /// <summary>
-    /// Голосует за книгу в рейтинге
+    /// Votes for a book in the rating
     /// </summary>
-    /// <param name="request">Запрос на голосование за книгу в рейтинге</param>
-    /// <param name="context">Контекст для вызова на стороне сервера</param>
-    /// <returns>Ответ, содержащий результаты операции голосования 
-    /// за книгу в рейтинге</returns>
-    public override async Task<VoteForBookApiResponse> VoteForBook(VoteForBookApiRequest request, ServerCallContext context)
+    /// <param name="request">Request to vote for a book in the rating</param>
+    /// <param name="context">Server call context</param>
+    /// <returns>Response containing the result of the voting operation</returns>
+    public override async Task<VoteForBookApiResponse> VoteForBook(
+        VoteForBookApiRequest request,
+        ServerCallContext context)
     {
         var command = new VoteForBookCommand(new Guid(request.BookId));
 
@@ -94,12 +98,14 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase
     }
 
     /// <summary>
-    /// Возвращает перечень книг, входящих в рейтинг
+    /// Returns a list of books in the rating
     /// </summary>
-    /// <param name="request">Запрос на получение перечня книг, добавленных в рейтинг</param>
-    /// <param name="context">Контекст для вызова на стороне сервера</param>
-    /// <returns>Ответ, содержащий перечень книг, добавленных в рейтинг</returns>
-    public override async Task<GetBooksApiResponse> GetBooks(GetBooksApiRequest request, ServerCallContext context)
+    /// <param name="request">Request to get books in the rating</param>
+    /// <param name="context">Server call context</param>
+    /// <returns>Response containing the list of books in the rating</returns>
+    public override async Task<GetBooksApiResponse> GetBooks(
+        GetBooksApiRequest request,
+        ServerCallContext context)
     {
         var query = new BooksQuery(request.BooksPerPage, request.Page);
 
@@ -112,7 +118,7 @@ public sealed class BookRatingServiceV1 : BookRating.BookRatingBase
 
         foreach (var book in queryResult.Result)
         {
-            result.AllPositions.Add(new BookInfoApiModel()
+            result.AllPositions.Add(new BookInfoApiModel
             {
                 BookId = book.Id.ToString(),
                 Name = book.Name,

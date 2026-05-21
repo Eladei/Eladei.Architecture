@@ -4,7 +4,7 @@ using Grpc.Core.Interceptors;
 namespace Eladei.BookRating.Api.Filters;
 
 /// <summary>
-/// Перехватчик для логирования входящих запросов
+/// Interceptor for logging incoming requests
 /// </summary>
 public sealed class LoggerInterceptor : Interceptor
 {
@@ -14,14 +14,15 @@ public sealed class LoggerInterceptor : Interceptor
     private readonly ILogger _logger;
 
     /// <summary>
-    /// Создает объект класса LoggerInterceptor
+    /// Creates an instance of the LoggerInterceptor class
     /// </summary>
-    /// <param name="logger">Логгер</param>
+    /// <param name="logger">Logger instance</param>
     public LoggerInterceptor(ILogger<LoggerInterceptor> logger)
     {
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
         TRequest request,
         ServerCallContext context,

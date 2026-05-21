@@ -8,7 +8,7 @@ using System.Text.Json;
 namespace Eladei.BookRating.Infrastructure.Outbox;
 
 /// <summary>
-/// Команда отправки событий интеграции из outbox
+/// Command for sending integration events from the outbox
 /// </summary>
 public sealed class SendIntegrationEventsFromOutboxCommand : EfCommandBase<BookRatingDbContext>
 {
@@ -17,11 +17,16 @@ public sealed class SendIntegrationEventsFromOutboxCommand : EfCommandBase<BookR
     private readonly IIntegrationEventBus _integrationEventBus;
 
     /// <summary>
-    /// Создает объект класса SendIntegrationEventsCommand
+    /// Creates an instance of the SendIntegrationEventsFromOutboxCommand class
     /// </summary>
-    /// <param name="integrationEventBus">Шина событий интеграции</param>
-    /// <exception cref="ArgumentException"></exception>
-    public SendIntegrationEventsFromOutboxCommand(Guid senderId, uint reservingSpanSeconds, IIntegrationEventBus integrationEventBus)
+    /// <param name="senderId">Identifier of the service sending events</param>
+    /// <param name="reservingSpanSeconds">Reservation timeout in seconds</param>
+    /// <param name="integrationEventBus">Integration event bus</param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public SendIntegrationEventsFromOutboxCommand(
+        Guid senderId,
+        uint reservingSpanSeconds,
+        IIntegrationEventBus integrationEventBus)
     {
         _senderId = senderId;
         _reservingSpanSeconds = reservingSpanSeconds;
@@ -30,6 +35,7 @@ public sealed class SendIntegrationEventsFromOutboxCommand : EfCommandBase<BookR
             ?? throw new ArgumentNullException(nameof(integrationEventBus));
     }
 
+    /// <inheritdoc />
     public override async Task ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken)
     {
         var sendingDate = DateTime.UtcNow;
@@ -38,7 +44,7 @@ public sealed class SendIntegrationEventsFromOutboxCommand : EfCommandBase<BookR
             .Where(x => !x.IsSent
                 && x.ReservedBy == _senderId
                 && x.ReservedAt != null
-                    && sendingDate < x.ReservedAt.Value.AddSeconds(_reservingSpanSeconds))
+                && sendingDate < x.ReservedAt.Value.AddSeconds(_reservingSpanSeconds))
             .OrderBy(x => x.CreatedAtUtc)
             .ToArrayAsync(cancellationToken);
 
@@ -62,7 +68,6 @@ public sealed class SendIntegrationEventsFromOutboxCommand : EfCommandBase<BookR
             catch (Exception ex)
             {
                 evnt.LastError = ex.Message;
-
                 sendEvents = false;
             }
 
@@ -72,9 +77,11 @@ public sealed class SendIntegrationEventsFromOutboxCommand : EfCommandBase<BookR
 
     private static IIntegrationEvent Map(IntegrationEventToSend eventDb)
     {
-        var eventType = Type.GetType(eventDb.EventType) ?? throw new Exception("Ошибка");
+        var eventType = Type.GetType(eventDb.EventType)
+            ?? throw new Exception("Type resolution error");
 
-        var result = JsonSerializer.Deserialize(eventDb.EventMetadata, eventType) ?? throw new Exception("Ошибка");
+        var result = JsonSerializer.Deserialize(eventDb.EventMetadata, eventType)
+            ?? throw new Exception("Deserialization error");
 
         return (IIntegrationEvent)result;
     }

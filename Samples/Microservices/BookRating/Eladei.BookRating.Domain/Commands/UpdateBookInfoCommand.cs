@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookRating.Domain.Commands;
 
 /// <summary>
-/// Команда обновления информации о книге в рейтинге
+/// Command for updating book information in the rating
 /// </summary>
 public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext>
 {
@@ -17,11 +17,11 @@ public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext>
     private readonly string _newAuthor;
 
     /// <summary>
-    /// Создает объект класса UpdateBookInfoCommand
+    /// Creates an instance of the UpdateBookInfoCommand class
     /// </summary>
-    /// <param name="bookId">Id книги</param>
-    /// <param name="newName">Новое название</param>
-    /// <param name="newAuthor">Новый автор</param>
+    /// <param name="bookId">Book identifier</param>
+    /// <param name="newName">New title</param>
+    /// <param name="newAuthor">New author</param>
     /// <exception cref="ArgumentException"></exception>
     public UpdateBookInfoCommand(Guid bookId, string newName, string newAuthor)
     {
@@ -31,7 +31,7 @@ public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext>
         if (string.IsNullOrEmpty(newName))
             throw new ArgumentException(nameof(newName));
 
-        if (string.IsNullOrEmpty(newName))
+        if (string.IsNullOrEmpty(newAuthor))
             throw new ArgumentException(nameof(newAuthor));
 
         _bookId = bookId;
@@ -64,7 +64,8 @@ public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext>
         book.Name = _newName;
         book.Author = _newAuthor;
 
-        var bookInfoWasUpdatedEvent = new BookInfoWasUpdatedInRatingDomainEvent(book.Id, book.Name, book.Author);
+        var bookInfoWasUpdatedEvent = new BookInfoWasUpdatedInRatingDomainEvent(
+            book.Id, book.Name, book.Author);
 
         SaveDomainEvents(bookInfoWasUpdatedEvent);
 

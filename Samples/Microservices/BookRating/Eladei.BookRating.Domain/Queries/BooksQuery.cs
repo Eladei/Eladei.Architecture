@@ -6,24 +6,27 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookRating.Domain.Queries;
 
 /// <summary>
-/// Запрос для получения списка книг
+/// Query for retrieving a list of books
 /// </summary>
 public sealed class BooksQuery : EfPageQueryBase<BookRatingDbContext, BookReadModel>
 {
     /// <summary>
-    /// Создает объект класса BooksQuery
+    /// Creates an instance of the BooksQuery class
     /// </summary>
-    /// <param name="booksPerPage">Количество книг на странице</param>
-    /// <param name="page">Номер целевой страницы</param>>
-    public BooksQuery(uint booksPerPage, uint page) : base(booksPerPage, page) { }
+    /// <param name="booksPerPage">Number of books per page</param>
+    /// <param name="page">Target page number</param>
+    public BooksQuery(uint booksPerPage, uint page)
+        : base(booksPerPage, page) { }
 
     /// <summary>
-    /// Запросить список книг
+    /// Executes query to retrieve books
     /// </summary>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Список книг</returns>
-    protected override async Task<IEnumerable<BookReadModel>> PerformAsync(BookRatingDbContext context, CancellationToken cancellationToken)
+    /// <param name="context">Data context</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>List of books</returns>
+    protected override async Task<IEnumerable<BookReadModel>> PerformAsync(
+        BookRatingDbContext context,
+        CancellationToken cancellationToken)
     {
         var query = context.Books
             .OrderByDescending(s => s.Votes)
@@ -44,6 +47,9 @@ public sealed class BooksQuery : EfPageQueryBase<BookRatingDbContext, BookReadMo
         return bookInfos;
     }
 
-    protected override async Task<uint> GetAllElementsCount(BookRatingDbContext context, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    protected override async Task<uint> GetAllElementsCount(
+        BookRatingDbContext context,
+        CancellationToken cancellationToken)
         => (uint)await context.Books.CountAsync(cancellationToken);
 }

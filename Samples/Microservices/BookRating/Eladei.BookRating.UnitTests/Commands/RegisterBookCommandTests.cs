@@ -11,7 +11,7 @@ using Shouldly;
 namespace Eladei.BookRating.UnitTests.Commands;
 
 /// <summary>
-/// Unit-тесты команды RegisterBookCommand
+/// Unit tests for the RegisterBookCommand
 /// </summary>
 /// <see cref="RegisterBookCommand"/>
 public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbContext>
@@ -24,7 +24,7 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
     public Task Command_Should_Throw_ArgumentException_When_Name_Is_Null_Or_Empty(string? name)
     {
         // Arrange
-        var author = "А.С. Пушкин";
+        var author = "A.S. Pushkin";
 
         // Act, Assert
         var exception = Assert.Throws<ArgumentException>(() => new RegisterBookCommand(name, author));
@@ -39,7 +39,7 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
     public Task Command_Should_Throw_ArgumentException_When_Author_Is_Null_Or_Empty(string? author)
     {
         // Arrange
-        var name = "Капитанская дочка";
+        var name = "The Captain's Daughter";
 
         // Act, Assert
         var exception = Assert.Throws<ArgumentException>(() => new RegisterBookCommand(name, author));
@@ -52,8 +52,8 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
     public async Task Command_Should_Return_Id_Of_Registered_Book()
     {
         // Arrange
-        var name = "Капитанская дочка";
-        var author = "А.С. Пушкин";
+        var name = "The Captain's Daughter";
+        var author = "A.S. Pushkin";
         var command = new RegisterBookCommand(name, author);
 
         // Act
@@ -67,8 +67,8 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
     public async Task Command_Should_Generate_BookWasRegisteredInRatingDomainEvent()
     {
         // Arrange
-        var name = "Капитанская дочка";
-        var author = "А.С. Пушкин";
+        var name = "The Captain's Daughter";
+        var author = "A.S. Pushkin";
         var command = new RegisterBookCommand(name, author);
 
         // Act

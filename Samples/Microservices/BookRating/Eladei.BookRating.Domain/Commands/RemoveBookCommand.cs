@@ -8,16 +8,16 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookRating.Domain.Commands;
 
 /// <summary>
-/// Команда удаления книги из рейтинга
+/// Command for removing a book from the rating
 /// </summary>
 public sealed class RemoveBookCommand : EfCommandBase<BookRatingDbContext>
 {
     private readonly Guid _bookId;
 
     /// <summary>
-    /// Создает объект класса RemoveBookCommand
+    /// Creates an instance of the RemoveBookCommand class
     /// </summary>
-    /// <param name="bookId">Id книги</param>
+    /// <param name="bookId">Book identifier</param>
     public RemoveBookCommand(Guid bookId)
     {
         _bookId = bookId;

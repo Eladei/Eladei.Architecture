@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BookAuthorNotDefined" xml:space="preserve">
-    <value>Не задан автор книги</value>
+    <value>Book author is not specified</value>
   </data>
   <data name="BookIdNotDefined" xml:space="preserve">
-    <value>Не задан Id книги</value>
+    <value>Book ID is not specified</value>
   </data>
   <data name="BookNameNotDefined" xml:space="preserve">
-    <value>Не задано название книги</value>
+    <value>Book title is not specified</value>
   </data>
   <data name="BookWithCurrentInfoAlreadyExists" xml:space="preserve">
-    <value>Книга с указанной информацией Name = '{0}' и Author = '{1}' уже существует.</value>
+    <value>A book with Name = '{0}' and Author = '{1}' already exists.</value>
   </data>
   <data name="BookWithIdNotFound" xml:space="preserve">
-    <value>Книга с указанным Id = {0} не найдена</value>
+    <value>A book with Id = {0} was not found</value>
   </data>
 </root>

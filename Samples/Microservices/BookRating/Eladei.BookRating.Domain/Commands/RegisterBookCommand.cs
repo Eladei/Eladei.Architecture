@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookRating.Domain.Commands;
 
 /// <summary>
-/// Команда регистрации книги в рейтинг
+/// Command for registering a book in the rating
 /// </summary>
 public sealed class RegisterBookCommand : EfCommandWithResultBase<BookRatingDbContext, Guid>
 {
@@ -17,10 +17,10 @@ public sealed class RegisterBookCommand : EfCommandWithResultBase<BookRatingDbCo
     private readonly string _author;
 
     /// <summary>
-    /// Создает объект класса RegisterBookCommand
+    /// Creates an instance of the RegisterBookCommand class
     /// </summary>
-    /// <param name="name">Название книги</param>
-    /// <param name="author">Автор книги</param>
+    /// <param name="name">Book title</param>
+    /// <param name="author">Book author</param>
     /// <exception cref="ArgumentException"></exception>
     public RegisterBookCommand(string name, string author)
     {
@@ -34,7 +34,7 @@ public sealed class RegisterBookCommand : EfCommandWithResultBase<BookRatingDbCo
         _author = author;
     }
 
-    /// <returns>Идентификатор добавленной книги</returns>
+    /// <returns>Identifier of the created book</returns>
     /// <exception cref="BookWithCurrentInfoAlreadyExistsException"></exception>
     public override async Task<Guid> ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken)
     {

@@ -3,18 +3,18 @@
 namespace Eladei.BookRating.Domain.Commands.DomainEvents;
 
 /// <summary>
-/// Книга была удалена из рейтинга
+/// A book was removed from the rating
 /// </summary>
 public sealed class BookWasRemovedFromRatingDomainEvent : DomainEvent
 {
     /// <summary>
-    /// Создает объект класса BookWasRemovedFromRatingDomainEvent
+    /// Creates an instance of the BookWasRemovedFromRatingDomainEvent class
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
+    /// <param name="bookId">Book identifier</param>
     public BookWasRemovedFromRatingDomainEvent(Guid bookId) : base(bookId) { }
 
     /// <summary>
-    /// Идентификатор книги
+    /// Book identifier
     /// </summary>
     public Guid BookId => EntityId;
 }

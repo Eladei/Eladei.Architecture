@@ -3,65 +3,65 @@
 namespace Eladei.BookRating.Model.Entities.IntegrationEvents;
 
 /// <summary>
-/// Информация об отправке события интеграции
+/// Information about sending an integration event
 /// </summary>
 public class IntegrationEventToSend : EntityBase
 {
     /// <summary>
-    /// Идентификатор события
+    /// Event identifier
     /// </summary>
     [Key]
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Id сущности, к которой привязано событие
+    /// Identifier of the entity associated with the event
     /// </summary>
     public Guid EntityId { get; set; }
 
     /// <summary>
-    /// Id для сквозного отслеживания
+    /// Id for distributed tracing
     /// </summary>
     public Guid CorrelationId { get; set; }
 
     /// <summary>
-    /// Тип события
+    /// Event type
     /// </summary>
     [Required]
     public string EventType { get; set; } = null!;
 
     /// <summary>
-    /// Метаданные события для парсинга
+    /// Event metadata for parsing
     /// </summary>
     [Required]
     public string EventMetadata { get; set; } = null!;
 
     /// <summary>
-    /// Показатель успешности отправки
+    /// Sending success indicator
     /// </summary>
     public bool IsSent { get; set; }
 
     /// <summary>
-    /// Число попыток отправки
+    /// Number of sending attempts
     /// </summary>
     public int NumberOfSendingAttempts { get; set; }
 
     /// <summary>
-    /// Дата отправки
+    /// Sending date
     /// </summary>
     public DateTime? SentAt { get; set; }
 
     /// <summary>
-    /// Последняя ошибка отправки
+    /// Last sending error
     /// </summary>
     public string? LastError { get; set; }
 
     /// <summary>
-    /// Идентификатор системы, зазерезервировавшей событие для отправки
+    /// Identifier of the system that reserved the event for sending
     /// </summary>
     public Guid? ReservedBy { get; set; }
 
     /// <summary>
-    /// Дата резервирования события для отправки
+    /// Date when the event was reserved for sending
     /// </summary>
     public DateTime? ReservedAt { get; set; }
 }

@@ -7,7 +7,7 @@ using Eladei.BookRating.Model;
 namespace Eladei.BookRating.Infrastructure.Outbox;
 
 /// <summary>
-/// Служба сохранения доменных событий в outbox
+/// Service for saving domain events to the outbox
 /// </summary>
 public sealed class OutboxDomainEventDao : IEfOutboxDomainEventDao<BookRatingDbContext>
 {
@@ -15,11 +15,16 @@ public sealed class OutboxDomainEventDao : IEfOutboxDomainEventDao<BookRatingDbC
     private readonly ICorrelationContext _correlationContext;
 
     /// <summary>
-    /// Создает объект класса DomainEventDao
+    /// Creates an instance of the <see cref="OutboxDomainEventDao"/> class
     /// </summary>
-    /// <param name="integrationEventFactory">Фабрика для формирования событий интеграции</param>
-    /// <param name="correlationContext">Контекст корреляции</param>
-    /// <exception cref="ArgumentNullException"></exception>
+    /// <param name="integrationEventFactory">Factory used to convert domain events into 
+    /// integration events suitable for external messaging systems.</param>
+    /// <param name="correlationContext">Provides correlation information (e.g. CorrelationId) 
+    /// used for distributed tracing across services and messages.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="integrationEventFactory"/> or
+    /// <paramref name="correlationContext"/> is null.
+    /// </exception>
     public OutboxDomainEventDao(
         IIntegrationEventFactory integrationEventFactory,
         ICorrelationContext correlationContext)
@@ -31,7 +36,11 @@ public sealed class OutboxDomainEventDao : IEfOutboxDomainEventDao<BookRatingDbC
             ?? throw new ArgumentNullException(nameof(correlationContext));
     }
 
-    public Task SaveAsync(IReadOnlyCollection<IDomainEvent> domainEvents, BookRatingDbContext context, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public Task SaveAsync(
+        IReadOnlyCollection<IDomainEvent> domainEvents,
+        BookRatingDbContext context,
+        CancellationToken cancellationToken)
     {
         var command = new SaveDomainEventsToOutboxCommand(domainEvents, _integrationEventFactory, _correlationContext);
 

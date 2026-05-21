@@ -5,18 +5,24 @@ using Grpc.Core.Interceptors;
 namespace Eladei.BookRating.Api.Filters;
 
 /// <summary>
-/// Перехватчик для установки correlationId, если он не был отправлен с клиента
+/// Interceptor that sets correlationId if it was not provided by the client
 /// </summary>
 public sealed class CorrelationIdInterceptor : Interceptor
 {
     private readonly ICorrelationContext _correlationContext;
 
+    /// <summary>
+    /// Interceptor that sets correlationId if it was not provided by the client
+    /// </summary>
+    /// <param name="correlationContext">Correlation context for distributed tracing</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public CorrelationIdInterceptor(ICorrelationContext correlationContext)
     {
         _correlationContext = correlationContext
             ?? throw new ArgumentNullException(nameof(correlationContext));
     }
 
+    /// <inheritdoc />
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
         TRequest request,
         ServerCallContext context,

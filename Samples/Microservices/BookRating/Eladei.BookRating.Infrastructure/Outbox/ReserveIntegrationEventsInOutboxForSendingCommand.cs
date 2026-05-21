@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookRating.Infrastructure.Outbox;
 
 /// <summary>
-/// Команда резервирования событий интеграции в outbox для последующей отправки
+/// Command for reserving integration events in the outbox for later sending
 /// </summary>
 public sealed class ReserveIntegrationEventsInOutboxForSendingCommand : EfCommandWithResultBase<BookRatingDbContext, int>
 {
@@ -14,11 +14,11 @@ public sealed class ReserveIntegrationEventsInOutboxForSendingCommand : EfComman
     private readonly uint _maxEventsToReserve;
 
     /// <summary>
-    /// Создает объект класса ReserveIntegrationEventsForSendingCommand
+    /// Creates an instance of the ReserveIntegrationEventsForSendingCommand class
     /// </summary>
-    /// <param name="senderId">Идентификатор службы, отправляющей события</param>
-    /// <param name="reservingSpanSeconds">Время резервирования в секундах</param>
-    /// <param name="maxEventsToReserve">Максимальное количество событий для резервирования</param>
+    /// <param name="senderId">Identifier of the service sending events</param>
+    /// <param name="reservingSpanSeconds">Reservation time in seconds</param>
+    /// <param name="maxEventsToReserve">Maximum number of events to reserve</param>
     public ReserveIntegrationEventsInOutboxForSendingCommand(Guid senderId, uint reservingSpanSeconds, uint maxEventsToReserve)
     {
         _senderId = senderId;
@@ -26,6 +26,7 @@ public sealed class ReserveIntegrationEventsInOutboxForSendingCommand : EfComman
         _maxEventsToReserve = maxEventsToReserve;
     }
 
+    /// <inheritdoc />
     public override async Task<int> ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken)
     {
         var reservingDate = DateTime.UtcNow;
@@ -43,7 +44,6 @@ public sealed class ReserveIntegrationEventsInOutboxForSendingCommand : EfComman
             evnt.ReservedAt = reservingDate;
             evnt.ReservedBy = _senderId;
         }
-        ;
 
         return eventsToReserve.Length;
     }
