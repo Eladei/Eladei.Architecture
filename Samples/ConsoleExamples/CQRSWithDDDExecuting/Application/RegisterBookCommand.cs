@@ -5,7 +5,7 @@ using Eladei.Architecture.Cqrs.Ddd.Commands;
 namespace CqrsWithDddExecuting.Application;
 
 /// <summary>
-/// Команда регистрации книги
+/// Command for registering a book
 /// </summary>
 internal sealed class RegisterBookCommand : DddCommandWithResultBase<Guid>
 {
@@ -13,10 +13,10 @@ internal sealed class RegisterBookCommand : DddCommandWithResultBase<Guid>
     private readonly string _author;
 
     /// <summary>
-    /// Создает объект класса RegisterBookCommand
+    /// Creates an instance of RegisterBookCommand
     /// </summary>
-    /// <param name="name">Название книги</param>
-    /// <param name="author">Автор книги</param>
+    /// <param name="name">Book name</param>
+    /// <param name="author">Book author</param>
     public RegisterBookCommand(string name, string author)
     {
         _name = name;

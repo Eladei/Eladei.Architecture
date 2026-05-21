@@ -3,18 +3,18 @@
 namespace CqrsWithEntityFrameworkExecuting.DomainModel.Commands;
 
 /// <summary>
-/// События голосования за книгу в рейтинге
+/// Domain event for voting for a book in the rating
 /// </summary>
 public class BookWasVotedDomainEvent : DomainEvent
 {
     /// <summary>
-    /// Создает объект класса BookWasVotedDomainEvent
+    /// Creates an instance of BookWasVotedDomainEvent
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
+    /// <param name="bookId">Book identifier</param>
     public BookWasVotedDomainEvent(Guid bookId) : base(bookId) { }
 
     /// <summary>
-    /// Идентификатор книги
+    /// Book identifier
     /// </summary>
     public Guid BookId => EntityId;
 }

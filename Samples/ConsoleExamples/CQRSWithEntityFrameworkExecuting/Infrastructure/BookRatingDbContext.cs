@@ -3,12 +3,12 @@
 namespace CqrsWithEntityFrameworkExecuting.Infrastructure;
 
 /// <summary>
-/// Контекст рейтинга книг
+/// Book rating database context
 /// </summary>
 public class BookRatingDbContext : DbContext
 {
     /// <summary>
-    /// Книги
+    /// Books
     /// </summary>
     public DbSet<BookInRatingDb> Books { get; set; } = null!;
 

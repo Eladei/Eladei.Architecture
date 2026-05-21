@@ -7,6 +7,7 @@ namespace CqrsWithDddExecuting.Infrastructure;
 /// </summary>
 public sealed class MockOperationExecutionPolicyService : IOperationExecutionPolicyService
 {
+    /// <inheritdoc />
     public IOperationExecutionPolicy GetExecutionPolicy(IOperation operation)
         => new OperationExecutionPolicyBuilder().Build();
 }

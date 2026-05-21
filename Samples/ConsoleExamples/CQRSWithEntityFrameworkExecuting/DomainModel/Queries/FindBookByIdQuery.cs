@@ -6,25 +6,28 @@ using Microsoft.EntityFrameworkCore;
 namespace CqrsWithEntityFrameworkExecuting.DomainModel.Queries;
 
 /// <summary>
-/// Команда регистрации книги
+/// Query for finding a book by its identifier
 /// </summary>
 internal sealed class FindBookByIdQuery : EfQueryBase<BookRatingDbContext, BookInRatingReadModel>
 {
     private readonly Guid _bookId;
 
     /// <summary>
-    /// Создает объект класса FindBookByIdQuery
+    /// Creates an instance of FindBookByIdQuery
     /// </summary>
-    /// <param name="name">Название книги</param>
+    /// <param name="bookId">Book identifier</param>
     public FindBookByIdQuery(Guid bookId)
     {
         _bookId = bookId;
     }
 
-    public override async Task<BookInRatingReadModel> ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken = default)
+    public override async Task<BookInRatingReadModel> ExecuteAsync(
+        BookRatingDbContext context,
+        CancellationToken cancellationToken = default)
     {
-        var book = await context.Books.FirstOrDefaultAsync(b => b.Id == _bookId, cancellationToken)
-            ?? throw new DomainLogicException("Книга не зарегистрирована");
+        var book = await context.Books
+            .FirstOrDefaultAsync(b => b.Id == _bookId, cancellationToken)
+            ?? throw new DomainLogicException("Book is not registered");
 
         return new BookInRatingReadModel
         {

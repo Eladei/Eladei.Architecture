@@ -3,7 +3,7 @@
 namespace CqrsWithEntityFrameworkExecuting.Infrastructure;
 
 /// <summary>
-/// Мок службы запроса политики выполнения операции
+/// Mock service for resolving operation execution policies
 /// </summary>
 public sealed class MockOperationExecutionPolicyService : IOperationExecutionPolicyService
 {

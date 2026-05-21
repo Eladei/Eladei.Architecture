@@ -6,16 +6,16 @@ using Eladei.Architecture.Ddd.Entities;
 namespace CqrsWithDddExecuting.Application;
 
 /// <summary>
-/// Команда регистрации книги
+/// Command for voting for a book
 /// </summary>
 internal sealed class VoteForBookCommand : DddCommandBase
 {
     private readonly Guid _bookId;
 
     /// <summary>
-    /// Создает объект класса RegisterBookCommand
+    /// Creates an instance of VoteForBookCommand
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
+    /// <param name="bookId">Book identifier</param>
     public VoteForBookCommand(Guid bookId)
     {
         _bookId = bookId;
@@ -26,7 +26,7 @@ internal sealed class VoteForBookCommand : DddCommandBase
         var bookRepository = repositoryFactory.CreateRepository<IBookRepository>();
 
         var foundBook = await bookRepository.FindByIdAsync(_bookId, cancellationToken)
-            ?? throw new DomainLogicException($"Не найдена книга с указанным Id='{_bookId}'");
+            ?? throw new DomainLogicException($"Book with specified Id='{_bookId}' was not found");
 
         foundBook.Vote();
 

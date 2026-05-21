@@ -3,12 +3,13 @@
 namespace CqrsWithDddExecuting.Infrastructure;
 
 /// <summary>
-/// Мок фабрики контекста единицы работы
+/// Mock Unit of Work context factory
 /// </summary>
 public class MockUnitOfWorkContextFactory : IUnitOfWorkContextFactory
 {
     private static List<BookInRatingDb> DataContext = [];
 
+    /// <inheritdoc />
     public IUnitOfWorkContext CreateContext()
         => new MockBookRatingUnitOfWorkContext(DataContext);
 }

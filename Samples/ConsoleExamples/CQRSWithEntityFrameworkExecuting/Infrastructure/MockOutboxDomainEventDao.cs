@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace CqrsWithEntityFrameworkExecuting.Infrastructure;
 
 /// <summary>
-/// Мок службы сохранения доменных событий в outbox
+/// Mock service for saving domain events to the outbox
 /// </summary>
 public sealed class MockOutboxDomainEventDao : IEfOutboxDomainEventDao<BookRatingDbContext>
 {
@@ -16,11 +16,14 @@ public sealed class MockOutboxDomainEventDao : IEfOutboxDomainEventDao<BookRatin
         _logger = logger;
     }
 
-    public Task SaveAsync(IReadOnlyCollection<IDomainEvent> domainEvents, BookRatingDbContext context, CancellationToken cancellationToken)
+    public Task SaveAsync(
+        IReadOnlyCollection<IDomainEvent> domainEvents,
+        BookRatingDbContext context,
+        CancellationToken cancellationToken)
     {
         var eventNames = string.Join(',', domainEvents.Select(evnt => evnt.GetType().Name));
 
-        _logger?.LogInformation("Зафиксированы доменные события {0}", eventNames);
+        _logger?.LogInformation("Domain events recorded: {0}", eventNames);
 
         return Task.CompletedTask;
     }
