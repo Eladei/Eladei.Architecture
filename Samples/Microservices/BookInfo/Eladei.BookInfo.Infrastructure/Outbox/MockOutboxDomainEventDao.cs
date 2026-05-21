@@ -5,7 +5,7 @@ using Eladei.BookInfo.Model;
 namespace Eladei.BookInfo.Infrastructure.Outbox;
 
 /// <summary>
-/// Мок службы сохранения доменных событий в outbox
+/// Mock implementation of a service for saving domain events to the outbox
 /// </summary>
 public sealed class MockOutboxDomainEventDao : IEfOutboxDomainEventDao<BookInfoDbContext>
 {

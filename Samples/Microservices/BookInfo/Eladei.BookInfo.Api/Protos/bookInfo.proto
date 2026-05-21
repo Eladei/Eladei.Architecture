@@ -6,16 +6,16 @@ package bookInfo.v1;
 
 import "google/protobuf/wrappers.proto";
 
-// Определение сервиса информации о книгах
+// Book information service definition
 service BookInfo {
-  // Обновить дополнительную информацию о книге
+  // Updates additional book information
   rpc UpdateAdditionalBookInfo (UpdateAdditionalBookInfoApiRequest) returns (UpdateAdditionalBookInfoApiResponse);
 
-  // Запросить информацию о книге
+  // Retrieves book information
   rpc GetBookInfo (GetBookInfoApiRequest) returns (GetBookInfoApiResponse);
 }
 
-// Запрос обновления дополнительной информации о книге
+// Request to update additional book information
 message UpdateAdditionalBookInfoApiRequest {
     string bookId = 1;
 
@@ -32,15 +32,15 @@ message UpdateAdditionalBookInfoApiRequest {
     string artist = 7;
 }
 
-// Результат обновления дополнительной информации о книге
+// Response for updating additional book information
 message UpdateAdditionalBookInfoApiResponse { }
 
-// Запрос информации о книге
+// Request for retrieving book information
 message GetBookInfoApiRequest {
     string bookId = 1;
 }
 
-// Результат запроса информации о книге
+// Response containing book information
 message GetBookInfoApiResponse {
     string bookId = 1;
 

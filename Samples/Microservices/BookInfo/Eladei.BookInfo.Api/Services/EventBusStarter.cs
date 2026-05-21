@@ -3,7 +3,7 @@
 namespace Eladei.BookInfo.Api.Services;
 
 /// <summary>
-/// Служба дли инициализации шины событий интеграции
+/// Service for initializing the integration event bus
 /// </summary>
 public class EventBusStarter : IHostedService
 {

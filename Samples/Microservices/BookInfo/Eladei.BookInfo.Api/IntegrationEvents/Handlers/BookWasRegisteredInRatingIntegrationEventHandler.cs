@@ -8,38 +8,46 @@ using Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 namespace Eladei.BookInfo.Api.IntegrationEvents.Handlers;
 
 /// <summary>
-/// Обработчик события регистрации книги в рейтинге
+/// Handler for book registration event in rating
 /// </summary>
-public sealed class BookWasRegisteredInRatingIntegrationEventHandler : KafkaIntegrationEventHandlerBase<BookWasRegisteredInRatingIntegrationEvent>
+public sealed class BookWasRegisteredInRatingIntegrationEventHandler
+    : KafkaIntegrationEventHandlerBase<BookWasRegisteredInRatingIntegrationEvent>
 {
     private readonly ICommandExecutor _commandExecutor;
 
     /// <summary>
-    /// Создает объект класса BookInfoWasUpdatedInRatingIntegrationEventHandler
+    /// Creates an instance of <see cref="BookWasRegisteredInRatingIntegrationEventHandler"/>
     /// </summary>
-    /// <param name="commandExecutor">Исполнитель команд</param>
-    /// <param name="correlationContext">Контекст корреляции</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <param name="logger">Логгер</param>
+    /// <param name="commandExecutor">Command executor</param>
+    /// <param name="correlationContext">Correlation context</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="logger">Logger</param>
     /// <exception cref="ArgumentNullException"></exception>
     public BookWasRegisteredInRatingIntegrationEventHandler(
         ICommandExecutor commandExecutor,
         ICorrelationContext correlationContext,
         CancellationToken cancellationToken,
-        ILogger<BookWasRegisteredInRatingIntegrationEventHandler>? logger) : base(cancellationToken, correlationContext, logger)
+        ILogger<BookWasRegisteredInRatingIntegrationEventHandler>? logger)
+        : base(cancellationToken, correlationContext, logger)
     {
         _commandExecutor = commandExecutor
             ?? throw new ArgumentNullException(nameof(commandExecutor));
     }
 
-    protected override async Task HandleAsync(BookWasRegisteredInRatingIntegrationEvent integrationEvent, CancellationToken cancellationToken)
+    /// <inheritdoc/>
+    protected override async Task HandleAsync(
+        BookWasRegisteredInRatingIntegrationEvent integrationEvent,
+        CancellationToken cancellationToken)
     {
         var command = new AddBookCommand(
-            integrationEvent.BookId, integrationEvent.Name, integrationEvent.Author);
+            integrationEvent.BookId,
+            integrationEvent.Name,
+            integrationEvent.Author);
 
         await _commandExecutor.ExecuteAsync(command, cancellationToken);
     }
 
+    /// <inheritdoc/>
     protected override bool IgnoreException(Exception ex)
-        => ex is BookWithCurrentIdAlreadyExistsException ? true : false;
+        => ex is BookWithCurrentIdAlreadyExistsException;
 }

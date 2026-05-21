@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookInfo.Model;
 
 /// <summary>
-/// Контекст базы данных для работы с информацией о книгах
+/// Database context for working with book information
 /// </summary>
 public class BookInfoDbContext : DbContext
 {
@@ -13,7 +13,7 @@ public class BookInfoDbContext : DbContext
     public BookInfoDbContext(DbContextOptions<BookInfoDbContext> options) : base(options) { }
 
     /// <summary>
-    /// Информация о книгах
+    /// Book information
     /// </summary>
     public DbSet<BookInformation> BookInformations { get; set; }
 
@@ -22,9 +22,11 @@ public class BookInfoDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<BookInformation>()
-            .Property(p => p.Version).IsRowVersion();
+            .Property(p => p.Version)
+            .IsRowVersion();
     }
 
+    /// <inheritdoc />
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         foreach (var entry in ChangeTracker.Entries())
@@ -34,13 +36,11 @@ public class BookInfoDbContext : DbContext
                 case EntityState.Added:
                     ((EntityBase)entry.Entity).CreatedAtUtc = DateTime.UtcNow;
                     break;
+
                 case EntityState.Modified:
                     ((EntityBase)entry.Entity).ModifiedAtUtc = DateTime.UtcNow;
                     break;
-                default:
-                    break;
             }
-            ;
         }
 
         return base.SaveChangesAsync(cancellationToken);

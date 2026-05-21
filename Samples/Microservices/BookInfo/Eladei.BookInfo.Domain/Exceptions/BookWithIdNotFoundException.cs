@@ -3,7 +3,7 @@
 namespace Eladei.BookInfo.Domain.Exceptions;
 
 /// <summary>
-/// Книга с указанным идентификатором не найдена
+/// Book with the specified identifier was not found
 /// </summary>
 public sealed class BookWithIdNotFoundException : DomainLogicException
 {

@@ -2,23 +2,28 @@
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 
-namespace Eladei.BookInfo.Api.Filters;
-
 /// <summary>
-/// Перехватчик для установки correlationId
+/// Interceptor that sets correlationId if it was not provided by the client
 /// </summary>
-/// <remarks>CorrelationId устанавливается только если он 
-/// не был отправлен с клиента по ключу "x-correlation-id"</remarks>
+/// <remarks>
+/// CorrelationId is set only if it was not sent by the client via the "x-correlation-id" header.
+/// </remarks>
 public sealed class CorrelationIdInterceptor : Interceptor
 {
     private readonly ICorrelationContext _correlationContext;
 
+    /// <summary>
+    /// Creates an instance of CorrelationIdInterceptor
+    /// </summary>
+    /// <param name="correlationContext">Correlation context for distributed tracing</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public CorrelationIdInterceptor(ICorrelationContext correlationContext)
     {
         _correlationContext = correlationContext
             ?? throw new ArgumentNullException(nameof(correlationContext));
     }
 
+    /// <inheritdoc />
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
         TRequest request,
         ServerCallContext context,

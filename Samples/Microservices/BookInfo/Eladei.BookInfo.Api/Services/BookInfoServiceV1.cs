@@ -6,19 +6,32 @@ using Grpc.Core;
 namespace Eladei.BookInfo.Api.Services;
 
 /// <summary>
-/// Сервис работы с информацией о книгах
+/// Service for working with book information
 /// </summary>
 public class BookInfoServiceV1 : BookInfo.BookInfoBase
 {
     private readonly IOperationExecutor _operationExecutor;
 
+    /// <summary>
+    /// Creates an instance of BookInfoServiceV1
+    /// </summary>
+    /// <param name="operationExecutor">Operation executor</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public BookInfoServiceV1(IOperationExecutor operationExecutor)
     {
         _operationExecutor = operationExecutor
             ?? throw new ArgumentNullException(nameof(operationExecutor));
     }
 
-    public override async Task<GetBookInfoApiResponse> GetBookInfo(GetBookInfoApiRequest request, ServerCallContext context)
+    /// <summary>
+    /// Retrieves book information
+    /// </summary>
+    /// <param name="request">Request containing book identifier</param>
+    /// <param name="context">Server call context</param>
+    /// <returns>Book information response</returns>
+    public override async Task<GetBookInfoApiResponse> GetBookInfo(
+        GetBookInfoApiRequest request,
+        ServerCallContext context)
     {
         var query = new BookInfoQuery(new Guid(request.BookId));
 
@@ -38,7 +51,15 @@ public class BookInfoServiceV1 : BookInfo.BookInfoBase
         };
     }
 
-    public override async Task<UpdateAdditionalBookInfoApiResponse> UpdateAdditionalBookInfo(UpdateAdditionalBookInfoApiRequest request, ServerCallContext context)
+    /// <summary>
+    /// Updates additional book information
+    /// </summary>
+    /// <param name="request">Request containing additional book information</param>
+    /// <param name="context">Server call context</param>
+    /// <returns>Update operation result</returns>
+    public override async Task<UpdateAdditionalBookInfoApiResponse> UpdateAdditionalBookInfo(
+        UpdateAdditionalBookInfoApiRequest request,
+        ServerCallContext context)
     {
         var additionalInfo = new AdditionalBookInfo
         {

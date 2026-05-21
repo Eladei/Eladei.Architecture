@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookInfo.Api.Filters;
 
 /// <summary>
-/// Перехватчик для обработки возникающих ошибок
+/// Interceptor for handling runtime errors
 /// </summary>
 public sealed class ErrorInterceptor : Interceptor
 {
@@ -16,14 +16,15 @@ public sealed class ErrorInterceptor : Interceptor
     private readonly ILogger _logger;
 
     /// <summary>
-    /// Создает объект класса ErrorInterceptor
+    /// Creates an instance of <see cref="ErrorInterceptor"/>
     /// </summary>
-    /// <param name="logger">Логгер</param>
+    /// <param name="logger">Logger</param>
     public ErrorInterceptor(ILogger<ErrorInterceptor> logger)
     {
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
         TRequest request,
         ServerCallContext context,
@@ -71,18 +72,17 @@ public sealed class ErrorInterceptor : Interceptor
     }
 
     /// <summary>
-    /// Обрабатывает перехваченную ошибку
+    /// Handles a caught exception and converts it into an RPC exception
     /// </summary>
-    /// <param name="ex">Исключение</param>
-    /// <param name="statusCode">Статус-код ошибки</param>
-    /// <param name="methodName">Название метода, 
-    /// в котором была зафиксирована ошибка</param>
-    /// <returns>RPC-исключение</returns>
+    /// <param name="ex">Exception</param>
+    /// <param name="statusCode">gRPC status code</param>
+    /// <param name="methodName">Name of the method where the error occurred</param>
+    /// <returns>gRPC exception</returns>
     private RpcException HandleError(Exception ex, StatusCode statusCode, string methodName)
     {
         _logger.LogError(ex, string.Format(ErrorMsgPattern, methodName));
 
-        // В Release-сборках возвращение только сообщения об ошибке
+        // In Release builds, return only the error message
         Status status;
 #if DEBUG
         status = new Status(statusCode, ex.ToString());
@@ -90,7 +90,7 @@ public sealed class ErrorInterceptor : Interceptor
         status = new Status(statusCode, ex.Message);
 #endif
 
-        // TODO: При возврате ошибки не пробрасывается в лог CorrelationId
+        // TODO: CorrelationId is not included in logs when error is returned
         return new RpcException(status);
     }
 }

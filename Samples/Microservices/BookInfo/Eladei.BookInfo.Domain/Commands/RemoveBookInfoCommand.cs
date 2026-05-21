@@ -7,27 +7,31 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookInfo.Domain.Commands;
 
 /// <summary>
-/// Команда обновления информации о книге
+/// Command for updating book information
 /// </summary>
 public sealed class RemoveBookInfoCommand : EfCommandBase<BookInfoDbContext>
 {
     private readonly Guid _bookId;
 
     /// <summary>
-    /// Создает объект класса RemoveBookInfoCommand
+    /// Creates an instance of RemoveBookInfoCommand
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
+    /// <param name="bookId">Book identifier</param>
     public RemoveBookInfoCommand(Guid bookId)
     {
         _bookId = bookId;
     }
 
     /// <exception cref="BookWithIdNotFoundException"></exception>
-    public override async Task ExecuteAsync(BookInfoDbContext context, CancellationToken cancellationToken)
+    public override async Task ExecuteAsync(
+        BookInfoDbContext context,
+        CancellationToken cancellationToken)
     {
         var book = await context.BookInformations
             .FirstOrDefaultAsync(s => s.Id == _bookId, cancellationToken)
-            ?? throw new BookWithIdNotFoundException(Resources.BookWithCurrentIdNotExists, _bookId);
+            ?? throw new BookWithIdNotFoundException(
+                Resources.BookWithCurrentIdNotExists,
+                _bookId);
 
         context.BookInformations.Remove(book);
     }

@@ -8,37 +8,43 @@ using Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 namespace Eladei.BookInfo.Api.IntegrationEvents.Handlers;
 
 /// <summary>
-/// Обработчик события удаления книги из рейтинга
+/// Handler for book removal event in rating;
 /// </summary>
-public sealed class BookWasRemovedFromRatingIntegrationEventHandler : KafkaIntegrationEventHandlerBase<BookWasRemovedFromRatingIntegrationEvent>
+public sealed class BookWasRemovedFromRatingIntegrationEventHandler
+    : KafkaIntegrationEventHandlerBase<BookWasRemovedFromRatingIntegrationEvent>
 {
     private readonly ICommandExecutor _commandExecutor;
 
     /// <summary>
-    /// Создает объект класса BookWasRemovedFromRatingIntegrationEventHandler
+    /// Creates an instance of <see cref="BookWasRemovedFromRatingIntegrationEventHandler"/>
     /// </summary>
-    /// <param name="commandExecutor">Исполнитель команд</param>
-    /// <param name="correlationContext">Контекст корреляции</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <param name="logger">Логгер</param>
+    /// <param name="commandExecutor">Command executor</param>
+    /// <param name="correlationContext">Correlation context</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="logger">Logger</param>
     /// <exception cref="ArgumentNullException"></exception>
     public BookWasRemovedFromRatingIntegrationEventHandler(
         ICommandExecutor commandExecutor,
         ICorrelationContext correlationContext,
         CancellationToken cancellationToken,
-        ILogger<BookWasRemovedFromRatingIntegrationEventHandler>? logger) : base(cancellationToken, correlationContext, logger)
+        ILogger<BookWasRemovedFromRatingIntegrationEventHandler>? logger)
+        : base(cancellationToken, correlationContext, logger)
     {
         _commandExecutor = commandExecutor
             ?? throw new ArgumentNullException(nameof(commandExecutor));
     }
 
-    protected override async Task HandleAsync(BookWasRemovedFromRatingIntegrationEvent integrationEvent, CancellationToken cancellationToken)
+    /// <inheritdoc/>
+    protected override async Task HandleAsync(
+        BookWasRemovedFromRatingIntegrationEvent integrationEvent,
+        CancellationToken cancellationToken)
     {
         var command = new RemoveBookInfoCommand(integrationEvent.BookId);
 
         await _commandExecutor.ExecuteAsync(command, cancellationToken);
     }
 
+    /// <inheritdoc/>
     protected override bool IgnoreException(Exception ex)
-        => ex is BookWithIdNotFoundException ? true : false;
+        => ex is BookWithIdNotFoundException;
 }

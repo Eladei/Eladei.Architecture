@@ -3,7 +3,7 @@
 namespace Eladei.BookInfo.Domain.Exceptions;
 
 /// <summary>
-/// Книга с указанным идентификатором уже существует
+/// Book with the specified identifier already exists
 /// </summary>
 public sealed class BookWithCurrentIdAlreadyExistsException : DomainLogicException
 {
