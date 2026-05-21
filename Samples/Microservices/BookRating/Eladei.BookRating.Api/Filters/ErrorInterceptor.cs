@@ -1,5 +1,4 @@
-﻿using Eladei.Architecture.Cqrs;
-using Eladei.Architecture.Cqrs.Commands;
+﻿using Eladei.Architecture.Cqrs.Commands;
 using Eladei.Architecture.Ddd.Entities;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
@@ -8,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookRating.Api.Filters;
 
 /// <summary>
-/// Перехватчик для обработки возникающих ошибок
+/// Interceptor for handling occurring errors
 /// </summary>
 public sealed class ErrorInterceptor : Interceptor
 {
@@ -17,14 +16,15 @@ public sealed class ErrorInterceptor : Interceptor
     private readonly ILogger _logger;
 
     /// <summary>
-    /// Создает объект класса ErrorInterceptor
+    /// Creates an instance of the ErrorInterceptor class
     /// </summary>
-    /// <param name="logger">Логгер</param>
+    /// <param name="logger">Logger instance</param>
     public ErrorInterceptor(ILogger<ErrorInterceptor> logger)
     {
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
         TRequest request,
         ServerCallContext context,

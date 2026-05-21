@@ -8,28 +8,30 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookInfo.Domain.Queries;
 
 /// <summary>
-/// Запрос для получения информации о книге
+/// Query for retrieving book information
 /// </summary>
 public sealed class BookInfoQuery : EfQueryBase<BookInfoDbContext, BookInfoReadModel>
 {
     private readonly Guid _bookId;
 
     /// <summary>
-    /// Создает объект класса BookInfoQuery
+    /// Creates an instance of <see cref="BookInfoQuery"/>
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
+    /// <param name="bookId">Book identifier</param>
     public BookInfoQuery(Guid bookId)
     {
         _bookId = bookId;
     }
 
     /// <summary>
-    /// Запросить информацию о книге
+    /// Retrieves book information
     /// </summary>
-    /// <param name="context">Контекст данных</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Список книг</returns>
-    public override async Task<BookInfoReadModel> ExecuteAsync(BookInfoDbContext context, CancellationToken cancellationToken)
+    /// <param name="context">Data context</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Book information</returns>
+    public override async Task<BookInfoReadModel> ExecuteAsync(
+        BookInfoDbContext context,
+        CancellationToken cancellationToken)
     {
         var book = await context.BookInformations
             .Select(b => new BookInfoReadModel

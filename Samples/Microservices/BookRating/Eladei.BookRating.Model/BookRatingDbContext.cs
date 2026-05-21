@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace Eladei.BookRating.Model;
 
 /// <summary>
-/// Контекст базы данных для работы с рейтингом книг
+/// Database context for working with book ratings
 /// </summary>
 public class BookRatingDbContext : DbContext
 {
@@ -15,7 +15,7 @@ public class BookRatingDbContext : DbContext
     public BookRatingDbContext(DbContextOptions<BookRatingDbContext> contextOptions) : base(contextOptions) { }
 
     /// <summary>
-    /// Информация о книгах
+    /// Information about books
     /// </summary>
     public virtual DbSet<Book> Books { get; set; }
 

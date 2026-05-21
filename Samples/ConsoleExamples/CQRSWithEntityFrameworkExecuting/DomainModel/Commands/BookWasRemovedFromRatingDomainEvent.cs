@@ -3,18 +3,18 @@
 namespace CqrsWithEntityFrameworkExecuting.DomainModel.Commands;
 
 /// <summary>
-/// Событие удаления книги из рейтинга
+/// Domain event for removing a book from the rating
 /// </summary>
 public class BookWasRemovedFromRatingDomainEvent : DomainEvent
 {
     /// <summary>
-    /// Создает объект класса BookWasRemovedFromRatingDomainEvent
+    /// Creates an instance of BookWasRemovedFromRatingDomainEvent
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
+    /// <param name="bookId">Book identifier</param>
     public BookWasRemovedFromRatingDomainEvent(Guid bookId) : base(bookId) { }
 
     /// <summary>
-    /// Идентификатор книги
+    /// Book identifier
     /// </summary>
     public Guid BookId => EntityId;
 }

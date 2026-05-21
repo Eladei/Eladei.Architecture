@@ -1,27 +1,27 @@
 ﻿namespace CqrsWithDddExecuting.Infrastructure;
 
 /// <summary>
-/// Информация о книге в рейтинге
+/// Book information in the rating
 /// </summary>
 public sealed class BookInRatingDb
 {
     /// <summary>
-    /// Идентификатор книги
+    /// Book identifier
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Название книги
+    /// Book name
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Автор
+    /// Author
     /// </summary>
     public string Author { get; set; } = null!;
 
     /// <summary>
-    /// Голоса, отданные за книгу
+    /// Votes cast for the book
     /// </summary>
     public uint Votes { get; set; }
 }

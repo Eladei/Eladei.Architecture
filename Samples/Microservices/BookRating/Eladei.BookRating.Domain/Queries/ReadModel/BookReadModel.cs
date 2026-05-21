@@ -1,32 +1,32 @@
 ﻿namespace Eladei.BookRating.Domain.Queries.ReadModel;
 
 /// <summary>
-/// Информация о книге
+/// Book information
 /// </summary>
 public record BookReadModel
 {
     /// <summary>
-    /// Идентификатор книги
+    /// Book identifier
     /// </summary>
     public Guid Id { get; init; }
 
     /// <summary>
-    /// Название 
+    /// Title
     /// </summary>
     public string Name { get; init; } = null!;
 
     /// <summary>
-    /// Автор
+    /// Author
     /// </summary>
     public string Author { get; init; } = null!;
 
     /// <summary>
-    /// Количество голосов, отданных за книгу
+    /// Number of votes cast for the book
     /// </summary>
     public uint Votes { get; init; }
 
     /// <summary>
-    /// Дата и время регистрации книги в стандарте UTC
+    /// Book registration date and time in UTC
     /// </summary>
     public DateTime RegisteredAtUtc { get; init; }
 }

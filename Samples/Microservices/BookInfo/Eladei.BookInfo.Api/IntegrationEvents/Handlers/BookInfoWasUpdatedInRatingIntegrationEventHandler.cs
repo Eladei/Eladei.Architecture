@@ -8,38 +8,46 @@ using Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 namespace Eladei.BookInfo.Api.IntegrationEvents.Handlers;
 
 /// <summary>
-/// Обработчик события обновления информации о книге в рейтинге
+/// Handler for book information update event in rating
 /// </summary>
-public sealed class BookInfoWasUpdatedInRatingIntegrationEventHandler : KafkaIntegrationEventHandlerBase<BookInfoWasUpdatedInRatingIntegrationEvent>
+public sealed class BookInfoWasUpdatedInRatingIntegrationEventHandler
+    : KafkaIntegrationEventHandlerBase<BookInfoWasUpdatedInRatingIntegrationEvent>
 {
     private readonly ICommandExecutor _commandExecutor;
 
     /// <summary>
-    /// Создает объект класса BookInfoWasUpdatedInRatingIntegrationEventHandler
+    /// Creates an instance of BookInfoWasUpdatedInRatingIntegrationEventHandler
     /// </summary>
-    /// <param name="commandExecutor">Исполнитель команд</param>
-    /// <param name="correlationContext">Контекст корреляции</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <param name="logger">Логгер</param>
+    /// <param name="commandExecutor">Command executor</param>
+    /// <param name="correlationContext">Correlation context</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="logger">Logger</param>
     /// <exception cref="ArgumentNullException"></exception>
     public BookInfoWasUpdatedInRatingIntegrationEventHandler(
         ICommandExecutor commandExecutor,
         ICorrelationContext correlationContext,
         CancellationToken cancellationToken,
-        ILogger<BookInfoWasUpdatedInRatingIntegrationEventHandler>? logger) : base(cancellationToken, correlationContext, logger)
+        ILogger<BookInfoWasUpdatedInRatingIntegrationEventHandler>? logger)
+        : base(cancellationToken, correlationContext, logger)
     {
         _commandExecutor = commandExecutor
             ?? throw new ArgumentNullException(nameof(commandExecutor));
     }
 
-    protected override async Task HandleAsync(BookInfoWasUpdatedInRatingIntegrationEvent integrationEvent, CancellationToken cancellationToken)
+    /// <inheritdoc/>
+    protected override async Task HandleAsync(
+        BookInfoWasUpdatedInRatingIntegrationEvent integrationEvent,
+        CancellationToken cancellationToken)
     {
         var command = new UpdateMainBookInfoCommand(
-            integrationEvent.BookId, integrationEvent.Name, integrationEvent.Author);
+            integrationEvent.BookId,
+            integrationEvent.Name,
+            integrationEvent.Author);
 
         await _commandExecutor.ExecuteAsync(command, cancellationToken);
     }
 
+    /// <inheritdoc/>
     protected override bool IgnoreException(Exception ex)
-        => ex is BookWithIdNotFoundException ? true : false;
+        => ex is BookWithIdNotFoundException;
 }

@@ -5,16 +5,16 @@ using Eladei.Architecture.Ddd.Repositories;
 namespace CqrsWithDddExecuting.Infrastructure;
 
 /// <summary>
-/// Мок контекста единицы работы рейтинга книг
+/// Mock unit of work context for book rating
 /// </summary>
 public sealed class MockBookRatingUnitOfWorkContext : IUnitOfWorkContext
 {
     private List<BookInRatingDb> _dataContext;
 
     /// <summary>
-    /// Создает объект класса MockBookRatingUnitOfWorkContext
+    /// Creates an instance of MockBookRatingUnitOfWorkContext
     /// </summary>
-    /// <param name="dataContext">Контекст данных</param>
+    /// <param name="dataContext">Data context</param>
     public MockBookRatingUnitOfWorkContext(List<BookInRatingDb> dataContext)
     {
         _dataContext = dataContext

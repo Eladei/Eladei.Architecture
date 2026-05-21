@@ -3,34 +3,35 @@
 namespace Eladei.BookRating.Domain.Commands.DomainEvents;
 
 /// <summary>
-/// Информация о книге была обновлена в рейтинге
+/// Information about a book was updated in the rating
 /// </summary>
 public sealed class BookInfoWasUpdatedInRatingDomainEvent : DomainEvent
 {
     /// <summary>
-    /// Создает объект класса BookInfoWasUpdatedInRatingDomainEvent 
+    /// Creates an instance of the BookInfoWasUpdatedInRatingDomainEvent class
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
-    /// <param name="name">Название книги</param>
-    /// <param name="author">Автор</param>
-    public BookInfoWasUpdatedInRatingDomainEvent(Guid bookId, string name, string author) : base(bookId)
+    /// <param name="bookId">Book identifier</param>
+    /// <param name="name">Book title</param>
+    /// <param name="author">Author</param>
+    public BookInfoWasUpdatedInRatingDomainEvent(Guid bookId, string name, string author)
+        : base(bookId)
     {
         Name = name;
         Author = author;
     }
 
     /// <summary>
-    /// Идентификатор книги
+    /// Book identifier
     /// </summary>
     public Guid BookId => EntityId;
 
     /// <summary>
-    /// Название книги
+    /// Book title
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    /// Автор
+    /// Author
     /// </summary>
     public string Author { get; }
 }

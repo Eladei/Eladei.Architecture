@@ -1,27 +1,27 @@
 ﻿namespace CqrsWithEntityFrameworkExecuting.DomainModel.Queries;
 
 /// <summary>
-/// Информация о книге в рейтинге
+/// Book information in the rating
 /// </summary>
 public sealed record class BookInRatingReadModel
 {
     /// <summary>
-    /// Идентификатор книги
+    /// Book identifier
     /// </summary>
     public Guid BookId { get; init; }
 
     /// <summary>
-    /// Название книги
+    /// Book title
     /// </summary>
-    public string Name { get; init; }
+    public string Name { get; init; } = null!;
 
     /// <summary>
-    /// Автор
+    /// Author
     /// </summary>
-    public string Author { get; init; }
+    public string Author { get; init; } = null!;
 
     /// <summary>
-    /// Голоса, отданные за книгу
+    /// Number of votes for the book
     /// </summary>
     public uint Votes { get; init; }
 }

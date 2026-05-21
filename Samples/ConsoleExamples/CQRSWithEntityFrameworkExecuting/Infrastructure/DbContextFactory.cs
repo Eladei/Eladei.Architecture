@@ -3,7 +3,7 @@
 namespace CqrsWithEntityFrameworkExecuting.Infrastructure;
 
 /// <summary>
-/// Фабрика контекста единицы работы
+/// Factory for the unit-of-work database context
 /// </summary>
 internal class DbContextFactory : IDbContextFactory<BookRatingDbContext>
 {

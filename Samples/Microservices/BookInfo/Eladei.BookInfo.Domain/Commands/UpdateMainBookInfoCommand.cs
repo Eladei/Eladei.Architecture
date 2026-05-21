@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookInfo.Domain.Commands;
 
 /// <summary>
-/// Команда обновления основной информации о книге
+/// Command for updating main book information
 /// </summary>
 public sealed class UpdateMainBookInfoCommand : EfCommandBase<BookInfoDbContext>
 {
@@ -16,11 +16,11 @@ public sealed class UpdateMainBookInfoCommand : EfCommandBase<BookInfoDbContext>
     private readonly string _author;
 
     /// <summary>
-    /// Создает объект класса UpdateMainBookInfoCommand
+    /// Creates an instance of UpdateMainBookInfoCommand
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
-    /// <param name="name">Название книги</param>
-    /// <param name="author">Автор книги</param>
+    /// <param name="bookId">Book identifier</param>
+    /// <param name="name">Book title</param>
+    /// <param name="author">Book author</param>
     /// <exception cref="ArgumentException"></exception>
     public UpdateMainBookInfoCommand(Guid bookId, string name, string author)
     {

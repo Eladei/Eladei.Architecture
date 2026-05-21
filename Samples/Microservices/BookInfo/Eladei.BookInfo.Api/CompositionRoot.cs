@@ -7,7 +7,6 @@ using Eladei.Architecture.Cqrs.EntityFramework.Queries;
 using Eladei.Architecture.Cqrs.Queries;
 using Eladei.Architecture.Logging;
 using Eladei.Architecture.Messaging.IntegrationEvents;
-using Eladei.Architecture.Messaging.Kafka;
 using Eladei.Architecture.Messaging.Kafka.Extensions;
 using Eladei.Architecture.Messaging.Kafka.IntegrationEvents;
 using Eladei.Architecture.Messaging.Kafka.Interceptors;
@@ -34,12 +33,12 @@ using Serilog.Events;
 namespace Eladei.BookInfo.Api;
 
 /// <summary>
-/// Корень сборки сервиса
+/// Composition root of the service
 /// </summary>
 public static class CompositionRoot
 {
     /// <summary>
-    /// Определяет зависимости сервиса
+    /// Defines the dependencies of the service
     /// </summary>
     public static void DefineDependencies(WebApplicationBuilder appBuilder)
     {
@@ -75,9 +74,9 @@ public static class CompositionRoot
     }
 
     /// <summary>
-    /// Устанавливаем объекты для работы с БД
+    /// Sets up the objects for working with the database
     /// </summary>
-    /// <param name="services">Коллекция сервисов</param>
+    /// <param name="services">Service collection</param>
     private static void SetDbServices(IServiceCollection services)
     {
         string connectionStr = EnvVariablesHelper.GetVariable<string>(EnvVariablesNames.DbConnectionString);
@@ -89,36 +88,36 @@ public static class CompositionRoot
     }
 
     /// <summary>
-    /// Устанавливает перехватчики
+    /// Sets up the loggers
     /// </summary>
-    /// <param name="appBuilder">Строитель сервиса</param>
+    /// <param name="appBuilder">Service builder</param>
     private static void SetLoggers(WebApplicationBuilder appBuilder)
     {
         const string consoleOutputTemplate = "[{Timestamp:u} {Level}] [{CorrelationId}] {Message}{NewLine}{Exception}";
         const string fileOutputTemplate = consoleOutputTemplate;
         const string outputLogFile = "logs/log-.txt";
 
-        // Настройка Serilog
+        // Setting up Serilog
         appBuilder.Host.UseSerilog((context, services, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration)
             .Enrich.FromLogContext()
-            .MinimumLevel.Information() // Уровень логирования по умолчанию
+            .MinimumLevel.Information() // Default logging level
             .Enrich.WithCorrelationId()
             .Enrich.WithCorrelationIdHeader()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Fatal) // Игнорировать логи Microsoft
-            .MinimumLevel.Override("System", LogEventLevel.Fatal) // Игнорировать логи System
-            .WriteTo.Console(outputTemplate: consoleOutputTemplate) // Формат для консоли
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Fatal) // Ignore Microsoft logs
+            .MinimumLevel.Override("System", LogEventLevel.Fatal) // Ignore System logs
+            .WriteTo.Console(outputTemplate: consoleOutputTemplate) // Console format
             .WriteTo.File(outputLogFile,
                 rollingInterval: RollingInterval.Day,
-                outputTemplate: fileOutputTemplate)); // Формат для файла
+                outputTemplate: fileOutputTemplate)); // File format
 
         appBuilder.Services.AddTransient<ICorrelationContext, CorrelationContext>();
     }
 
     /// <summary>
-    /// Устанавливаем перехватчики
+    /// Sets up the interceptors
     /// </summary>
-    /// <param name="services">Коллекция сервисов</param>
+    /// <param name="services">Service collection</param>
     private static void SetInterceptors(IServiceCollection services)
     {
         services.AddGrpc(options =>
@@ -130,15 +129,15 @@ public static class CompositionRoot
     }
 
     /// <summary>
-    /// Устанавливает jobs
+    /// Sets up the jobs
     /// </summary>
-    /// <param name="services">Коллекция сервисов</param>
+    /// <param name="services">Service collection</param>
     private static void SetJobs(IServiceCollection services) { }
 
     /// <summary>
-    /// Конфигурирует шину событий
+    /// Configures the event bus
     /// </summary>
-    /// <param name="services">Службы текущего сервиса опроса</param>
+    /// <param name="services">Services of the current polling service</param>
     private static void SetUpEventBus(IServiceCollection services)
     {
         var host = EnvVariablesHelper.GetVariable<string>(EnvVariablesNames.KafkaHost);
@@ -170,7 +169,7 @@ public static class CompositionRoot
                 ReconnectBackoffMs = 500,
                 ReconnectBackoffMaxMs = 1000,
 
-                AllowAutoCreateTopics = true, // В production избегать данной опции и создавать топики предварительно
+                AllowAutoCreateTopics = true, // In production, avoid this option and create topics in advance
             };
 
             var consumerConfig = new ConsumerConfig()
@@ -185,7 +184,7 @@ public static class CompositionRoot
                 ReconnectBackoffMs = 500,
                 ReconnectBackoffMaxMs = 1000,
 
-                AllowAutoCreateTopics = true, // В production избегать данной опции и создавать топики предварительно
+                AllowAutoCreateTopics = true, // In production, avoid this option and create topics in advance
             };
 
             var handlersFactory = new KafkaEventHandlerFactory(provider);

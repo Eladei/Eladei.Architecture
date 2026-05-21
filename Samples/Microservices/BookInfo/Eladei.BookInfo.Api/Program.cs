@@ -16,7 +16,7 @@ public class Program
 
         app.MapGrpcService<BookInfoServiceV1>();
 
-        // Добавляем Grpc-рефлексию
+        // Adding gRPC reflection
         if (app.Environment.IsDevelopment())
         {
             app.MapGrpcReflectionService();

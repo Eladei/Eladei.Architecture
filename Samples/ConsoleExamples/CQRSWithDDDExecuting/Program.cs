@@ -16,16 +16,16 @@ internal class Program
     {
         SetExecutors();
 
-        // Выполнить команды
-        var registerBookCommand = new RegisterBookCommand("Капитанская дочка", "А.С. Пушкин");
+        // Execute commands
+        var registerBookCommand = new RegisterBookCommand("The Captain's Daughter", "A.S. Pushkin");
 
         var bookId = await _commandExecutor.ExecuteAsync(registerBookCommand, CancellationToken.None);
-        Console.WriteLine($"\nЗарегистрирована книга Id='{bookId}'\n");
+        Console.WriteLine($"\nBook registered with Id='{bookId}'\n");
 
         var voteForBookCommand = new VoteForBookCommand(bookId);
         await _commandExecutor.ExecuteAsync(voteForBookCommand, CancellationToken.None);
 
-        // Выполнить запрос
+        // Execute query
         var query = new FindBookByIdQuery(bookId);
 
         var foundBook = await _queryExecutor.ExecuteAsync(query, CancellationToken.None);
@@ -34,7 +34,7 @@ internal class Program
 
     private static void SetExecutors()
     {
-        // Логгеры для команд и запросов
+        // Loggers for commands and queries
         var loggerFactory = LoggerFactory.Create(builder
             =>
         { builder.AddConsole(); });
@@ -43,17 +43,17 @@ internal class Program
         var eventDaoLogger = loggerFactory.CreateLogger<MockOutboxDomainEventDao>();
         var queryLogger = loggerFactory.CreateLogger<DddQueryExecutorLogger>();
 
-        // Контекст данных
+        // Db context factory
         var contextFactory = new MockUnitOfWorkContextFactory();
 
-        // Исполнитель команд
+        // Command executor
         _commandExecutor = new DddCommandExecutor(
             contextFactory,
             new MockOperationExecutionPolicyService(),
             new MockOutboxDomainEventDao(eventDaoLogger),
             new DddCommandExecutorLogger(commandLogger));
 
-        // Исполнитель запросов
+        // Query executor
         _queryExecutor = new DddQueryExecutor(
             contextFactory,
             new DddQueryExecutorLogger(queryLogger));
@@ -63,7 +63,7 @@ internal class Program
     {
         Console.WriteLine(
 @$"
-Информация по зарегистрированной книге: 
+Information about the registered book:
 Id: {book.BookId}
 Name: {book.Name}
 Author: {book.Author}

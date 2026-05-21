@@ -3,17 +3,17 @@
 namespace Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 
 /// <summary>
-/// Информация о книге была обновлена в рейтинге
+/// Information about a book was updated in the rating
 /// </summary>
 public sealed class BookInfoWasUpdatedInRatingIntegrationEvent : IntegrationEvent
 {
     /// <summary>
-    /// Создает объект класса BookInfoWasUpdatedInRatingIntegrationEvent  
+    /// Creates an instance of the BookInfoWasUpdatedInRatingIntegrationEvent class
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
-    /// <param name="correlationId">Id для сквозного отслеживания</param>
-    /// <param name="name">Название книги</param>
-    /// <param name="author">Автор</param>
+    /// <param name="bookId">Book identifier</param>
+    /// <param name="correlationId">Id for distributed tracing</param>
+    /// <param name="name">Book title</param>
+    /// <param name="author">Author</param>
     public BookInfoWasUpdatedInRatingIntegrationEvent(Guid bookId, Guid correlationId, string name, string author) : base(bookId, correlationId)
     {
         Name = name;
@@ -21,17 +21,17 @@ public sealed class BookInfoWasUpdatedInRatingIntegrationEvent : IntegrationEven
     }
 
     /// <summary>
-    /// Идентификатор книги
+    /// Book identifier
     /// </summary>
     public Guid BookId { get => EntityId; }
 
     /// <summary>
-    /// Название книги
+    /// Book title
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    /// Автор
+    /// Author
     /// </summary>
     public string Author { get; }
 }

@@ -3,42 +3,42 @@
 namespace CqrsWithDddExecuting.DomainModel;
 
 /// <summary>
-/// Информация о книге в рейтинге
+/// Book information in the rating
 /// </summary>
 public sealed class BookInRating : Aggregate<Guid>
 {
     /// <summary>
-    /// Создает объект класса BookInRating
+    /// Creates an instance of BookInRating
     /// </summary>
-    /// <param name="id">Идентификатор книги</param>
-    /// <param name="name">Название книги</param>
-    /// <param name="author">Автор</param>
-    /// <param name="votes">Число голосов, отданных за книгу</param>
+    /// <param name="id">Book identifier</param>
+    /// <param name="name">Book name</param>
+    /// <param name="author">Author</param>
+    /// <param name="votes">Number of votes for the book</param>
     /// <exception cref="ArgumentException"></exception>
     public BookInRating(Guid id, string name, string author, uint votes = 0) : base(id)
     {
-        Name = name ?? throw new ArgumentException("Не указано название книги");
-        Author = author ?? throw new ArgumentException("Не указан автор книги");
+        Name = name ?? throw new ArgumentException("Book name is not specified");
+        Author = author ?? throw new ArgumentException("Book author is not specified");
         Votes = votes;
     }
 
     /// <summary>
-    /// Название книги
+    /// Book name
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    /// Автор
+    /// Author
     /// </summary>
     public string Author { get; }
 
     /// <summary>
-    /// Голоса, отданные за книгу
+    /// Votes cast for the book
     /// </summary>
     public uint Votes { get; private set; }
 
     /// <summary>
-    /// Проголосовать за книгу
+    /// Vote for the book
     /// </summary>
     public void Vote()
     {

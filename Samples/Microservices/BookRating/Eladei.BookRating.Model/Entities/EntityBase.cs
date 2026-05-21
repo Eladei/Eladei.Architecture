@@ -3,23 +3,23 @@
 namespace Eladei.BookRating.Model.Entities;
 
 /// <summary>
-/// Базовый класс сущности БД
+/// Base database entity class
 /// </summary>
 public abstract class EntityBase
 {
     /// <summary>
-    /// Версия строки для оптимистической блокировки
+    /// Row version for optimistic concurrency control
     /// </summary>
     public uint Version { get; set; }
 
     /// <summary>
-    /// Дата и время создания в стандарте UTC
+    /// Creation date and time in UTC
     /// </summary>
     [Required]
     public DateTime CreatedAtUtc { get; set; }
 
     /// <summary>
-    /// Дата и время последнего изменения в стандарте UTC
+    /// Last modification date and time in UTC
     /// </summary>
     public DateTime? ModifiedAtUtc { get; set; }
 }

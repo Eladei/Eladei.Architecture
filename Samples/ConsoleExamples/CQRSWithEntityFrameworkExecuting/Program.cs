@@ -16,10 +16,10 @@ internal class Program
     {
         SetExecutors();
 
-        var registerBookCommand = new RegisterBookCommand("Капитанская дочка", "А.С.Пушкин");
+        var registerBookCommand = new RegisterBookCommand("The Captain's Daughter", "A.S. Pushkin");
 
         var bookId = await _commandExecutor.ExecuteAsync(registerBookCommand, CancellationToken.None);
-        Console.WriteLine($"\nЗарегистрирована книга Id='{bookId}'\n");
+        Console.WriteLine($"\nBook registered with Id='{bookId}'\n");
 
         var voteForBookCommand = new VoteForBookCommand(bookId);
         await _commandExecutor.ExecuteAsync(voteForBookCommand, CancellationToken.None);
@@ -35,7 +35,7 @@ internal class Program
 
     private static void SetExecutors()
     {
-        // Логгеры для команд и запросов
+        // Loggers for commands and queries
         var loggerFactory = LoggerFactory.Create(builder
             =>
         { builder.AddConsole(); });
@@ -44,17 +44,17 @@ internal class Program
         var eventDaoLogger = loggerFactory.CreateLogger<MockOutboxDomainEventDao>();
         var queryLogger = loggerFactory.CreateLogger<EfQueryExecutorLogger>();
 
-        // Контекст данных
+        // Db context factory
         var contextFactory = new DbContextFactory();
 
-        // Исполнитель команд
+        // Command executor
         _commandExecutor = new EfCommandExecutor<BookRatingDbContext>(
             contextFactory,
             new MockOperationExecutionPolicyService(),
             new MockOutboxDomainEventDao(eventDaoLogger),
             new EfCommandExecutorLogger(commandLogger));
 
-        // Исполнитель запросов
+        // Query executor
         _queryExecutor = new EfQueryExecutor<BookRatingDbContext>(
             contextFactory,
             new EfQueryExecutorLogger(queryLogger));
@@ -64,7 +64,7 @@ internal class Program
     {
         Console.WriteLine(
 @$"
-Информация по зарегистрированной книге: 
+Information about the registered book:
 Id: {book.BookId}
 Name: {book.Name}
 Author: {book.Author}

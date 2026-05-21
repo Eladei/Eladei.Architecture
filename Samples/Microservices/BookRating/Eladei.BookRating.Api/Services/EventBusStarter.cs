@@ -3,10 +3,10 @@
 namespace Eladei.BookRating.Api.Services;
 
 /// <summary>
-/// Служба дли инициализации шины событий интеграции
+/// Service for initializing the integration event bus
 /// </summary>
-/// <remarks>Шина инициализируется при первом внедрении в конструктор объекта 
-/// на основе настроек из CompositionRoot.</remarks>
+/// <remarks>The bus is initialized upon the first injection into the constructor of an object
+/// based on settings from CompositionRoot.</remarks>
 public class EventBusStarter : IHostedService
 {
     private readonly IIntegrationEventBus _eventBus;

@@ -1,52 +1,52 @@
 ﻿namespace Eladei.BookInfo.Domain.Queries.ReadModel;
 
 /// <summary>
-/// Информация о книге
+/// Book information
 /// </summary>
 public record BookInfoReadModel
 {
     /// <summary>
-    /// Уникальный идентификатор книги
+    /// Unique book identifier
     /// </summary>
     public Guid Id { get; init; }
 
     /// <summary>
-    /// Название 
+    /// Title
     /// </summary>
     public string Name { get; init; } = null!;
 
     /// <summary>
-    /// Автор
+    /// Author
     /// </summary>
     public string Author { get; init; } = null!;
 
     /// <summary>
-    /// Число страниц
+    /// Number of pages
     /// </summary>
     public uint? Pages { get; init; }
 
     /// <summary>
-    /// Тираж
+    /// Print run (circulation)
     /// </summary>
     public uint? Circulation { get; init; }
 
     /// <summary>
-    /// Аннотация
+    /// Annotation
     /// </summary>
     public string? Annotation { get; init; } = null!;
 
     /// <summary>
-    /// Редактор
+    /// Editor
     /// </summary>
     public string? Editor { get; init; }
 
     /// <summary>
-    /// Переводчик
+    /// Translator
     /// </summary>
     public string? Translator { get; init; }
 
     /// <summary>
-    /// Художник
+    /// Artist
     /// </summary>
     public string? Artist { get; init; }
 }

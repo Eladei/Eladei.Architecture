@@ -6,7 +6,7 @@ using Eladei.BookRating.Domain.Commands.DomainEvents;
 namespace Eladei.BookRating.Api.IntegrationEvents;
 
 /// <summary>
-/// Фабрика для формирования событий интеграции
+/// Factory for creating integration events
 /// </summary>
 public sealed class IntegrationEventFactory : IIntegrationEventFactory
 {

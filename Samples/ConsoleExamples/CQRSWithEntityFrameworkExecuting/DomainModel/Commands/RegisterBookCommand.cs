@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CqrsWithEntityFrameworkExecuting.DomainModel.Commands;
 
 /// <summary>
-/// Команда регистрации книги
+/// Command for registering a book
 /// </summary>
 internal sealed class RegisterBookCommand : EfCommandWithResultBase<BookRatingDbContext, Guid>
 {
@@ -14,10 +14,10 @@ internal sealed class RegisterBookCommand : EfCommandWithResultBase<BookRatingDb
     private readonly string _author;
 
     /// <summary>
-    /// Создает объект класса RegisterBookCommand
+    /// Creates an instance of RegisterBookCommand
     /// </summary>
-    /// <param name="name">Название книги</param>
-    /// <param name="author">Автор книги</param>
+    /// <param name="name">Book name</param>
+    /// <param name="author">Book author</param>
     /// <exception cref="ArgumentException"></exception>
     public RegisterBookCommand(string name, string author)
     {
@@ -33,7 +33,7 @@ internal sealed class RegisterBookCommand : EfCommandWithResultBase<BookRatingDb
             cancellationToken);
 
         if (isBookRegistered)
-            throw new DomainLogicException("Книга уже зарегистрирована");
+            throw new DomainLogicException("Book is already registered");
     }
 
     public override Task<Guid> ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken = default)

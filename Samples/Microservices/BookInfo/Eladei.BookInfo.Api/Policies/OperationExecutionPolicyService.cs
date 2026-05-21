@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 namespace Eladei.BookInfo.Api.Policies;
 
 /// <summary>
-/// Служба запроса политики выполнения операции
+/// Operation execution policy service
 /// </summary>
 public sealed class OperationExecutionPolicyService : IOperationExecutionPolicyService
 {
@@ -28,6 +28,7 @@ public sealed class OperationExecutionPolicyService : IOperationExecutionPolicyS
 
     private static readonly IOperationExecutionPolicy _defaultPolicy = new OperationExecutionPolicyBuilder().Build();
 
+    /// <inheritdoc />
     public IOperationExecutionPolicy GetExecutionPolicy(IOperation operation)
         => _policies.TryGetValue(operation.GetType(), out var policy)
             ? policy

@@ -4,11 +4,13 @@ using Serilog.Context;
 namespace Eladei.BookInfo.Api.Logging;
 
 /// <summary>
-/// Контекст корреляции для сквозного логирования
+/// Correlation context for distributed tracing and logging
 /// </summary>
-/// <remarks>CorrelationId проносится через всю асинхронную цепочку вызовов за счет AsyncLocal.
-/// Изменение значения происходит только через SetCorrelationId 
-/// и требует корректного управления временем жизни через IDisposable (используйте using)</remarks>
+/// <remarks>
+/// CorrelationId is propagated through the entire asynchronous call chain via AsyncLocal.
+/// The value can only be changed using SetCorrelationId
+/// and requires proper lifetime management via IDisposable (use using).
+/// </remarks>
 public class CorrelationContext : ICorrelationContext
 {
     private const string CORRELATION_ID_PROPERTY = "CorrelationId";

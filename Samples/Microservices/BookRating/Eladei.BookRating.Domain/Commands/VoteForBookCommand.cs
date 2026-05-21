@@ -7,16 +7,16 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookRating.Domain.Commands;
 
 /// <summary>
-/// Команда для голосования за книгу в рейтинге
+/// Command for voting for a book in the rating
 /// </summary>
 public sealed class VoteForBookCommand : EfCommandBase<BookRatingDbContext>
 {
     private readonly Guid _bookId;
 
     /// <summary>
-    /// Создает объект класса VoteForBookCommand
+    /// Creates an instance of the VoteForBookCommand class
     /// </summary>
-    /// <param name="bookId">Id книги</param>
+    /// <param name="bookId">Book identifier</param>
     public VoteForBookCommand(Guid bookId)
     {
         _bookId = bookId;

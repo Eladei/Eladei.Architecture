@@ -1,19 +1,18 @@
 ﻿namespace Eladei.BookRating.Api.Helpers;
 
 /// <summary>
-/// Вспомогательный класс для работы с внешними переменными, хранящимися в .env-файле
+/// Helper class for working with external variables stored in a .env file
 /// </summary>
 public static class EnvVariablesHelper
 {
     /// <summary>
-    /// Запросить переменную из .env-файла
+    /// Retrieves a variable from the .env file
     /// </summary>
-    /// <typeparam name="T">Тип переменной</typeparam>
-    /// <param name="envVariableName">Название переменной</param>
-    /// <returns>Переменная из .env-файла</returns>
-    /// <exception cref="ArgumentNullException">Переменная не найдена</exception>
-    /// <exception cref="NotImplementedException">Тип запрашиваемой переменной 
-    /// не предусмотрен для запроса</exception>
+    /// <typeparam name="T">Type of the variable</typeparam>
+    /// <param name="envVariableName">Name of the environment variable</param>
+    /// <returns>Value of the environment variable</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the variable is not found</exception>
+    /// <exception cref="NotImplementedException">Thrown when the requested type is not supported</exception>
     public static T GetVariable<T>(string envVariableName)
     {
         var envVariable = Environment.GetEnvironmentVariable(envVariableName)

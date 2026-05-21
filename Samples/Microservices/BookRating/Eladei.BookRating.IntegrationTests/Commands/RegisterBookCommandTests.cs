@@ -9,7 +9,7 @@ using Shouldly;
 namespace Eladei.BookRating.IntegrationTests.Commands;
 
 /// <summary>
-/// Интеграционные тесты команды RegisterBookCommand
+/// Integration tests for the RegisterBookCommand
 /// </summary>
 /// <see cref="RegisterBookCommand"/>
 public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRatingDbContext>
@@ -21,8 +21,8 @@ public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRa
     public async Task Command_Should_Throw_BookWithCurrentInfoAlreadyExistsException_When_Book_Already_Exists()
     {
         // Arrange
-        var name = "Капитанская дочка";
-        var author = "А.С. Пушкин";
+        var name = "The Captain's Daughter";
+        var author = "A.S. Pushkin";
         var command = new RegisterBookCommand(name, author);
         var expectedError = string.Format(Resource.BookWithCurrentInfoAlreadyExists, name, author);
 
@@ -48,8 +48,8 @@ public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRa
     public async Task Command_Should_Save_New_Book()
     {
         // Arrange
-        var name = "Капитанская дочка";
-        var author = "А.С. Пушкин";
+        var name = "The Captain's Daughter";
+        var author = "A.S. Pushkin";
         var command = new RegisterBookCommand(name, author);
         var expectedError = string.Format(Resource.BookWithCurrentInfoAlreadyExists, name, author);
 

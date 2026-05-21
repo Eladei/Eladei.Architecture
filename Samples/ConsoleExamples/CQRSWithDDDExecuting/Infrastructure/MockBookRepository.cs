@@ -3,7 +3,7 @@
 namespace CqrsWithDddExecuting.Infrastructure;
 
 /// <summary>
-/// Мок репозитория книг
+/// Mock of book repository
 /// </summary>
 public sealed class MockBookRepository : IBookRepository
 {
@@ -17,6 +17,7 @@ public sealed class MockBookRepository : IBookRepository
             ?? throw new ArgumentNullException(nameof(dataContext));
     }
 
+    /// <inheritdoc />
     public Task SaveBookAsync(BookInRating book, CancellationToken cancellationToken)
     {
         _dataContext.Add(Convert(book));
@@ -24,6 +25,7 @@ public sealed class MockBookRepository : IBookRepository
         return Task.CompletedTask;
     }
 
+    /// <inheritdoc />
     public Task UpdateBookAsync(BookInRating book, CancellationToken cancellationToken)
     {
         var updatingBookIndex = _dataContext.FindIndex(b => b.Id == book.Id);
@@ -36,6 +38,7 @@ public sealed class MockBookRepository : IBookRepository
         return Task.CompletedTask;
     }
 
+    /// <inheritdoc />
     public Task RemoveBookAsync(BookInRating book, CancellationToken cancellationToken)
     {
         var removingBook = _dataContext.FirstOrDefault(b => b.Id == book.Id)
@@ -46,6 +49,7 @@ public sealed class MockBookRepository : IBookRepository
         return Task.CompletedTask;
     }
 
+    /// <inheritdoc />
     public Task<BookInRating?> FindByIdAsync(Guid bookId, CancellationToken cancellationToken)
     {
         var foundBook = _dataContext.FirstOrDefault(b => b.Id == bookId);

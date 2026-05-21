@@ -19,7 +19,7 @@ namespace Eladei.BookRating.Domain.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -61,7 +61,7 @@ namespace Eladei.BookRating.Domain.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не задан автор книги.
+        ///   Looks up a localized string similar to Book author is not specified.
         /// </summary>
         public static string BookAuthorNotDefined {
             get {
@@ -70,7 +70,7 @@ namespace Eladei.BookRating.Domain.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не задан Id книги.
+        ///   Looks up a localized string similar to Book ID is not specified.
         /// </summary>
         public static string BookIdNotDefined {
             get {
@@ -79,7 +79,7 @@ namespace Eladei.BookRating.Domain.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не задано название книги.
+        ///   Looks up a localized string similar to Book title is not specified.
         /// </summary>
         public static string BookNameNotDefined {
             get {
@@ -88,7 +88,7 @@ namespace Eladei.BookRating.Domain.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Книга с указанной информацией Name = &apos;{0}&apos; и Author = &apos;{1}&apos; уже существует..
+        ///   Looks up a localized string similar to A book with Name = &apos;{0}&apos; and Author = &apos;{1}&apos; already exists..
         /// </summary>
         public static string BookWithCurrentInfoAlreadyExists {
             get {
@@ -97,7 +97,7 @@ namespace Eladei.BookRating.Domain.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Книга с указанным Id = {0} не найдена.
+        ///   Looks up a localized string similar to A book with Id = {0} was not found.
         /// </summary>
         public static string BookWithIdNotFound {
             get {

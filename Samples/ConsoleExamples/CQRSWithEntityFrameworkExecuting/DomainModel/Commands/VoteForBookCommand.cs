@@ -6,28 +6,30 @@ using Microsoft.EntityFrameworkCore;
 namespace CqrsWithEntityFrameworkExecuting.DomainModel.Commands;
 
 /// <summary>
-/// Команда голосования за книгу
+/// Command for voting for a book
 /// </summary>
 internal sealed class VoteForBookCommand : EfCommandBase<BookRatingDbContext>
 {
     private readonly Guid _bookId;
 
     /// <summary>
-    /// Создает объект класса VoteForBookCommand
+    /// Creates an instance of VoteForBookCommand
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
+    /// <param name="bookId">Book identifier</param>
     public VoteForBookCommand(Guid bookId)
     {
         _bookId = bookId;
     }
 
-    public override async Task ExecuteAsync(BookRatingDbContext context, CancellationToken cancellationToken = default)
+    public override async Task ExecuteAsync(
+        BookRatingDbContext context,
+        CancellationToken cancellationToken = default)
     {
-        var removingBook = await context.Books.FirstOrDefaultAsync(
+        var book = await context.Books.FirstOrDefaultAsync(
             b => b.Id == _bookId, cancellationToken)
-            ?? throw new DomainLogicException("Книга не зарегистрирована");
+            ?? throw new DomainLogicException("Book is not registered");
 
-        removingBook.Votes++;
+        book.Votes++;
 
         SaveDomainEvents(new BookWasVotedDomainEvent(_bookId));
     }

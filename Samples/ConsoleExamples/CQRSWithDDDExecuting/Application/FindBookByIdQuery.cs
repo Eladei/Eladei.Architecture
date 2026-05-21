@@ -7,16 +7,16 @@ using Eladei.Architecture.Ddd.Entities;
 namespace CqrsWithDddExecuting.Application;
 
 /// <summary>
-/// Запрос информации о книге по ее идентификатору
+/// Query for getting book information by its identifier
 /// </summary>
 internal sealed class FindBookByIdQuery : DddQueryBase<BookInRatingReadModel>
 {
     private readonly Guid _bookId;
 
     /// <summary>
-    /// Создает объект класса FindBookByIdQuery
+    /// Creates an instance of FindBookByIdQuery
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
+    /// <param name="bookId">Book identifier</param>
     public FindBookByIdQuery(Guid bookId)
     {
         _bookId = bookId;
@@ -27,7 +27,7 @@ internal sealed class FindBookByIdQuery : DddQueryBase<BookInRatingReadModel>
         var bookRepository = repositoryFactory.CreateRepository<IBookRepository>();
 
         var foundBook = await bookRepository.FindByIdAsync(_bookId, cancellationToken)
-            ?? throw new DomainLogicException($"Не найдена книга с указанным Id='{_bookId}'");
+            ?? throw new DomainLogicException($"Book with specified Id='{_bookId}' was not found");
 
         return new BookInRatingReadModel
         {

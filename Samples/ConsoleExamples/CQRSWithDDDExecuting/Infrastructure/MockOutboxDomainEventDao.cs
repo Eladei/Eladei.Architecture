@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace CqrsWithDddExecuting.Infrastructure;
 
 /// <summary>
-/// Мок службы сохранения доменных событий
+/// Mock of outbox domain event DAO
 /// </summary>
 public sealed class MockOutboxDomainEventDao : IDddOutboxDomainEventDao
 {
@@ -17,6 +17,7 @@ public sealed class MockOutboxDomainEventDao : IDddOutboxDomainEventDao
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public Task SaveAsync(IReadOnlyCollection<IDomainEvent> domainEvents, IRepositoryFactory repositoryFactory, CancellationToken cancellationToken)
     {
         var eventNames = string.Join(',', domainEvents.Select(evnt => evnt.GetType().Name));

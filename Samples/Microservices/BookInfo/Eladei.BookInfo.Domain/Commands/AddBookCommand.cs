@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookInfo.Domain.Commands;
 
 /// <summary>
-/// Команда добавления книги
+/// Command for adding a book
 /// </summary>
 public sealed class AddBookCommand : EfCommandWithResultBase<BookInfoDbContext, Guid>
 {
@@ -17,11 +17,11 @@ public sealed class AddBookCommand : EfCommandWithResultBase<BookInfoDbContext, 
     private readonly string _author;
 
     /// <summary>
-    /// Создает объект класса AddBookCommand
+    /// Creates an instance of AddBookCommand
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
-    /// <param name="name">Название книги</param>
-    /// <param name="author">Автор книги</param>
+    /// <param name="bookId">Book identifier</param>
+    /// <param name="name">Book title</param>
+    /// <param name="author">Book author</param>
     /// <exception cref="ArgumentException"></exception>
     public AddBookCommand(Guid bookId, string name, string author)
     {
@@ -36,9 +36,13 @@ public sealed class AddBookCommand : EfCommandWithResultBase<BookInfoDbContext, 
         _author = author;
     }
 
-    /// <returns>Идентификатор добавленной книги</returns>
-    /// <exception cref="BookWithCurrentIdAlreadyExistsException"></exception>
-    public override async Task<Guid> ExecuteAsync(BookInfoDbContext context, CancellationToken cancellationToken)
+    /// <returns>Identifier of the added book</returns>
+    /// <exception cref="BookWithCurrentIdAlreadyExistsException">
+    /// Thrown when a book with the specified Id already exists
+    /// </exception>
+    public override async Task<Guid> ExecuteAsync(
+        BookInfoDbContext context,
+        CancellationToken cancellationToken)
     {
         var bookExists = await context.BookInformations
             .AnyAsync(s => s.Id == _bookId, cancellationToken);

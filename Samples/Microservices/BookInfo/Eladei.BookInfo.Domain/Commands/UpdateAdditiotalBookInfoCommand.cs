@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Eladei.BookInfo.Domain.Commands;
 
 /// <summary>
-/// Команда обновления дополнительной информации о книге
+/// Command for updating additional book information
 /// </summary>
 public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbContext>
 {
@@ -15,10 +15,10 @@ public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbCo
     private readonly AdditionalBookInfo _additionalInfo;
 
     /// <summary>
-    /// Создает объект класса UpdateAdditiotalBookInfoCommand
+    /// Creates an instance of UpdateAdditiotalBookInfoCommand
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
-    /// <param name="additionalInfo">Дополнительная информация о книге</param>
+    /// <param name="bookId">Book identifier</param>
+    /// <param name="additionalInfo">Additional book information</param>
     /// <exception cref="ArgumentException"></exception>
     public UpdateAdditiotalBookInfoCommand(Guid bookId, AdditionalBookInfo additionalInfo)
     {
@@ -28,11 +28,15 @@ public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbCo
     }
 
     /// <exception cref="BookWithIdNotFoundException"></exception>
-    public override async Task ExecuteAsync(BookInfoDbContext context, CancellationToken cancellationToken)
+    public override async Task ExecuteAsync(
+        BookInfoDbContext context,
+        CancellationToken cancellationToken)
     {
         var book = await context.BookInformations
             .FirstOrDefaultAsync(s => s.Id == _bookId, cancellationToken)
-            ?? throw new BookWithIdNotFoundException(Resources.BookWithCurrentIdNotExists, _bookId);
+            ?? throw new BookWithIdNotFoundException(
+                Resources.BookWithCurrentIdNotExists,
+                _bookId);
 
         book.Pages = _additionalInfo.Pages;
         book.Circulation = _additionalInfo.Circulation;
@@ -44,37 +48,37 @@ public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbCo
 }
 
 /// <summary>
-/// Дополнительная информация о книге
+/// Additional book information
 /// </summary>
 public record AdditionalBookInfo
 {
     /// <summary>
-    /// Число страниц
+    /// Number of pages
     /// </summary>
     public uint? Pages { get; init; }
 
     /// <summary>
-    /// Тираж
+    /// Print run (circulation)
     /// </summary>
     public uint? Circulation { get; init; }
 
     /// <summary>
-    /// Аннотация
+    /// Annotation / summary
     /// </summary>
     public string? Annotation { get; init; }
 
     /// <summary>
-    /// Редактор
+    /// Editor
     /// </summary>
     public string? Editor { get; init; }
 
     /// <summary>
-    /// Переводчик
+    /// Translator
     /// </summary>
     public string? Translator { get; init; }
 
     /// <summary>
-    /// Художник
+    /// Illustrator / artist
     /// </summary>
     public string? Artist { get; init; }
 }

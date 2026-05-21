@@ -3,16 +3,16 @@
 namespace CqrsWithDddExecuting.DomainModel;
 
 /// <summary>
-/// Событие регистрации книги в рейтинге
+/// Domain event for registering a book in the rating
 /// </summary>
 public class BookWasRegisteredInRatingDomainEvent : DomainEvent
 {
     /// <summary>
-    /// Создает объект класса BookWasRegisteredInRatingDomainEvent
+    /// Creates an instance of BookWasRegisteredInRatingDomainEvent
     /// </summary>
-    /// <param name="bookId">Идентификатор книги</param>
-    /// <param name="name">Название книги</param>
-    /// <param name="author">Автор</param>
+    /// <param name="bookId">Book identifier</param>
+    /// <param name="name">Book name</param>
+    /// <param name="author">Author</param>
     public BookWasRegisteredInRatingDomainEvent(Guid bookId, string name, string author) : base(bookId)
     {
         Name = name;
@@ -20,17 +20,17 @@ public class BookWasRegisteredInRatingDomainEvent : DomainEvent
     }
 
     /// <summary>
-    /// Идентификатор книги
+    /// Book identifier
     /// </summary>
     public Guid BookId => EntityId;
 
     /// <summary>
-    /// Название книги
+    /// Book name
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    /// Автор
+    /// Author
     /// </summary>
     public string Author { get; }
 }

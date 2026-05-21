@@ -5,78 +5,74 @@ package book.v1;
 
 import "google/protobuf/timestamp.proto";
 
-// Определение сервиса работы с рейтингом книг
+// Service for working with book rating
 service BookRating {
-	// Регистрирует книгу в рейтинге
+	// Registers a book in the rating
 	rpc RegisterBook (RegisterBookApiRequest) returns (RegisterBookApiResponse);
 
-	// Удаляет книгу из рейтинга
+	// Removes a book from the rating
 	rpc RemoveBook (RemoveBookApiRequest) returns (RemoveBookApiResponse);
 
-	// Обновляет информацию о книге в рейтинге
+	// Updates book information in the rating
 	rpc UpdateBook(UpdateBookApiRequest) returns (UpdateBookApiResponse);
 
-	// Голосует за книгу в рейтинге
+	// Votes for a book in the rating
 	rpc VoteForBook(VoteForBookApiRequest) returns (VoteForBookApiResponse);
 
-	// Возвращает перечень книг, входящих в рейтинг
+	// Returns a list of books in the rating
 	rpc GetBooks (GetBooksApiRequest) returns (GetBooksApiResponse);
 }
 
-// Запрос на добавление книги в рейтинг
+// Request to add a book to the rating
 message RegisterBookApiRequest {
 	string name = 1;
 	string author = 2;
 }
 
-// Ответ, содержащий результаты операции регистрации
-// книги в рейтинге
+// Response containing the result of the book registration operation
 message RegisterBookApiResponse {
 	string bookId = 1;
 }
 
-// Запрос на удаление книги из рейтинга
+// Request to remove a book from the rating
 message RemoveBookApiRequest {
 	string bookId = 1;
 }
 
-// Ответ, содержащий результаты операции удаления
-// книги из рейтинга
+// Response containing the result of the book removal operation
 message RemoveBookApiResponse { }
 
-// Запрос на изменение информации о книге в рейтинге
+// Request to update book information in the rating
 message UpdateBookApiRequest {
     string bookId = 1;
 	string name = 2;
 	string author = 3;
 }
 
-// Ответ, содержащий результаты операции изменения
-// информации о книге в рейтинге
+// Response containing the result of the book update operation
 message UpdateBookApiResponse { }
 
-// Запрос на голосование за книгу в рейтинге
+// Request to vote for a book in the rating
 message VoteForBookApiRequest {
     string bookId = 1;
 }
 
-// Ответ, содержащий результаты операции голосования
-// за книгу в рейтинге
+// Response containing the result of the voting operation
 message VoteForBookApiResponse { }
 
-// Запрос на получение перечня книг, добавленных в рейтинг
+// Request to get a list of books in the rating
 message GetBooksApiRequest {
 	uint32 booksPerPage = 1;
     uint32 page = 2;
 }
 
-// Ответ, содержащий перечень книг, добавленных в рейтинг
+// Response containing a list of books in the rating
 message GetBooksApiResponse {
 	uint32 totalPages = 1;
 	repeated BookInfoApiModel allPositions = 2;
 }
 
-// Информация о книге в рейтинге
+// Book information in the rating
 message BookInfoApiModel {
     string bookId = 1;
 	string name = 2;
