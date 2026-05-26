@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <!-- передается из GitHub Actions -->
+    <!-- Passed from GitHub Actions -->
     <Version>$(PackageVersion)</Version>
     <PackageVersion>$(PackageVersion)</PackageVersion>
     <AssemblyVersion>$(PackageVersion)</AssemblyVersion>
@@ -11,7 +11,7 @@
        DEFAULT PACK RULES
        ========================= -->
 
-  <!-- по умолчанию НЕ пакуем всё -->
+  <!-- By default, do NOT pack everything -->
   <PropertyGroup>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -21,6 +21,7 @@
        ========================= -->
   <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').StartsWith('Eladei.Architecture'))">
     <IsPackable>true</IsPackable>
+	 <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <!-- =========================
