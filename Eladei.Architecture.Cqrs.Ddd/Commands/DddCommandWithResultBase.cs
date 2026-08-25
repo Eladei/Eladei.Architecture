@@ -1,4 +1,4 @@
-﻿using Eladei.Architecture.Ddd.DomainEvents;
+﻿using Eladei.Architecture.Messaging.IntegrationEvents;
 
 namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 
@@ -8,10 +8,10 @@ namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 /// <typeparam name="R">The result type</typeparam>
 public abstract class DddCommandWithResultBase<R> : IDddCommand<R>
 {
-    private readonly List<IDomainEvent> _events = [];
+    private readonly List<IIntegrationEvent> _events = [];
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IDomainEvent> Events => _events.AsReadOnly();
+    public IReadOnlyCollection<IIntegrationEvent> Events => _events.AsReadOnly();
 
     /// <inheritdoc />
     public void ClearEvents()
@@ -29,15 +29,15 @@ public abstract class DddCommandWithResultBase<R> : IDddCommand<R>
     public abstract Task<R> ExecuteAsync(IRepositoryFactory repositoryFactory, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Adds domain events
+    /// Adds integration events
     /// </summary>
-    /// <param name="domainEvents">The domain events</param>
+    /// <param name="integrationEvents">The integration events</param>
     /// <remarks>
-    /// Added domain events are available via the <see cref="Events"/> collection.
+    /// Added integration events are available via the <see cref="Events"/> collection.
     /// They are used to allow saving events to the outbox by the command handler
     /// </remarks>
-    protected void AddDomainEvents(params IDomainEvent[] domainEvents)
+    protected void AddIntegrationEvents(params IIntegrationEvent[] integrationEvents)
     {
-        _events.AddRange(domainEvents);
+        _events.AddRange(integrationEvents);
     }
 }

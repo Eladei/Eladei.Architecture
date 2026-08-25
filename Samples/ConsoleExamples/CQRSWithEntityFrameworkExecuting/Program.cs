@@ -1,5 +1,5 @@
-﻿using CqrsWithEntityFrameworkExecuting.DomainModel.Commands;
-using CqrsWithEntityFrameworkExecuting.DomainModel.Queries;
+﻿using CqrsWithEntityFrameworkExecuting.Application.Commands;
+using CqrsWithEntityFrameworkExecuting.Application.Queries;
 using CqrsWithEntityFrameworkExecuting.Infrastructure;
 using Eladei.Architecture.Cqrs.EntityFramework.Commands;
 using Eladei.Architecture.Cqrs.EntityFramework.Queries;
@@ -9,8 +9,8 @@ namespace CqrsWithEntityFrameworkExecuting;
 
 internal class Program
 {
-    private static EfCommandExecutor<BookRatingDbContext> _commandExecutor;
-    private static EfQueryExecutor<BookRatingDbContext> _queryExecutor;
+    private static EfCommandExecutor<BookRatingDbContext> _commandExecutor = null!;
+    private static EfQueryExecutor<BookRatingDbContext> _queryExecutor = null!;
 
     static async Task Main(string[] args)
     {
@@ -41,7 +41,7 @@ internal class Program
         { builder.AddConsole(); });
 
         var commandLogger = loggerFactory.CreateLogger<EfCommandExecutorLogger>();
-        var eventDaoLogger = loggerFactory.CreateLogger<MockOutboxDomainEventDao>();
+        var eventDaoLogger = loggerFactory.CreateLogger<MockOutboxIntegrationEventWriter>();
         var queryLogger = loggerFactory.CreateLogger<EfQueryExecutorLogger>();
 
         // Db context factory
@@ -50,8 +50,8 @@ internal class Program
         // Command executor
         _commandExecutor = new EfCommandExecutor<BookRatingDbContext>(
             contextFactory,
-            new MockOperationExecutionPolicyService(),
-            new MockOutboxDomainEventDao(eventDaoLogger),
+            new MockOperationExecutionPolicyProvider(),
+            new MockOutboxIntegrationEventWriter(eventDaoLogger),
             new EfCommandExecutorLogger(commandLogger));
 
         // Query executor

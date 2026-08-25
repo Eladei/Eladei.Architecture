@@ -1,21 +1,14 @@
 using Eladei.Architecture.Cqrs;
-using Eladei.BookInfo.Domain.Commands;
-using Eladei.BookInfo.Domain.Queries;
+using Eladei.BookInfo.Application.Commands;
+using Eladei.BookInfo.Application.Queries;
 using Grpc.Core;
 
 namespace Eladei.BookInfo.Api.Services;
 
-/// <summary>
-/// Service for working with book information
-/// </summary>
 public class BookInfoServiceV1 : BookInfo.BookInfoBase
 {
     private readonly IOperationExecutor _operationExecutor;
 
-    /// <summary>
-    /// Creates an instance of BookInfoServiceV1
-    /// </summary>
-    /// <param name="operationExecutor">Operation executor</param>
     /// <exception cref="ArgumentNullException"></exception>
     public BookInfoServiceV1(IOperationExecutor operationExecutor)
     {
@@ -23,12 +16,6 @@ public class BookInfoServiceV1 : BookInfo.BookInfoBase
             ?? throw new ArgumentNullException(nameof(operationExecutor));
     }
 
-    /// <summary>
-    /// Retrieves book information
-    /// </summary>
-    /// <param name="request">Request containing book identifier</param>
-    /// <param name="context">Server call context</param>
-    /// <returns>Book information response</returns>
     public override async Task<GetBookInfoApiResponse> GetBookInfo(
         GetBookInfoApiRequest request,
         ServerCallContext context)
@@ -51,12 +38,6 @@ public class BookInfoServiceV1 : BookInfo.BookInfoBase
         };
     }
 
-    /// <summary>
-    /// Updates additional book information
-    /// </summary>
-    /// <param name="request">Request containing additional book information</param>
-    /// <param name="context">Server call context</param>
-    /// <returns>Update operation result</returns>
     public override async Task<UpdateAdditionalBookInfoApiResponse> UpdateAdditionalBookInfo(
         UpdateAdditionalBookInfoApiRequest request,
         ServerCallContext context)

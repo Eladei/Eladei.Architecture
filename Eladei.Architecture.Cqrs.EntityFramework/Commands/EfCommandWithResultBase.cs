@@ -1,4 +1,4 @@
-﻿using Eladei.Architecture.Ddd.DomainEvents;
+﻿using Eladei.Architecture.Messaging.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
@@ -13,12 +13,10 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 /// </remarks>
 public abstract class EfCommandWithResultBase<T, R> : IEfCommand<T, R> where T : DbContext
 {
-    private readonly List<IDomainEvent> _events = [];
+    private readonly List<IIntegrationEvent> _events = [];
 
-    /// <summary>
-    /// Domain events
-    /// </summary>
-    public IReadOnlyCollection<IDomainEvent> Events => _events.AsReadOnly();
+    /// <inheritdoc />
+    public IReadOnlyCollection<IIntegrationEvent> Events => _events.AsReadOnly();
 
     /// <inheritdoc />
     public void ClearEvents()
@@ -36,15 +34,15 @@ public abstract class EfCommandWithResultBase<T, R> : IEfCommand<T, R> where T :
     public abstract Task<R> ExecuteAsync(T context, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Adds domain events
+    /// Adds integration events
     /// </summary>
-    /// <param name="domainEvents">The domain events</param>
+    /// <param name="integrationEvents">The integration events</param>
     /// <remarks>
-    /// The added domain events are available through the Events collection.
+    /// The added integration events are available through the Events collection.
     /// They are used to persist events in the outbox by the command executor
     /// </remarks>
-    protected void SaveDomainEvents(params IDomainEvent[] domainEvents)
+    protected void AddIntegrationEvents(params IIntegrationEvent[] integrationEvents)
     {
-        _events.AddRange(domainEvents);
+        _events.AddRange(integrationEvents);
     }
 }

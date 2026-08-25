@@ -21,10 +21,10 @@ public class KafkaEventHandlerFactory : IKafkaEventHandlerFactory
     }
 
     /// <inheritdoc />
-    public H CreateHandler<H, E>(CancellationToken cancellationToken)
+    public H CreateHandler<H, E>(KafkaIntegrationEventMetadata eventMetadata, CancellationToken cancellationToken)
         where H : IHandleMessages<E>
         where E : IIntegrationEvent
     {
-        return ActivatorUtilities.CreateInstance<H>(_serviceProvider, cancellationToken);
+        return ActivatorUtilities.CreateInstance<H>(_serviceProvider, eventMetadata, cancellationToken);
     }
 }

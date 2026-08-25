@@ -6,23 +6,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Eladei.BookInfo.Infrastructure.Adapters;
 
-/// <summary>
-/// Query executor adapter
-/// </summary>
 public sealed class EfQueryExecutorAdapter : IQueryExecutor
 {
     private readonly IEfQueryExecutor<BookInfoDbContext> _queryExecutor;
     private readonly ILogger<EfQueryExecutorAdapter> _logger;
 
-    /// <summary>
-    /// Creates an instance of the <see cref="EfQueryExecutorAdapter"/> class
-    /// </summary>
-    /// <remarks>
-    /// This adapter wraps an EF-based query executor and adapts it to the
-    /// generic CQRS <see cref="IQueryExecutor"/> abstraction.
-    /// </remarks>
-    /// <param name="queryExecutor">Query executor</param>
-    /// <param name="logger">Logger</param>
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="queryExecutor"/> or <paramref name="logger"/> is null.
     /// </exception>

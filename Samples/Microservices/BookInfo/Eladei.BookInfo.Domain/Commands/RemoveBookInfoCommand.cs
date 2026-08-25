@@ -1,22 +1,15 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands;
-using Eladei.BookInfo.Domain.Exceptions;
-using Eladei.BookInfo.Domain.Properties;
+using Eladei.BookInfo.Application.Exceptions;
+using Eladei.BookInfo.Application.Properties;
 using Eladei.BookInfo.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eladei.BookInfo.Domain.Commands;
+namespace Eladei.BookInfo.Application.Commands;
 
-/// <summary>
-/// Command for updating book information
-/// </summary>
 public sealed class RemoveBookInfoCommand : EfCommandBase<BookInfoDbContext>
 {
     private readonly Guid _bookId;
 
-    /// <summary>
-    /// Creates an instance of RemoveBookInfoCommand
-    /// </summary>
-    /// <param name="bookId">Book identifier</param>
     public RemoveBookInfoCommand(Guid bookId)
     {
         _bookId = bookId;

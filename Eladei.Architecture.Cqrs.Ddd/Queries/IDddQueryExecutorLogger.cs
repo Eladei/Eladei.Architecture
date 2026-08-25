@@ -1,4 +1,6 @@
-﻿namespace Eladei.Architecture.Cqrs.Ddd.Queries;
+﻿using Eladei.Architecture.Cqrs.Ddd.Queries.Exceptions;
+
+namespace Eladei.Architecture.Cqrs.Ddd.Queries;
 
 /// <summary>
 /// Query executor logger
@@ -23,6 +25,13 @@ public interface IDddQueryExecutorLogger
     /// <param name="queryName">The query name</param>
     /// <param name="ex">The cancellation exception</param>
     void ExecutingCancelled(string queryName, OperationCanceledException ex);
+
+    /// <summary>
+    /// Logs query logic error
+    /// </summary>
+    /// <param name="queryName">The query name</param>
+    /// <param name="ex">The query logic exception</param>
+    void QueryLogicError(string queryName, DddQueryLogicException ex);
 
     /// <summary>
     /// Logs a critical query execution error

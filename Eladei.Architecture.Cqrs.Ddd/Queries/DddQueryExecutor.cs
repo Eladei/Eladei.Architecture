@@ -1,5 +1,5 @@
 ﻿using Eladei.Architecture.Cqrs.Ddd.Properties;
-using Eladei.Architecture.Cqrs.Queries;
+using Eladei.Architecture.Cqrs.Ddd.Queries.Exceptions;
 
 namespace Eladei.Architecture.Cqrs.Ddd.Queries;
 
@@ -8,8 +8,15 @@ namespace Eladei.Architecture.Cqrs.Ddd.Queries;
 /// </summary>
 public class DddQueryExecutor : IDddQueryExecutor
 {
-    protected readonly IUnitOfWorkContextFactory _unitOfWorkContextFactory;
-    protected readonly IDddQueryExecutorLogger? _logger;
+    /// <summary>
+    /// The unit of work context factory
+    /// </summary>
+    protected readonly IUnitOfWorkContextFactory UnitOfWorkContextFactory;
+
+    /// <summary>
+    /// The unit of work context factory
+    /// </summary>
+    protected readonly IDddQueryExecutorLogger? Logger;
 
     /// <summary>
     /// Creates a new instance of <see cref="DddQueryExecutor"/>
@@ -21,10 +28,10 @@ public class DddQueryExecutor : IDddQueryExecutor
         IUnitOfWorkContextFactory unitOfWorkContextFactory,
         IDddQueryExecutorLogger? logger = null)
     {
-        _unitOfWorkContextFactory = unitOfWorkContextFactory
+        UnitOfWorkContextFactory = unitOfWorkContextFactory
             ?? throw new ArgumentNullException(nameof(unitOfWorkContextFactory));
 
-        _logger = logger;
+        Logger = logger;
     }
 
     /// <inheritdoc />
@@ -32,29 +39,35 @@ public class DddQueryExecutor : IDddQueryExecutor
     {
         var queryName = query.GetType().Name;
 
-        _logger?.ExecutingStarted(queryName);
+        Logger?.ExecutingStarted(queryName);
 
-        var unitOfWork = _unitOfWorkContextFactory.CreateContext();
+        var unitOfWork = UnitOfWorkContextFactory.CreateContext();
 
         try
         {
             var result = await query.ExecuteAsync(unitOfWork, cancellationToken);
 
-            _logger?.ExecutingSuccessfulFinished(queryName);
+            Logger?.ExecutingSuccessfulFinished(queryName);
 
             return result;
         }
+        catch (DddQueryLogicException ex)
+        {
+            Logger?.QueryLogicError(queryName, ex);
+
+            throw;
+        }
         catch (OperationCanceledException ex)
         {
-            _logger?.ExecutingCancelled(queryName, ex);
+            Logger?.ExecutingCancelled(queryName, ex);
 
             throw;
         }
         catch (Exception ex)
         {
-            var unknownEx = new QueryExecutingErrorException(Resources.QueryExecutingError, ex);
+            var unknownEx = new DddQueryExecutingErrorException(Resources.QueryExecutingError, ex);
 
-            _logger?.CriticalError(queryName, unknownEx);
+            Logger?.CriticalError(queryName, unknownEx);
 
             throw unknownEx;
         }

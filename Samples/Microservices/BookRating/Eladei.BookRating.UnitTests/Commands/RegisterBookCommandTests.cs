@@ -1,7 +1,6 @@
-﻿using Eladei.Architecture.Tests.EntityFramework.Unit;
-using Eladei.BookRating.Domain.Commands;
-using Eladei.BookRating.Domain.Commands.DomainEvents;
-using Eladei.BookRating.Domain.Properties;
+﻿using Eladei.BookRating.Application.Commands;
+using Eladei.BookRating.Application.Exceptions;
+using Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 using Eladei.BookRating.Model;
 using Eladei.BookRating.Model.Entities;
 using Moq;
@@ -10,25 +9,26 @@ using Shouldly;
 
 namespace Eladei.BookRating.UnitTests.Commands;
 
-/// <summary>
-/// Unit tests for the RegisterBookCommand
-/// </summary>
-/// <see cref="RegisterBookCommand"/>
 public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbContext>
 {
-    private List<Book> _books = new();
+    private readonly List<Book> _books = [];
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public Task Command_Should_Throw_ArgumentException_When_Name_Is_Null_Or_Empty(string? name)
+    [InlineData(" ")]
+    public Task Command_WhenNameIsNullOrWhiteSpace_ShouldThrowArgumentException(string? name)
     {
         // Arrange
         var author = "A.S. Pushkin";
 
         // Act, Assert
-        var exception = Assert.Throws<ArgumentException>(() => new RegisterBookCommand(name, author));
-        exception.Message.ShouldBe(Resource.BookNameNotDefined);
+        var expectedError = "Book title is not specified";
+
+        // Act, Assert
+        var action = () => new RegisterBookCommand(name!, author);
+
+        action.ShouldThrow<ArgumentException>(expectedError);
 
         return Task.CompletedTask;
     }
@@ -36,20 +36,47 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public Task Command_Should_Throw_ArgumentException_When_Author_Is_Null_Or_Empty(string? author)
+    [InlineData(" ")]
+    public Task Command_WhenAuthorIsNullOrWhiteSpace_ShouldThrowArgumentException(string? author)
     {
         // Arrange
         var name = "The Captain's Daughter";
 
+        var expectedError = "Book author is not specified";
+
         // Act, Assert
-        var exception = Assert.Throws<ArgumentException>(() => new RegisterBookCommand(name, author));
-        exception.Message.ShouldBe(Resource.BookAuthorNotDefined);
+        var action = () => new RegisterBookCommand(name, author!);
+
+        action.ShouldThrow<ArgumentException>(expectedError);
 
         return Task.CompletedTask;
     }
 
     [Fact]
-    public async Task Command_Should_Return_Id_Of_Registered_Book()
+    public async Task Command_WheneBookWithCurrentInfoAlreadeExists_ShouldThrowBookWithCurrentInfoAlreadyExistsException()
+    {
+        // Arrange
+        var name = "The Captain's Daughter";
+        var author = "A.S. Pushkin";
+        var command = new RegisterBookCommand(name, author);
+
+        _books.Add(new Book
+        {
+            Id = Guid.NewGuid(),
+            Name = name,
+            Author = author
+        });
+
+        var expectedError = $"A book with Name = '{name}' and Author = '{author}' already exists.";
+
+        // Act, Assert
+        var action = () => command.ExecuteAsync(_context, CancellationToken.None);
+
+        await action.ShouldThrowAsync<BookWithCurrentInfoAlreadyExistsException>(expectedError);
+    }
+
+    [Fact]
+    public async Task Command_ShouldReturnIdOfRegisteredBook()
     {
         // Arrange
         var name = "The Captain's Daughter";
@@ -59,12 +86,25 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
         // Act
         var result = await command.ExecuteAsync(_context, CancellationToken.None);
 
+        var expectedBookDb = new Book
+        {
+            Id = result,
+            Name = name,
+            Author = author
+        };
+
         // Assert
         result.ShouldNotBe(Guid.Empty);
+
+        var books = new List<Book>();
+        _contextMock.Verify(x => x.Books.AddAsync(Capture.In(books), It.IsAny<CancellationToken>()), Times.Once);
+
+        books.Count.ShouldBe(1);
+        books[0].ShouldBeEquivalentTo(expectedBookDb);
     }
 
     [Fact]
-    public async Task Command_Should_Generate_BookWasRegisteredInRatingDomainEvent()
+    public async Task Command_ShouldGenerateBookWasRegisteredInRatingIntegrationEvent()
     {
         // Arrange
         var name = "The Captain's Daughter";
@@ -79,15 +119,17 @@ public sealed class RegisterBookCommandTests : EFUnitTestsBase<BookRatingDbConte
         command.Events.Count.ShouldBe(1);
 
         var evnt = command.Events.Single()
-            .ShouldBeOfType<BookWasRegisteredInRatingDomainEvent>();
+            .ShouldBeOfType<BookWasRegisteredInRatingIntegrationEvent>();
 
         evnt.Name.ShouldBe(name);
         evnt.Author.ShouldBe(author);
     }
 
-    protected override BookRatingDbContext SetUpDbContext(Mock<BookRatingDbContext> contextMock)
+    protected override BookRatingDbContext ConfigureContext(Mock<BookRatingDbContext> contextMock)
     {
-        contextMock.Setup(s => s.Books).ReturnsDbSet(_books);
+        contextMock
+            .Setup(s => s.Books)
+            .ReturnsDbSet(_books);
 
         return contextMock.Object;
     }

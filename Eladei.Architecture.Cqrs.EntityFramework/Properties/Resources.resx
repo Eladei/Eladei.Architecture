@@ -138,6 +138,9 @@
   <data name="CommandExecutingSuccessfullyFinished" xml:space="preserve">
     <value>Execution of command '{0}' has completed successfully</value>
   </data>
+  <data name="MaxAttemptsCountMustBeGreaterThanZero" xml:space="preserve">
+    <value>MaxAttemptsCount must be greater than 0</value>
+  </data>
   <data name="ModifiedObjectWasRemoved" xml:space="preserve">
     <value>The entity being modified has been deleted from the database</value>
   </data>
@@ -161,5 +164,8 @@
   </data>
   <data name="UnreachableCodeError" xml:space="preserve">
     <value>Unreachable code</value>
+  </data>
+  <data name="UnsupportedExceptionType" xml:space="preserve">
+    <value>Unsupported exception type '{0}'</value>
   </data>
 </root>

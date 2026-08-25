@@ -9,10 +9,27 @@ public interface IIntegrationEventBus
     /// Publishes an integration event
     /// </summary>
     /// <param name="integrationEvent">The integration event</param>
-    Task PublishEventAsync(IIntegrationEvent integrationEvent);
-}
+    /// <param name="headers">Headers for event publishing</param>
+    Task PublishEventAsync(IIntegrationEvent integrationEvent, Dictionary<string, string>? headers = null);
 
-/// <summary>
-/// Integration event bus that processes events in parallel (without ordering guarantees).
-/// </summary>
-public interface IParallelIntegrationEventBus : IIntegrationEventBus { }
+    /// <summary>
+    /// Header names used for integration events
+    /// </summary>
+    public static class IntegrationEventHeadersNames
+    {
+        /// <summary>
+        /// The name of the header that contains the event id
+        /// </summary>
+        public const string EventId = "event-id";
+
+        /// <summary>
+        /// The name of the header that contains the message key
+        /// </summary>
+        public const string MessageKey = "message-key";
+
+        /// <summary>
+        /// The name of the header that contains the correlation id
+        /// </summary>
+        public const string CorrelationId = "correlation-id";
+    }
+}

@@ -1,5 +1,5 @@
-﻿using Eladei.Architecture.Cqrs.Ddd.Properties;
-using Eladei.Architecture.Ddd.Entities;
+﻿using Eladei.Architecture.Cqrs.Ddd.Commands.Exceptions;
+using Eladei.Architecture.Cqrs.Ddd.Properties;
 using Microsoft.Extensions.Logging;
 
 namespace Eladei.Architecture.Cqrs.Ddd.Commands;
@@ -45,7 +45,7 @@ public sealed class DddCommandExecutorLogger : IDddCommandExecutorLogger
     }
 
     /// <inheritdoc />
-    public void DomainLogicError(string commandName, DomainLogicException ex)
+    public void CommandLogicError(string commandName, DddCommandLogicException ex)
     {
         CriticalError(commandName, ex);
     }

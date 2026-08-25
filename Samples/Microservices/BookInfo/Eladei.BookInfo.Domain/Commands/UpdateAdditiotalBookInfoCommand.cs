@@ -1,24 +1,16 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands;
-using Eladei.BookInfo.Domain.Exceptions;
-using Eladei.BookInfo.Domain.Properties;
+using Eladei.BookInfo.Application.Exceptions;
+using Eladei.BookInfo.Application.Properties;
 using Eladei.BookInfo.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eladei.BookInfo.Domain.Commands;
+namespace Eladei.BookInfo.Application.Commands;
 
-/// <summary>
-/// Command for updating additional book information
-/// </summary>
 public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbContext>
 {
     private readonly Guid _bookId;
     private readonly AdditionalBookInfo _additionalInfo;
 
-    /// <summary>
-    /// Creates an instance of UpdateAdditiotalBookInfoCommand
-    /// </summary>
-    /// <param name="bookId">Book identifier</param>
-    /// <param name="additionalInfo">Additional book information</param>
     /// <exception cref="ArgumentException"></exception>
     public UpdateAdditiotalBookInfoCommand(Guid bookId, AdditionalBookInfo additionalInfo)
     {
@@ -47,38 +39,17 @@ public sealed class UpdateAdditiotalBookInfoCommand : EfCommandBase<BookInfoDbCo
     }
 }
 
-/// <summary>
-/// Additional book information
-/// </summary>
-public record AdditionalBookInfo
+public sealed record AdditionalBookInfo
 {
-    /// <summary>
-    /// Number of pages
-    /// </summary>
     public uint? Pages { get; init; }
 
-    /// <summary>
-    /// Print run (circulation)
-    /// </summary>
     public uint? Circulation { get; init; }
 
-    /// <summary>
-    /// Annotation / summary
-    /// </summary>
     public string? Annotation { get; init; }
 
-    /// <summary>
-    /// Editor
-    /// </summary>
     public string? Editor { get; init; }
 
-    /// <summary>
-    /// Translator
-    /// </summary>
     public string? Translator { get; init; }
 
-    /// <summary>
-    /// Illustrator / artist
-    /// </summary>
     public string? Artist { get; init; }
 }

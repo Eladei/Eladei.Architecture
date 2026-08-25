@@ -9,8 +9,8 @@ namespace CqrsWithDddExecuting;
 
 internal class Program
 {
-    private static DddCommandExecutor _commandExecutor;
-    private static DddQueryExecutor _queryExecutor;
+    private static DddCommandExecutor _commandExecutor = null!;
+    private static DddQueryExecutor _queryExecutor = null!;
 
     static async Task Main(string[] args)
     {
@@ -40,7 +40,7 @@ internal class Program
         { builder.AddConsole(); });
 
         var commandLogger = loggerFactory.CreateLogger<DddCommandExecutorLogger>();
-        var eventDaoLogger = loggerFactory.CreateLogger<MockOutboxDomainEventDao>();
+        var eventDaoLogger = loggerFactory.CreateLogger<MockOutboxIntegrationEventWriter>();
         var queryLogger = loggerFactory.CreateLogger<DddQueryExecutorLogger>();
 
         // Db context factory
@@ -49,8 +49,8 @@ internal class Program
         // Command executor
         _commandExecutor = new DddCommandExecutor(
             contextFactory,
-            new MockOperationExecutionPolicyService(),
-            new MockOutboxDomainEventDao(eventDaoLogger),
+            new MockOperationExecutionPolicyProvider(),
+            new MockOutboxIntegrationEventWriter(eventDaoLogger),
             new DddCommandExecutorLogger(commandLogger));
 
         // Query executor

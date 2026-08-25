@@ -16,7 +16,6 @@
 | `Eladei.Architecture.Logging` | Base types for logging. |
 | `Eladei.Architecture.Messaging` | Base types for integration event processing. |
 | `Eladei.Architecture.Messaging.Kafka` | Types for working with integration events via Kafka. |
-| `Eladei.Architecture.Tests.EntityFramework` | Base types for building integration and unit tests focused on Entity Framework. |
 
 ---
 
@@ -46,8 +45,8 @@
 // Command executor
 var commandExecutor = new EfCommandExecutor<BookRatingDbContext>( 
     contextFactory,
-    new MockOperationExecutionPolicyService(),
-    new MockOutboxDomainEventDao(eventDaoLogger));
+    new MockOperationExecutionPolicyProvider(),
+    new MockOutboxIntegrationEventWriter(eventWriterLogger));
 
 // Query executor
 var queryExecutor = new EfQueryExecutor<BookRatingDbContext>(contextFactory);
@@ -74,8 +73,8 @@ var bookInfo = await queryExecutor.ExecuteAsync(findBookQuery, CancellationToken
 // Command executor
 var commandExecutor = new DddCommandExecutor(
     contextFactory,
-    new MockOperationExecutionPolicyService(),
-    new MockOutboxDomainEventDao(eventDaoLogger));
+    new MockOperationExecutionPolicyProvider(),
+    new MockOutboxIntegrationEventWriter(eventWriterLogger));
 
 // Query executor
 var queryExecutor = new DddQueryExecutor(contextFactory);

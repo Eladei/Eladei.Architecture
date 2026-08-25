@@ -1,5 +1,5 @@
-﻿using Eladei.Architecture.Cqrs.EntityFramework.Properties;
-using Eladei.Architecture.Ddd.Entities;
+﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands.Exceptions;
+using Eladei.Architecture.Cqrs.EntityFramework.Properties;
 using Microsoft.Extensions.Logging;
 
 namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
@@ -21,7 +21,7 @@ public sealed class EfCommandExecutorLogger : IEfCommandExecutorLogger
     }
 
     /// <inheritdoc />
-    public void ExecutingStarted(string commandName)
+    public void ExecutionStarted(string commandName)
     {
         var msg = string.Format(Resources.CommandExecutingStarted, commandName);
 
@@ -29,7 +29,7 @@ public sealed class EfCommandExecutorLogger : IEfCommandExecutorLogger
     }
 
     /// <inheritdoc />
-    public void ExecutingSuccessfulFinished(string commandName)
+    public void ExecutionSucceeded(string commandName)
     {
         var msg = string.Format(Resources.CommandExecutingSuccessfullyFinished, commandName);
 
@@ -37,7 +37,7 @@ public sealed class EfCommandExecutorLogger : IEfCommandExecutorLogger
     }
 
     /// <inheritdoc />
-    public void ExecutingCancelled(string commandName, OperationCanceledException ex)
+    public void ExecutionCancelled(string commandName, OperationCanceledException ex)
     {
         var msg = string.Format(Resources.CommandExecutingCancelled, commandName);
 
@@ -45,7 +45,7 @@ public sealed class EfCommandExecutorLogger : IEfCommandExecutorLogger
     }
 
     /// <inheritdoc />
-    public void DomainLogicError(string commandName, DomainLogicException ex)
+    public void CommandLogicError(string commandName, EfCommandLogicException ex)
     {
         CriticalError(commandName, ex);
     }

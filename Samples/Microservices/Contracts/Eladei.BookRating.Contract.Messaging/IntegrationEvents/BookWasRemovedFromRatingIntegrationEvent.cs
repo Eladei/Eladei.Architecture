@@ -5,17 +5,19 @@ namespace Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 /// <summary>
 /// A book was removed from the rating
 /// </summary>
-public class BookWasRemovedFromRatingIntegrationEvent : IntegrationEvent
+public class BookWasRemovedFromRatingIntegrationEvent : IIntegrationEvent
 {
     /// <summary>
     /// Creates an instance of the BookWasRemovedFromRatingIntegrationEvent class
     /// </summary>
     /// <param name="bookId">Book identifier</param>
-    /// <param name="correlationId">Id for distributed tracing</param>
-    public BookWasRemovedFromRatingIntegrationEvent(Guid bookId, Guid correlationId) : base(bookId, correlationId) { }
+    public BookWasRemovedFromRatingIntegrationEvent(Guid bookId)
+    {
+        BookId = bookId;
+    }
 
     /// <summary>
     /// Book identifier
     /// </summary>
-    public Guid BookId { get => EntityId; }
+    public Guid BookId { get; }
 }

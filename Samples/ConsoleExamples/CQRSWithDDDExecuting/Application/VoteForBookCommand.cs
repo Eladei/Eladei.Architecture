@@ -1,21 +1,15 @@
-﻿using CqrsWithDddExecuting.DomainModel;
+﻿using CqrsWithDddExecuting.Application.IntegrationEvents;
+using CqrsWithDddExecuting.DomainModel;
 using Eladei.Architecture.Cqrs.Ddd;
 using Eladei.Architecture.Cqrs.Ddd.Commands;
-using Eladei.Architecture.Ddd.Entities;
+using Eladei.Architecture.Cqrs.Ddd.Commands.Exceptions;
 
 namespace CqrsWithDddExecuting.Application;
 
-/// <summary>
-/// Command for voting for a book
-/// </summary>
 internal sealed class VoteForBookCommand : DddCommandBase
 {
     private readonly Guid _bookId;
 
-    /// <summary>
-    /// Creates an instance of VoteForBookCommand
-    /// </summary>
-    /// <param name="bookId">Book identifier</param>
     public VoteForBookCommand(Guid bookId)
     {
         _bookId = bookId;
@@ -26,12 +20,15 @@ internal sealed class VoteForBookCommand : DddCommandBase
         var bookRepository = repositoryFactory.CreateRepository<IBookRepository>();
 
         var foundBook = await bookRepository.FindByIdAsync(_bookId, cancellationToken)
-            ?? throw new DomainLogicException($"Book with specified Id='{_bookId}' was not found");
+            ?? throw new DddCommandLogicException($"Book with specified Id='{_bookId}' was not found");
 
         foundBook.Vote();
 
         await bookRepository.UpdateBookAsync(foundBook, cancellationToken);
 
-        AddDomainEvents([.. foundBook.DomainEvents]);
+        var expectedEvent = foundBook.DomainEvents.First(x => x is BookWasVotedDomainEvent) as BookWasVotedDomainEvent;
+        var integrationEvent = new BookWasVotedIntegrationEvent(expectedEvent!.BookId);
+
+        AddIntegrationEvents(integrationEvent);
     }
 }

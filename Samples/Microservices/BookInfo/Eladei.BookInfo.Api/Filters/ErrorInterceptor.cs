@@ -1,24 +1,17 @@
-﻿using Eladei.Architecture.Cqrs.Commands;
-using Eladei.Architecture.Ddd.Entities;
+﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands.Exceptions;
+using Eladei.Architecture.Cqrs.EntityFramework.Queries.Exceptions;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eladei.BookInfo.Api.Filters;
 
-/// <summary>
-/// Interceptor for handling runtime errors
-/// </summary>
 public sealed class ErrorInterceptor : Interceptor
 {
     private const string ErrorMsgPattern = "Error thrown by {0}";
 
     private readonly ILogger _logger;
 
-    /// <summary>
-    /// Creates an instance of <see cref="ErrorInterceptor"/>
-    /// </summary>
-    /// <param name="logger">Logger</param>
     public ErrorInterceptor(ILogger<ErrorInterceptor> logger)
     {
         _logger = logger;
@@ -47,7 +40,8 @@ public sealed class ErrorInterceptor : Interceptor
                 case OverflowException:
                 case ArgumentException:
                     throw HandleError(ex, StatusCode.InvalidArgument, context.Method);
-                case DomainLogicException:
+                case EfCommandLogicException:
+                case EfQueryLogicException:
                     throw HandleError(ex, StatusCode.FailedPrecondition, context.Method);
                 case DbModifiedObjectWasRemovedException:
                 case DbRemovingObjectWasRemovedException:
@@ -71,13 +65,6 @@ public sealed class ErrorInterceptor : Interceptor
         }
     }
 
-    /// <summary>
-    /// Handles a caught exception and converts it into an RPC exception
-    /// </summary>
-    /// <param name="ex">Exception</param>
-    /// <param name="statusCode">gRPC status code</param>
-    /// <param name="methodName">Name of the method where the error occurred</param>
-    /// <returns>gRPC exception</returns>
     private RpcException HandleError(Exception ex, StatusCode statusCode, string methodName)
     {
         _logger.LogError(ex, string.Format(ErrorMsgPattern, methodName));

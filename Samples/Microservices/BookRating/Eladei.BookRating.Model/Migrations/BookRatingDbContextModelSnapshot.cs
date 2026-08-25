@@ -60,7 +60,7 @@ namespace Eladei.BookRating.Model.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("Eladei.BookRating.Model.Entities.IntegrationEvents.IntegrationEventToSend", b =>
+            modelBuilder.Entity("Eladei.BookRating.Model.Entities.Outbox.OutboxMessage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,9 +71,6 @@ namespace Eladei.BookRating.Model.Migrations
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("EntityId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("EventMetadata")
                         .IsRequired()
@@ -88,6 +85,9 @@ namespace Eladei.BookRating.Model.Migrations
 
                     b.Property<string>("LastError")
                         .HasColumnType("text");
+
+                    b.Property<Guid>("MessageKey")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("ModifiedAtUtc")
                         .HasColumnType("timestamp with time zone");
@@ -112,7 +112,7 @@ namespace Eladei.BookRating.Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IntegrationEvents");
+                    b.ToTable("OutboxMessages");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,24 +1,17 @@
-﻿using Eladei.Architecture.Cqrs.Commands;
-using Eladei.Architecture.Ddd.Entities;
+﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands.Exceptions;
+using Eladei.Architecture.Cqrs.EntityFramework.Queries.Exceptions;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eladei.BookRating.Api.Filters;
 
-/// <summary>
-/// Interceptor for handling occurring errors
-/// </summary>
 public sealed class ErrorInterceptor : Interceptor
 {
     private const string ErrorMsgPattern = "Error thrown by {0}";
 
     private readonly ILogger _logger;
 
-    /// <summary>
-    /// Creates an instance of the ErrorInterceptor class
-    /// </summary>
-    /// <param name="logger">Logger instance</param>
     public ErrorInterceptor(ILogger<ErrorInterceptor> logger)
     {
         _logger = logger;
@@ -47,7 +40,8 @@ public sealed class ErrorInterceptor : Interceptor
                 case OverflowException:
                 case ArgumentException:
                     throw HandleError(ex, StatusCode.InvalidArgument, context.Method);
-                case DomainLogicException:
+                case EfCommandLogicException:
+                case EfQueryLogicException:
                     throw HandleError(ex, StatusCode.FailedPrecondition, context.Method);
                 case DbModifiedObjectWasRemovedException:
                 case DbRemovingObjectWasRemovedException:
@@ -72,19 +66,11 @@ public sealed class ErrorInterceptor : Interceptor
         }
     }
 
-    /// <summary>
-    /// Обрабатывает перехваченную ошибку
-    /// </summary>
-    /// <param name="ex">Исключение</param>
-    /// <param name="statusCode">Статус-код ошибки</param>
-    /// <param name="methodName">Название метода, 
-    /// в котором была зафиксирована ошибка</param>
-    /// <returns>RPC-исключение</returns>
     private RpcException HandleError(Exception ex, StatusCode statusCode, string methodName)
     {
         _logger.LogError(ex, string.Format(ErrorMsgPattern, methodName));
 
-        // В Release-сборках возвращение только сообщения об ошибке
+        // In Release builds, return only the error message
         Status status;
 #if DEBUG
         status = new Status(statusCode, ex.ToString());
@@ -92,7 +78,7 @@ public sealed class ErrorInterceptor : Interceptor
         status = new Status(statusCode, ex.Message);
 #endif
 
-        // TODO: При возврате ошибки не пробрасывается в лог CorrelationId
+        // TODO: CorrelationId is not included in logs when error is returned
         return new RpcException(status);
     }
 }

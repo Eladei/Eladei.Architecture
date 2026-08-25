@@ -124,6 +124,15 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MaxAttemptsCount must be greater than 0.
+        /// </summary>
+        internal static string MaxAttemptsCountMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("MaxAttemptsCountMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The entity being modified has been deleted from the database.
         /// </summary>
         internal static string ModifiedObjectWasRemoved {
@@ -192,6 +201,15 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Properties {
         internal static string UnreachableCodeError {
             get {
                 return ResourceManager.GetString("UnreachableCodeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported exception type &apos;{0}&apos;.
+        /// </summary>
+        internal static string UnsupportedExceptionType {
+            get {
+                return ResourceManager.GetString("UnsupportedExceptionType", resourceCulture);
             }
         }
     }

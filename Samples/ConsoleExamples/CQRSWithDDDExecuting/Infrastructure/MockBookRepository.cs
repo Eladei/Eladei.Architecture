@@ -2,9 +2,6 @@
 
 namespace CqrsWithDddExecuting.Infrastructure;
 
-/// <summary>
-/// Mock of book repository
-/// </summary>
 public sealed class MockBookRepository : IBookRepository
 {
     private const string BOOK_NOT_FOUND_ERROR = "Book not found";
@@ -25,7 +22,6 @@ public sealed class MockBookRepository : IBookRepository
         return Task.CompletedTask;
     }
 
-    /// <inheritdoc />
     public Task UpdateBookAsync(BookInRating book, CancellationToken cancellationToken)
     {
         var updatingBookIndex = _dataContext.FindIndex(b => b.Id == book.Id);
@@ -38,7 +34,6 @@ public sealed class MockBookRepository : IBookRepository
         return Task.CompletedTask;
     }
 
-    /// <inheritdoc />
     public Task RemoveBookAsync(BookInRating book, CancellationToken cancellationToken)
     {
         var removingBook = _dataContext.FirstOrDefault(b => b.Id == book.Id)
@@ -49,7 +44,6 @@ public sealed class MockBookRepository : IBookRepository
         return Task.CompletedTask;
     }
 
-    /// <inheritdoc />
     public Task<BookInRating?> FindByIdAsync(Guid bookId, CancellationToken cancellationToken)
     {
         var foundBook = _dataContext.FirstOrDefault(b => b.Id == bookId);
@@ -71,5 +65,5 @@ public sealed class MockBookRepository : IBookRepository
         };
 
     private static BookInRating Convert(BookInRatingDb bookDb)
-        => new BookInRating(bookDb.Id, bookDb.Name, bookDb.Author, bookDb.Votes);
+        => new(bookDb.Id, bookDb.Name, bookDb.Author, bookDb.Votes);
 }

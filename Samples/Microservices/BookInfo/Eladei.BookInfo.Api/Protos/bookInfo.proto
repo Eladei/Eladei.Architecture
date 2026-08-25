@@ -6,16 +6,12 @@ package bookInfo.v1;
 
 import "google/protobuf/wrappers.proto";
 
-// Book information service definition
 service BookInfo {
-  // Updates additional book information
   rpc UpdateAdditionalBookInfo (UpdateAdditionalBookInfoApiRequest) returns (UpdateAdditionalBookInfoApiResponse);
 
-  // Retrieves book information
   rpc GetBookInfo (GetBookInfoApiRequest) returns (GetBookInfoApiResponse);
 }
 
-// Request to update additional book information
 message UpdateAdditionalBookInfoApiRequest {
     string bookId = 1;
 
@@ -32,15 +28,12 @@ message UpdateAdditionalBookInfoApiRequest {
     string artist = 7;
 }
 
-// Response for updating additional book information
 message UpdateAdditionalBookInfoApiResponse { }
 
-// Request for retrieving book information
 message GetBookInfoApiRequest {
     string bookId = 1;
 }
 
-// Response containing book information
 message GetBookInfoApiResponse {
     string bookId = 1;
 

@@ -13,9 +13,10 @@ public interface IKafkaEventHandlerFactory
     /// </summary>
     /// <typeparam name="H">The type of the integration event handler</typeparam>
     /// <typeparam name="E">The type of the integration event</typeparam>
+    /// <param name="eventMetadata"></param>
     /// <param name="cancellationToken">Cancellation token for event processing</param>
     /// <returns>The integration event handler</returns>
-    H CreateHandler<H, E>(CancellationToken cancellationToken)
+    H CreateHandler<H, E>(KafkaIntegrationEventMetadata eventMetadata, CancellationToken cancellationToken)
         where H : IHandleMessages<E>
         where E : IIntegrationEvent;
 }

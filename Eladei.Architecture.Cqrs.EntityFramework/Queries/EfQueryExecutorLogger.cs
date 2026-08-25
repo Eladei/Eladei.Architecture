@@ -1,4 +1,5 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Properties;
+using Eladei.Architecture.Cqrs.EntityFramework.Queries.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
@@ -17,7 +18,7 @@ public sealed class EfQueryExecutorLogger : IEfQueryExecutorLogger
     }
 
     /// <inheritdoc />
-    public void ExecutingStarted(string queryName)
+    public void ExecutionStarted(string queryName)
     {
         var msg = string.Format(Resources.QueryExecutingStarted, queryName);
 
@@ -25,7 +26,7 @@ public sealed class EfQueryExecutorLogger : IEfQueryExecutorLogger
     }
 
     /// <inheritdoc />
-    public void ExecutingSuccessfulFinished(string queryName)
+    public void ExecutionSucceeded(string queryName)
     {
         var msg = string.Format(Resources.QueryExecutingSuccessfullyFinished, queryName);
 
@@ -33,11 +34,17 @@ public sealed class EfQueryExecutorLogger : IEfQueryExecutorLogger
     }
 
     /// <inheritdoc />
-    public void ExecutingCancelled(string queryName, OperationCanceledException ex)
+    public void ExecutionCancelled(string queryName, OperationCanceledException ex)
     {
         var msg = string.Format(Resources.QueryExecutingCancelled, queryName);
 
         _logger?.LogInformation(ex, msg);
+    }
+
+    /// <inheritdoc />
+    public void QueryLogicError(string queryName, EfQueryLogicException ex)
+    {
+        CriticalError(queryName, ex);
     }
 
     /// <inheritdoc />

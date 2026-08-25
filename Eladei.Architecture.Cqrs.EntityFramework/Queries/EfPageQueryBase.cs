@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Eladei.Architecture.Cqrs.Queries;
+﻿using Eladei.Architecture.Cqrs.Queries;
+using Microsoft.EntityFrameworkCore;
 
 namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 
@@ -10,8 +10,15 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 /// <typeparam name="R">The result item type</typeparam>
 public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> where T : DbContext
 {
-    private readonly uint _page;
-    protected readonly uint? _elementsPerPage;
+    /// <summary>
+    /// The page number to query
+    /// </summary>
+    protected readonly uint Page;
+
+    /// <summary>
+    /// The number of elements per page
+    /// </summary>
+    protected readonly uint? ElementsPerPage;
 
     /// <inheritdoc />
     public override async Task<PageResult<R>> ExecuteAsync(T context, CancellationToken cancellationToken = default)
@@ -22,7 +29,7 @@ public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> wher
 
         return new PageResult<R>
         {
-            CurrentPage = _page,
+            CurrentPage = Page,
             TotalPages = pagesAdditionalInfo.TotalPages,
             TotalElements = pagesAdditionalInfo.TotalElements,
             Result = result
@@ -48,8 +55,8 @@ public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> wher
     /// <summary>
     /// Number of elements to skip in the query
     /// </summary>
-    protected uint ElementsToSkip => _elementsPerPage.HasValue
-        ? _elementsPerPage.Value * (_page - 1)
+    protected uint ElementsToSkip => ElementsPerPage.HasValue
+        ? ElementsPerPage.Value * (Page - 1)
         : 0;
 
     /// <summary>
@@ -66,16 +73,16 @@ public abstract class EfPageQueryBase<T, R> : EfQueryBase<T, PageResult<R>> wher
         if (page.HasValue)
             ArgumentOutOfRangeException.ThrowIfZero(page.Value);
 
-        _elementsPerPage = elementsPerPage;
-        _page = page ?? 1;
+        ElementsPerPage = elementsPerPage;
+        Page = page ?? 1;
     }
 
     private async Task<PageAdditionalInfo> GetPagesAdditionalInfo(T context, CancellationToken cancellationToken)
     {
         var allElementsCount = await GetAllElementsCount(context, cancellationToken);
 
-        var totalPages = _elementsPerPage.HasValue
-            ? (uint)Math.Ceiling((double)allElementsCount / _elementsPerPage.Value)
+        var totalPages = ElementsPerPage.HasValue
+            ? (uint)Math.Ceiling((double)allElementsCount / ElementsPerPage.Value)
             : allElementsCount;
 
         return new PageAdditionalInfo

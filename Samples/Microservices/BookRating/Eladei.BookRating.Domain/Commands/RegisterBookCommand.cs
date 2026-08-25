@@ -1,33 +1,25 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands;
-using Eladei.BookRating.Domain.Commands.DomainEvents;
-using Eladei.BookRating.Domain.Exceptions;
-using Eladei.BookRating.Domain.Properties;
+using Eladei.BookRating.Application.Exceptions;
+using Eladei.BookRating.Application.Properties;
+using Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 using Eladei.BookRating.Model;
 using Eladei.BookRating.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eladei.BookRating.Domain.Commands;
+namespace Eladei.BookRating.Application.Commands;
 
-/// <summary>
-/// Command for registering a book in the rating
-/// </summary>
 public sealed class RegisterBookCommand : EfCommandWithResultBase<BookRatingDbContext, Guid>
 {
     private readonly string _name;
     private readonly string _author;
 
-    /// <summary>
-    /// Creates an instance of the RegisterBookCommand class
-    /// </summary>
-    /// <param name="name">Book title</param>
-    /// <param name="author">Book author</param>
     /// <exception cref="ArgumentException"></exception>
     public RegisterBookCommand(string name, string author)
     {
-        if (string.IsNullOrEmpty(name))
+        if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException(Resource.BookNameNotDefined);
 
-        if (string.IsNullOrEmpty(author))
+        if (string.IsNullOrWhiteSpace(author))
             throw new ArgumentException(Resource.BookAuthorNotDefined);
 
         _name = name;
@@ -56,10 +48,10 @@ public sealed class RegisterBookCommand : EfCommandWithResultBase<BookRatingDbCo
 
         await context.Books.AddAsync(newBook, cancellationToken);
 
-        var bookWasRegisteredEvent = new BookWasRegisteredInRatingDomainEvent(
+        var bookWasRegisteredEvent = new BookWasRegisteredInRatingIntegrationEvent(
             newBook.Id, newBook.Name, newBook.Author);
 
-        SaveDomainEvents(bookWasRegisteredEvent);
+        AddIntegrationEvents(bookWasRegisteredEvent);
 
         return newBook.Id;
     }
