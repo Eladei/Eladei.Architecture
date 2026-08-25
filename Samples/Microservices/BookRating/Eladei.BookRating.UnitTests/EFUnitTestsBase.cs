@@ -11,7 +11,7 @@ public abstract class EFUnitTestsBase<T> where T : DbContext
     public EFUnitTestsBase()
     {
         _contextMock = CreateContextMock();
-        
+
         _context = ConfigureContext(_contextMock);
     }
 

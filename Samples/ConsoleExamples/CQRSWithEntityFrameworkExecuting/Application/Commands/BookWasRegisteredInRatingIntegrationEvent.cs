@@ -10,7 +10,7 @@ public class BookWasRegisteredInRatingIntegrationEvent : IIntegrationEvent
         Name = name;
         Author = author;
     }
-    
+
     public Guid BookId { get; }
 
     public string Name { get; }

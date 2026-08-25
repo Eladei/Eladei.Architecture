@@ -16,8 +16,8 @@ public sealed class MockOutboxIntegrationEventWriter : IDddOutboxIntegrationEven
 
     /// <inheritdoc />
     public Task SaveAsync(
-        IReadOnlyCollection<IIntegrationEvent> integrationEvents, 
-        IRepositoryFactory repositoryFactory, 
+        IReadOnlyCollection<IIntegrationEvent> integrationEvents,
+        IRepositoryFactory repositoryFactory,
         CancellationToken cancellationToken)
     {
         var eventNames = string.Join(',', integrationEvents.Select(evnt => evnt.GetType().Name));

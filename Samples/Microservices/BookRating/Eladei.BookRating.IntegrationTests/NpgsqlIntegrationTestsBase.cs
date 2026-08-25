@@ -11,7 +11,7 @@ public abstract class NpgsqlIntegrationTestsBase<T> : IAsyncLifetime where T : D
     private DbContextOptions<T> _contextOptions = null!;
 
     public NpgsqlIntegrationTestsBase(
-        NpgsqlConnectionParams serverConnectionParams, 
+        NpgsqlConnectionParams serverConnectionParams,
         Func<DbContextOptions<T>, T> contextFactory)
     {
         _serverConnectionParams = serverConnectionParams

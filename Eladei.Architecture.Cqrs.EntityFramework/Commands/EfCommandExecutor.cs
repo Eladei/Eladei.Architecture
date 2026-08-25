@@ -184,7 +184,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
             command.ClearEvents();
 
             using var context = await CreateDbContextAsync(commandName, cancellationToken);
-            
+
             try
             {
                 await command.BeforeExecuteAsync(context, cancellationToken);
@@ -284,7 +284,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
     protected virtual async Task<T> CreateDbContextAsync(string commandName, CancellationToken cancellationToken)
     {
         T context = await ContextFactory.CreateDbContextAsync(cancellationToken);
-        
+
         if (context is null)
         {
             var invalidOperEx = new InvalidOperationException(Resources.CantCreateDbContext);

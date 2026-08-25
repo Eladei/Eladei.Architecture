@@ -11,4 +11,3 @@ public class BookWasRemovedFromRatingIntegrationEvent : IIntegrationEvent
 
     public Guid BookId { get; }
 }
- 

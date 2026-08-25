@@ -13,7 +13,7 @@ public class BookWasRegisteredInRatingIntegrationEvent : IIntegrationEvent
     /// <param name="bookId">Book identifier</param>
     /// <param name="name">Book title</param>
     /// <param name="author">Author</param>
-    public BookWasRegisteredInRatingIntegrationEvent(Guid bookId, string name, string author) 
+    public BookWasRegisteredInRatingIntegrationEvent(Guid bookId, string name, string author)
     {
         BookId = bookId;
         Name = name;
