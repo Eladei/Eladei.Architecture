@@ -3,20 +3,13 @@ using Grpc.Core.Interceptors;
 
 namespace Eladei.BookRating.Api.Filters;
 
-/// <summary>
-/// Interceptor for logging incoming requests
-/// </summary>
 public sealed class LoggerInterceptor : Interceptor
 {
-    private static string LoggingMsgPattern
+    private static readonly string LoggingMsgPattern
         = "Starting receiving call. Type/Method: {Type} / {Method}";
 
     private readonly ILogger _logger;
 
-    /// <summary>
-    /// Creates an instance of the LoggerInterceptor class
-    /// </summary>
-    /// <param name="logger">Logger instance</param>
     public LoggerInterceptor(ILogger<LoggerInterceptor> logger)
     {
         _logger = logger;

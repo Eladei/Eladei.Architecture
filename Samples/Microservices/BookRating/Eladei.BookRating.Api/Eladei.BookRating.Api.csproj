@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -21,14 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Eladei.Architecture.Cqrs.Ddd\Eladei.Architecture.Cqrs.Ddd.csproj" />
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Cqrs.EntityFramework\Eladei.Architecture.Cqrs.EntityFramework.csproj" />
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Jobs\Eladei.Architecture.Jobs.Quartz.csproj" />
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Logging\Eladei.Architecture.Logging.csproj" />
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Messaging.Kafka\Eladei.Architecture.Messaging.Kafka.csproj" />
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Messaging\Eladei.Architecture.Messaging.csproj" />
     <ProjectReference Include="..\..\Contracts\Eladei.BookRating.Contract.Messaging\Eladei.BookRating.Contract.Messaging.csproj" />
-    <ProjectReference Include="..\Eladei.BookRating.Domain\Eladei.BookRating.Domain.csproj" />
+    <ProjectReference Include="..\Eladei.BookRating.Domain\Eladei.BookRating.Application.csproj" />
     <ProjectReference Include="..\Eladei.BookRating.Infrastructure\Eladei.BookRating.Infrastructure.csproj" />
     <ProjectReference Include="..\Eladei.BookRating.Model\Eladei.BookRating.Model.csproj" />
   </ItemGroup>

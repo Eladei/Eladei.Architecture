@@ -3,18 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eladei.BookInfo.Model;
 
-/// <summary>
-/// Database context for working with book information
-/// </summary>
 public class BookInfoDbContext : DbContext
 {
     public BookInfoDbContext() : base() { }
 
     public BookInfoDbContext(DbContextOptions<BookInfoDbContext> options) : base(options) { }
 
-    /// <summary>
-    /// Book information
-    /// </summary>
     public DbSet<BookInformation> BookInformations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -12,10 +12,6 @@ public sealed class CorrelationIdInterceptor : Interceptor
 {
     private readonly ICorrelationContext _correlationContext;
 
-    /// <summary>
-    /// Creates an instance of CorrelationIdInterceptor
-    /// </summary>
-    /// <param name="correlationContext">Correlation context for distributed tracing</param>
     /// <exception cref="ArgumentNullException"></exception>
     public CorrelationIdInterceptor(ICorrelationContext correlationContext)
     {

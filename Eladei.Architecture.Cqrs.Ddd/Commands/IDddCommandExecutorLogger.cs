@@ -1,4 +1,4 @@
-﻿using Eladei.Architecture.Ddd.Entities;
+﻿using Eladei.Architecture.Cqrs.Ddd.Commands.Exceptions;
 
 namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 
@@ -20,18 +20,21 @@ public interface IDddCommandExecutorLogger
     /// <summary>
     /// Logs command execution cancellation
     /// </summary>
+    /// <param name="commandName">The command name</param>
     /// <param name="ex">The cancellation exception</param>
     void ExecutingCancelled(string commandName, OperationCanceledException ex);
 
     /// <summary>
-    /// Logs a domain logic error
+    /// Logs a command logic error
     /// </summary>
-    /// <param name="ex">The domain logic exception</param>
-    void DomainLogicError(string commandName, DomainLogicException ex);
+    /// <param name="commandName">The command name</param>
+    /// <param name="ex">The command logic exception</param>
+    void CommandLogicError(string commandName, DddCommandLogicException ex);
 
     /// <summary>
     /// Logs a critical command execution error
     /// </summary>
+    /// <param name="commandName">The command name</param>
     /// <param name="ex">The execution exception</param>
     void CriticalError(string commandName, Exception ex);
 
@@ -39,6 +42,7 @@ public interface IDddCommandExecutorLogger
     /// Logs an error when retry attempt limit is reached
     /// during database update while executing a command
     /// </summary>
+    /// <param name="commandName">The command name</param>
     /// <param name="ex">The execution exception</param>
     /// <param name="maxAttemptsCount">The total number of retry attempts</param>
     void AttemptLimitReachedError(string commandName, Exception ex, uint maxAttemptsCount);

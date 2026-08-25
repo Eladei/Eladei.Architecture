@@ -1,30 +1,25 @@
-﻿using Eladei.Architecture.Tests.EntityFramework.Integration;
-using Eladei.BookRating.Domain.Commands;
-using Eladei.BookRating.Domain.Exceptions;
-using Eladei.BookRating.Domain.Properties;
+﻿using Eladei.BookRating.Application.Commands;
+using Eladei.BookRating.Application.Exceptions;
 using Eladei.BookRating.Model;
 using Eladei.BookRating.Model.Entities;
 using Shouldly;
 
 namespace Eladei.BookRating.IntegrationTests.Commands;
 
-/// <summary>
-/// Integration tests for the RegisterBookCommand
-/// </summary>
-/// <see cref="RegisterBookCommand"/>
 public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRatingDbContext>
 {
     public RegisterBookCommandTests(NpgsqlConnectionParams serverConnectionParams)
         : base(serverConnectionParams, opts => new BookRatingDbContext(opts)) { }
 
     [Fact]
-    public async Task Command_Should_Throw_BookWithCurrentInfoAlreadyExistsException_When_Book_Already_Exists()
+    public async Task Command_WhenBookAlreadyExists_ShouldThrowBookWithCurrentInfoAlreadyExistsException()
     {
         // Arrange
         var name = "The Captain's Daughter";
         var author = "A.S. Pushkin";
         var command = new RegisterBookCommand(name, author);
-        var expectedError = string.Format(Resource.BookWithCurrentInfoAlreadyExists, name, author);
+
+        var expectedError = $"A book with Name = '{name}' and Author = '{author}' already exists.";
 
         using var context = CreateContext();
 
@@ -38,20 +33,18 @@ public sealed class RegisterBookCommandTests : NpgsqlIntegrationTestsBase<BookRa
         await context.SaveChangesAsync(CancellationToken.None);
 
         // Act, Assert
-        var exception = await Assert.ThrowsAsync<BookWithCurrentInfoAlreadyExistsException>(
-            async () => await command.ExecuteAsync(context, CancellationToken.None));
+        var action = () => command.ExecuteAsync(context, CancellationToken.None);
 
-        exception.Message.ShouldBe(expectedError);
+        await action.ShouldThrowAsync<BookWithCurrentInfoAlreadyExistsException>(expectedError);
     }
 
     [Fact]
-    public async Task Command_Should_Save_New_Book()
+    public async Task Command_ShouldSaveNewBook()
     {
         // Arrange
         var name = "The Captain's Daughter";
         var author = "A.S. Pushkin";
         var command = new RegisterBookCommand(name, author);
-        var expectedError = string.Format(Resource.BookWithCurrentInfoAlreadyExists, name, author);
 
         using var context = CreateContext();
 

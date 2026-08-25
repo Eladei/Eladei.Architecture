@@ -2,21 +2,14 @@
 using CqrsWithDddExecuting.ReadModel;
 using Eladei.Architecture.Cqrs.Ddd;
 using Eladei.Architecture.Cqrs.Ddd.Queries;
-using Eladei.Architecture.Ddd.Entities;
+using Eladei.Architecture.Cqrs.Ddd.Queries.Exceptions;
 
 namespace CqrsWithDddExecuting.Application;
 
-/// <summary>
-/// Query for getting book information by its identifier
-/// </summary>
 internal sealed class FindBookByIdQuery : DddQueryBase<BookInRatingReadModel>
 {
     private readonly Guid _bookId;
 
-    /// <summary>
-    /// Creates an instance of FindBookByIdQuery
-    /// </summary>
-    /// <param name="bookId">Book identifier</param>
     public FindBookByIdQuery(Guid bookId)
     {
         _bookId = bookId;
@@ -27,7 +20,7 @@ internal sealed class FindBookByIdQuery : DddQueryBase<BookInRatingReadModel>
         var bookRepository = repositoryFactory.CreateRepository<IBookRepository>();
 
         var foundBook = await bookRepository.FindByIdAsync(_bookId, cancellationToken)
-            ?? throw new DomainLogicException($"Book with specified Id='{_bookId}' was not found");
+            ?? throw new DddQueryLogicException($"Book with specified Id='{_bookId}' was not found");
 
         return new BookInRatingReadModel
         {

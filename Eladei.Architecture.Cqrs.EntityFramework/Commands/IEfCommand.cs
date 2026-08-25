@@ -1,5 +1,5 @@
 ﻿using Eladei.Architecture.Cqrs.Commands;
-using Eladei.Architecture.Ddd.DomainEvents;
+using Eladei.Architecture.Messaging.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
@@ -15,12 +15,12 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 public interface IEfCommand<T> : ICommand where T : DbContext
 {
     /// <summary>
-    /// Domain events
+    /// Integration events
     /// </summary>
-    IReadOnlyCollection<IDomainEvent> Events { get; }
+    IReadOnlyCollection<IIntegrationEvent> Events { get; }
 
     /// <summary>
-    /// Clears domain events
+    /// Clears integration events
     /// </summary>
     void ClearEvents();
 
@@ -52,12 +52,12 @@ public interface IEfCommand<T> : ICommand where T : DbContext
 public interface IEfCommand<T, R> : ICommand<R> where T : DbContext
 {
     /// <summary>
-    /// Domain events
+    /// Integration events
     /// </summary>
-    IReadOnlyCollection<IDomainEvent> Events { get; }
+    IReadOnlyCollection<IIntegrationEvent> Events { get; }
 
     /// <summary>
-    /// Clears domain events
+    /// Clears integration events
     /// </summary>
     void ClearEvents();
 

@@ -2,9 +2,6 @@
 
 namespace Eladei.BookInfo.Api.Services;
 
-/// <summary>
-/// Service for initializing the integration event bus
-/// </summary>
 public class EventBusStarter : IHostedService
 {
     private readonly IIntegrationEventBus _eventBus;

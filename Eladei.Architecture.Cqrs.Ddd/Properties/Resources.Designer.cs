@@ -115,6 +115,15 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MaxAttemptsCount must be greater than 0.
+        /// </summary>
+        public static string MaxAttemptsCountMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("MaxAttemptsCountMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Execution of query &apos;{0}&apos; has been canceled.
         /// </summary>
         public static string QueryExecutingCancelled {
@@ -156,6 +165,15 @@ namespace Eladei.Architecture.Cqrs.Ddd.Properties {
         public static string UnreachableCodeError {
             get {
                 return ResourceManager.GetString("UnreachableCodeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported exception type &apos;{0}&apos;.
+        /// </summary>
+        public static string UnsupportedExceptionType {
+            get {
+                return ResourceManager.GetString("UnsupportedExceptionType", resourceCulture);
             }
         }
     }

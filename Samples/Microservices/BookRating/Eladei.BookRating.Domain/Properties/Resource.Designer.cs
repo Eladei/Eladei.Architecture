@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Eladei.BookRating.Domain.Properties {
+namespace Eladei.BookRating.Application.Properties {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace Eladei.BookRating.Domain.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resource {
+    internal class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace Eladei.BookRating.Domain.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Eladei.BookRating.Domain.Properties.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Eladei.BookRating.Application.Properties.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Eladei.BookRating.Domain.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,25 +63,16 @@ namespace Eladei.BookRating.Domain.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Book author is not specified.
         /// </summary>
-        public static string BookAuthorNotDefined {
+        internal static string BookAuthorNotDefined {
             get {
                 return ResourceManager.GetString("BookAuthorNotDefined", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Book ID is not specified.
-        /// </summary>
-        public static string BookIdNotDefined {
-            get {
-                return ResourceManager.GetString("BookIdNotDefined", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Book title is not specified.
         /// </summary>
-        public static string BookNameNotDefined {
+        internal static string BookNameNotDefined {
             get {
                 return ResourceManager.GetString("BookNameNotDefined", resourceCulture);
             }
@@ -90,7 +81,7 @@ namespace Eladei.BookRating.Domain.Properties {
         /// <summary>
         ///   Looks up a localized string similar to A book with Name = &apos;{0}&apos; and Author = &apos;{1}&apos; already exists..
         /// </summary>
-        public static string BookWithCurrentInfoAlreadyExists {
+        internal static string BookWithCurrentInfoAlreadyExists {
             get {
                 return ResourceManager.GetString("BookWithCurrentInfoAlreadyExists", resourceCulture);
             }
@@ -99,7 +90,7 @@ namespace Eladei.BookRating.Domain.Properties {
         /// <summary>
         ///   Looks up a localized string similar to A book with Id = {0} was not found.
         /// </summary>
-        public static string BookWithIdNotFound {
+        internal static string BookWithIdNotFound {
             get {
                 return ResourceManager.GetString("BookWithIdNotFound", resourceCulture);
             }

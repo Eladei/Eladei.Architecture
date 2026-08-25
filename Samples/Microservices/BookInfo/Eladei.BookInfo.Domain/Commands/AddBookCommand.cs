@@ -1,27 +1,18 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands;
-using Eladei.BookInfo.Domain.Exceptions;
-using Eladei.BookInfo.Domain.Properties;
+using Eladei.BookInfo.Application.Exceptions;
+using Eladei.BookInfo.Application.Properties;
 using Eladei.BookInfo.Model;
 using Eladei.BookInfo.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eladei.BookInfo.Domain.Commands;
+namespace Eladei.BookInfo.Application.Commands;
 
-/// <summary>
-/// Command for adding a book
-/// </summary>
 public sealed class AddBookCommand : EfCommandWithResultBase<BookInfoDbContext, Guid>
 {
     private readonly Guid _bookId;
     private readonly string _name;
     private readonly string _author;
 
-    /// <summary>
-    /// Creates an instance of AddBookCommand
-    /// </summary>
-    /// <param name="bookId">Book identifier</param>
-    /// <param name="name">Book title</param>
-    /// <param name="author">Book author</param>
     /// <exception cref="ArgumentException"></exception>
     public AddBookCommand(Guid bookId, string name, string author)
     {

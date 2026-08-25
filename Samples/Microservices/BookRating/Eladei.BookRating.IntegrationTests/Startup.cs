@@ -1,5 +1,4 @@
 ﻿using DotNetEnv;
-using Eladei.Architecture.Tests.EntityFramework.Integration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Eladei.BookRating.IntegrationTests;

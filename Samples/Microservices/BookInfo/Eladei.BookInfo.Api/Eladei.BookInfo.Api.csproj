@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Messaging.Kafka\Eladei.Architecture.Messaging.Kafka.csproj" />
     <ProjectReference Include="..\..\..\..\Eladei.Architecture.Messaging\Eladei.Architecture.Messaging.csproj" />
     <ProjectReference Include="..\..\Contracts\Eladei.BookRating.Contract.Messaging\Eladei.BookRating.Contract.Messaging.csproj" />
-    <ProjectReference Include="..\Eladei.BookInfo.Domain\Eladei.BookInfo.Domain.csproj" />
+    <ProjectReference Include="..\Eladei.BookInfo.Domain\Eladei.BookInfo.Application.csproj" />
     <ProjectReference Include="..\Eladei.BookInfo.Infrastructure\Eladei.BookInfo.Infrastructure.csproj" />
     <ProjectReference Include="..\Eladei.BookInfo.Model\Eladei.BookInfo.Model.csproj" />
   </ItemGroup>

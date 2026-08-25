@@ -135,6 +135,9 @@
   <data name="CommandUpdateDataSourceAttemptLimitReachedError" xml:space="preserve">
     <value>Execution attempt limit has been reached while processing command '{0}'. Total attempts: {1}</value>
   </data>
+  <data name="MaxAttemptsCountMustBeGreaterThanZero" xml:space="preserve">
+    <value>MaxAttemptsCount must be greater than 0</value>
+  </data>
   <data name="QueryExecutingCancelled" xml:space="preserve">
     <value>Execution of query '{0}' has been canceled</value>
   </data>
@@ -149,5 +152,8 @@
   </data>
   <data name="UnreachableCodeError" xml:space="preserve">
     <value>Unreachable code</value>
+  </data>
+  <data name="UnsupportedExceptionType" xml:space="preserve">
+    <value>Unsupported exception type '{0}'</value>
   </data>
 </root>

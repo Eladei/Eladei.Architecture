@@ -5,23 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Eladei.BookRating.Infrastructure.Adapters;
 
-/// <summary>
-/// Command executor adapter
-/// </summary>
 public class EfCommandExecutorAdapter : ICommandExecutor
 {
     private readonly IEfCommandExecutor<BookRatingDbContext> _commandExecutor;
     private readonly ILogger<EfCommandExecutorAdapter> _logger;
 
-    /// <summary>
-    /// Creates an instance of the <see cref="EfCommandExecutorAdapter"/> class
-    /// </summary>
-    /// <remarks>
-    /// This adapter wraps an EF-based command executor and adapts it to the
-    /// generic CQRS <see cref="ICommandExecutor"/> abstraction.
-    /// </remarks>
-    /// <param name="commandExecutor">Entity Framework command executor</param>
-    /// <param name="logger">Logger</param>
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="commandExecutor"/> or <paramref name="logger"/> is null.
     /// </exception>

@@ -1,23 +1,16 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands;
-using Eladei.BookRating.Domain.Commands.DomainEvents;
-using Eladei.BookRating.Domain.Exceptions;
-using Eladei.BookRating.Domain.Properties;
+using Eladei.BookRating.Application.Exceptions;
+using Eladei.BookRating.Application.Properties;
+using Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 using Eladei.BookRating.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eladei.BookRating.Domain.Commands;
+namespace Eladei.BookRating.Application.Commands;
 
-/// <summary>
-/// Command for removing a book from the rating
-/// </summary>
 public sealed class RemoveBookCommand : EfCommandBase<BookRatingDbContext>
 {
     private readonly Guid _bookId;
 
-    /// <summary>
-    /// Creates an instance of the RemoveBookCommand class
-    /// </summary>
-    /// <param name="bookId">Book identifier</param>
     public RemoveBookCommand(Guid bookId)
     {
         _bookId = bookId;
@@ -31,8 +24,8 @@ public sealed class RemoveBookCommand : EfCommandBase<BookRatingDbContext>
 
         context.Books.Remove(book);
 
-        var bookWasRemovedEvent = new BookWasRemovedFromRatingDomainEvent(_bookId);
+        var bookWasRemovedEvent = new BookWasRemovedFromRatingIntegrationEvent(_bookId);
 
-        SaveDomainEvents(bookWasRemovedEvent);
+        AddIntegrationEvents(bookWasRemovedEvent);
     }
 }

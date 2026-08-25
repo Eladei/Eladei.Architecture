@@ -1,4 +1,5 @@
 ﻿using Eladei.Architecture.Cqrs.Ddd.Properties;
+using Eladei.Architecture.Cqrs.Ddd.Queries.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace Eladei.Architecture.Cqrs.Ddd.Queries;
@@ -41,6 +42,12 @@ public sealed class DddQueryExecutorLogger : IDddQueryExecutorLogger
         var msg = string.Format(Resources.QueryExecutingCancelled, queryName);
 
         _logger?.LogInformation(ex, msg);
+    }
+
+    /// <inheritdoc />
+    public void QueryLogicError(string queryName, DddQueryLogicException ex)
+    {
+        CriticalError(queryName, ex);
     }
 
     /// <inheritdoc />

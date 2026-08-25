@@ -120,9 +120,6 @@
   <data name="BookAuthorNotDefined" xml:space="preserve">
     <value>Book author is not specified</value>
   </data>
-  <data name="BookIdNotDefined" xml:space="preserve">
-    <value>Book ID is not specified</value>
-  </data>
   <data name="BookNameNotDefined" xml:space="preserve">
     <value>Book title is not specified</value>
   </data>

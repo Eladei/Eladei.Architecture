@@ -1,11 +1,8 @@
-﻿using Eladei.Architecture.Ddd.Entities;
+﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands.Exceptions;
 
-namespace Eladei.BookRating.Domain.Exceptions;
+namespace Eladei.BookRating.Application.Exceptions;
 
-/// <summary>
-/// A book with the specified information already exists
-/// </summary>
-public sealed class BookWithCurrentInfoAlreadyExistsException : DomainLogicException
+public sealed class BookWithCurrentInfoAlreadyExistsException : EfCommandLogicException
 {
     public BookWithCurrentInfoAlreadyExistsException() : base() { }
 

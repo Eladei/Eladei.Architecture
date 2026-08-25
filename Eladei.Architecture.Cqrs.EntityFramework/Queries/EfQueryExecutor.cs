@@ -1,5 +1,5 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Properties;
-using Eladei.Architecture.Cqrs.Queries;
+using Eladei.Architecture.Cqrs.EntityFramework.Queries.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
@@ -10,21 +10,28 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Queries;
 /// <typeparam name="T">The database context type</typeparam>
 public class EfQueryExecutor<T> : IEfQueryExecutor<T> where T : DbContext
 {
-    protected readonly IDbContextFactory<T> _contextFactory;
-    protected readonly IEfQueryExecutorLogger? _logger;
+    /// <summary>
+    /// The database context factory
+    /// </summary>
+    protected readonly IDbContextFactory<T> ContextFactory;
+
+    /// <summary>
+    /// The logger
+    /// </summary>
+    protected readonly IEfQueryExecutorLogger? Logger;
 
     /// <summary>
     /// Creates an instance of the EF query executor
     /// </summary>
     /// <param name="contextFactory">The database context factory</param>
-    /// <param name="logger">The optional logger</param>
+    /// <param name="logger">The logger</param>
     /// <exception cref="ArgumentNullException"></exception>
     public EfQueryExecutor(IDbContextFactory<T> contextFactory, IEfQueryExecutorLogger? logger = null)
     {
-        _contextFactory = contextFactory
+        ContextFactory = contextFactory
             ?? throw new ArgumentNullException(nameof(contextFactory));
 
-        _logger = logger;
+        Logger = logger;
     }
 
     /// <inheritdoc />
@@ -32,7 +39,7 @@ public class EfQueryExecutor<T> : IEfQueryExecutor<T> where T : DbContext
     {
         var queryName = query.GetType().Name;
 
-        _logger?.ExecutingStarted(queryName);
+        Logger?.ExecutionStarted(queryName);
 
         using var dbContext = await CreateDbContextAsync(queryName, cancellationToken);
 
@@ -40,21 +47,27 @@ public class EfQueryExecutor<T> : IEfQueryExecutor<T> where T : DbContext
         {
             var result = await query.ExecuteAsync(dbContext, cancellationToken);
 
-            _logger?.ExecutingSuccessfulFinished(queryName);
+            Logger?.ExecutionSucceeded(queryName);
 
             return result;
         }
+        catch (EfQueryLogicException ex)
+        {
+            Logger?.QueryLogicError(queryName, ex);
+
+            throw;
+        }
         catch (OperationCanceledException ex)
         {
-            _logger?.ExecutingCancelled(queryName, ex);
+            Logger?.ExecutionCancelled(queryName, ex);
 
             throw;
         }
         catch (Exception ex)
         {
-            var unknownEx = new QueryExecutingErrorException(Resources.QueryExecutingError, ex);
+            var unknownEx = new EfQueryExecutingErrorException(Resources.QueryExecutingError, ex);
 
-            _logger?.CriticalError(queryName, unknownEx);
+            Logger?.CriticalError(queryName, unknownEx);
 
             throw unknownEx;
         }
@@ -69,13 +82,13 @@ public class EfQueryExecutor<T> : IEfQueryExecutor<T> where T : DbContext
     /// <exception cref="InvalidOperationException"></exception>
     protected virtual async Task<T> CreateDbContextAsync(string queryName, CancellationToken cancellationToken)
     {
-        T context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        T context = await ContextFactory.CreateDbContextAsync(cancellationToken);
 
         if (context is null)
         {
             var invalidOperEx = new InvalidOperationException(Resources.CantCreateDbContext);
 
-            _logger?.CriticalError(queryName, invalidOperEx);
+            Logger?.CriticalError(queryName, invalidOperEx);
 
             throw invalidOperEx;
         }

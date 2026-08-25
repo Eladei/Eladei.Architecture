@@ -4,9 +4,8 @@ using Eladei.Architecture.Cqrs.Queries;
 namespace Eladei.Architecture.Cqrs;
 
 /// <summary>
-/// Operation executor for Entity Framework operations
+/// Operation executor
 /// </summary>
-/// <typeparam name="T">The data context type</typeparam>
 public class OperationExecutor : IOperationExecutor
 {
     private readonly ICommandExecutor _commandExecutor;

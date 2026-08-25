@@ -1,5 +1,5 @@
 ﻿using Eladei.Architecture.Cqrs.Commands;
-using Eladei.Architecture.Ddd.DomainEvents;
+using Eladei.Architecture.Messaging.IntegrationEvents;
 
 namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 
@@ -9,12 +9,12 @@ namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 public interface IDddCommand : ICommand
 {
     /// <summary>
-    /// Domain events
+    /// Integration events
     /// </summary>
-    IReadOnlyCollection<IDomainEvent> Events { get; }
+    IReadOnlyCollection<IIntegrationEvent> Events { get; }
 
     /// <summary>
-    /// Clears domain events
+    /// Clears integration events
     /// </summary>
     void ClearEvents();
 
@@ -41,12 +41,12 @@ public interface IDddCommand : ICommand
 public interface IDddCommand<R> : ICommand<R>
 {
     /// <summary>
-    /// Domain events
+    /// Integration events
     /// </summary>
-    IReadOnlyCollection<IDomainEvent> Events { get; }
+    IReadOnlyCollection<IIntegrationEvent> Events { get; }
 
     /// <summary>
-    /// Clears domain events
+    /// Clears integration events
     /// </summary>
     void ClearEvents();
 

@@ -1,7 +1,6 @@
-﻿using Eladei.Architecture.Cqrs.Commands;
+﻿using Eladei.Architecture.Cqrs.Ddd.Commands.Exceptions;
 using Eladei.Architecture.Cqrs.Ddd.Properties;
-using Eladei.Architecture.Ddd.DomainEvents;
-using Eladei.Architecture.Ddd.Entities;
+using Eladei.Architecture.Messaging.IntegrationEvents;
 using System.Diagnostics;
 
 namespace Eladei.Architecture.Cqrs.Ddd.Commands;
@@ -13,39 +12,54 @@ namespace Eladei.Architecture.Cqrs.Ddd.Commands;
 /// Coordinates command execution process:
 /// retry policies, transactional execution, and logging.
 /// To persist domain events in the database (outbox pattern) within the same transaction,
-/// an implementation of <see cref="IDddOutboxDomainEventDao"/> is required
+/// an implementation of <see cref="IDddOutboxIntegrationEventWriter"/> is required
 /// </remarks>
 public class DddCommandExecutor : IDddCommandExecutor
 {
-    protected readonly IUnitOfWorkContextFactory _unitOfWorkContextFactory;
-    protected readonly IOperationExecutionPolicyService _executionRetryPolicy;
-    protected readonly IDddOutboxDomainEventDao _domainEventDao;
-    protected readonly IDddCommandExecutorLogger? _logger;
+    /// <summary>
+    /// The unit of work context factory
+    /// </summary>
+    protected readonly IUnitOfWorkContextFactory UnitOfWorkContextFactory;
+
+    /// <summary>
+    /// The operation execution policy provider
+    /// </summary>
+    protected readonly IOperationExecutionPolicyProvider ExecutionPolicyProvider;
+
+    /// <summary>
+    /// The domain event persistence service
+    /// </summary>
+    protected readonly IDddOutboxIntegrationEventWriter OutboxIntegrationEventWriter;
+
+    /// <summary>
+    /// The logger
+    /// </summary>
+    protected readonly IDddCommandExecutorLogger? Logger;
 
     /// <summary>
     /// Creates a new instance of <see cref="DddCommandExecutor"/>
     /// </summary>
     /// <param name="unitOfWorkContextFactory">The unit of work context factory</param>
-    /// <param name="executionPolicyService">The operation execution policy service</param>
-    /// <param name="domainEventDao">The domain event persistence service</param>
+    /// <param name="executionPolicyProvider">The operation execution policy provider</param>
+    /// <param name="outboxIntegrationEventWriter">The integration event persistence service</param>
     /// <param name="logger">The logger</param>
     /// <exception cref="ArgumentNullException"></exception>
     public DddCommandExecutor(
         IUnitOfWorkContextFactory unitOfWorkContextFactory,
-        IOperationExecutionPolicyService executionPolicyService,
-        IDddOutboxDomainEventDao domainEventDao,
+        IOperationExecutionPolicyProvider executionPolicyProvider,
+        IDddOutboxIntegrationEventWriter outboxIntegrationEventWriter,
         IDddCommandExecutorLogger? logger = null)
     {
-        _unitOfWorkContextFactory = unitOfWorkContextFactory
+        UnitOfWorkContextFactory = unitOfWorkContextFactory
             ?? throw new ArgumentNullException(nameof(unitOfWorkContextFactory));
 
-        _domainEventDao = domainEventDao
-            ?? throw new ArgumentNullException(nameof(domainEventDao));
+        OutboxIntegrationEventWriter = outboxIntegrationEventWriter
+            ?? throw new ArgumentNullException(nameof(outboxIntegrationEventWriter));
 
-        _executionRetryPolicy = executionPolicyService
-            ?? throw new ArgumentNullException(nameof(executionPolicyService));
+        ExecutionPolicyProvider = executionPolicyProvider
+            ?? throw new ArgumentNullException(nameof(executionPolicyProvider));
 
-        _logger = logger;
+        Logger = logger;
     }
 
     /// <inheritdoc />
@@ -53,15 +67,15 @@ public class DddCommandExecutor : IDddCommandExecutor
     {
         var commandName = command.GetType().Name;
 
-        _logger?.ExecutingStarted(commandName);
+        Logger?.ExecutingStarted(commandName);
 
-        var commandPolicy = _executionRetryPolicy.GetExecutionPolicy(command);
+        var commandPolicy = ExecutionPolicyProvider.GetExecutionPolicy(command);
 
         for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++)
         {
             command.ClearEvents();
 
-            var unitOfWorkContext = _unitOfWorkContextFactory.CreateContext();
+            var unitOfWorkContext = UnitOfWorkContextFactory.CreateContext();
 
             try
             {
@@ -72,7 +86,7 @@ public class DddCommandExecutor : IDddCommandExecutor
             }
             catch (Exception ex)
             {
-                _logger?.CriticalError(commandName, ex);
+                Logger?.CriticalError(commandName, ex);
 
                 throw;
             }
@@ -85,19 +99,19 @@ public class DddCommandExecutor : IDddCommandExecutor
             {
                 await command.ExecuteAsync(unitOfWorkContext, cancellationToken);
 
-                await SaveDomainEvents(command.Events, unitOfWorkContext, cancellationToken);
+                await AddIntegrationEvents(command.Events, unitOfWorkContext, cancellationToken);
 
                 await unitOfWorkContext.CommitTransactionAsync(cancellationToken);
 
-                _logger?.ExecutingSuccessfulFinished(commandName);
+                Logger?.ExecutingSuccessfulFinished(commandName);
 
                 return;
             }
-            catch (DomainLogicException ex)
+            catch (DddCommandLogicException ex)
             {
                 await unitOfWorkContext.RollbackTransactionAsync(cancellationToken);
 
-                _logger?.DomainLogicError(commandName, ex);
+                Logger?.CommandLogicError(commandName, ex);
 
                 throw;
             }
@@ -107,7 +121,7 @@ public class DddCommandExecutor : IDddCommandExecutor
 
                 foundEx = ex;
 
-                _logger?.ExecutingCancelled(commandName, ex);
+                Logger?.ExecutingCancelled(commandName, ex);
 
                 throw;
             }
@@ -117,7 +131,7 @@ public class DddCommandExecutor : IDddCommandExecutor
 
                 foundEx = ex;
 
-                _logger?.CriticalError(commandName, foundEx);
+                Logger?.CriticalError(commandName, foundEx);
             }
 
             if (!commandPolicy.ShouldRetry(foundEx, attempt))
@@ -129,7 +143,7 @@ public class DddCommandExecutor : IDddCommandExecutor
 
                 var maxRetryEx = new CommandExecutionAttemptLimitReachedException(errorMsg, foundEx);
 
-                _logger?.AttemptLimitReachedError(commandName, maxRetryEx, commandPolicy.MaxAttemptsCount);
+                Logger?.AttemptLimitReachedError(commandName, maxRetryEx, commandPolicy.MaxAttemptsCount);
 
                 throw maxRetryEx;
             }
@@ -143,15 +157,15 @@ public class DddCommandExecutor : IDddCommandExecutor
     {
         var commandName = command.GetType().Name;
 
-        _logger?.ExecutingStarted(commandName);
+        Logger?.ExecutingStarted(commandName);
 
-        var commandPolicy = _executionRetryPolicy.GetExecutionPolicy(command);
+        var commandPolicy = ExecutionPolicyProvider.GetExecutionPolicy(command);
 
         for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++)
         {
             command.ClearEvents();
 
-            var unitOfWorkContext = _unitOfWorkContextFactory.CreateContext();
+            var unitOfWorkContext = UnitOfWorkContextFactory.CreateContext();
 
             try
             {
@@ -159,7 +173,7 @@ public class DddCommandExecutor : IDddCommandExecutor
             }
             catch (Exception ex)
             {
-                _logger?.CriticalError(commandName, ex);
+                Logger?.CriticalError(commandName, ex);
 
                 throw;
             }
@@ -172,21 +186,21 @@ public class DddCommandExecutor : IDddCommandExecutor
             {
                 var result = await command.ExecuteAsync(unitOfWorkContext, cancellationToken);
 
-                await SaveDomainEvents(command.Events, unitOfWorkContext, cancellationToken);
+                await AddIntegrationEvents(command.Events, unitOfWorkContext, cancellationToken);
 
                 await unitOfWorkContext.SaveChangesAsync(cancellationToken);
 
                 await unitOfWorkContext.CommitTransactionAsync(cancellationToken);
 
-                _logger?.ExecutingSuccessfulFinished(commandName);
+                Logger?.ExecutingSuccessfulFinished(commandName);
 
                 return result;
             }
-            catch (DomainLogicException ex)
+            catch (DddCommandLogicException ex)
             {
                 await unitOfWorkContext.RollbackTransactionAsync(cancellationToken);
 
-                _logger?.DomainLogicError(commandName, ex);
+                Logger?.CommandLogicError(commandName, ex);
 
                 throw;
             }
@@ -194,7 +208,7 @@ public class DddCommandExecutor : IDddCommandExecutor
             {
                 await unitOfWorkContext.RollbackTransactionAsync(cancellationToken);
 
-                _logger?.ExecutingCancelled(commandName, ex);
+                Logger?.ExecutingCancelled(commandName, ex);
 
                 throw;
             }
@@ -204,7 +218,7 @@ public class DddCommandExecutor : IDddCommandExecutor
 
                 foundEx = ex;
 
-                _logger?.CriticalError(commandName, foundEx);
+                Logger?.CriticalError(commandName, foundEx);
             }
 
             if (!commandPolicy.ShouldRetry(foundEx, attempt))
@@ -216,7 +230,7 @@ public class DddCommandExecutor : IDddCommandExecutor
 
                 var maxRetryEx = new CommandExecutionAttemptLimitReachedException(errorMsg, foundEx);
 
-                _logger?.AttemptLimitReachedError(commandName, maxRetryEx, commandPolicy.MaxAttemptsCount);
+                Logger?.AttemptLimitReachedError(commandName, maxRetryEx, commandPolicy.MaxAttemptsCount);
 
                 throw maxRetryEx;
             }
@@ -251,15 +265,15 @@ public class DddCommandExecutor : IDddCommandExecutor
     }
 
     /// <summary>
-    /// Saves domain events
+    /// Saves integration events
     /// </summary>
-    /// <param name="domainEvents">The domain events</param>
+    /// <param name="integrationEvents">The integration events</param>
     /// <param name="repositoryFactory">The repository factory</param>
     /// <param name="cancellationToken">The cancellation token</param>
-    protected virtual Task SaveDomainEvents(IReadOnlyCollection<IDomainEvent> domainEvents, IRepositoryFactory repositoryFactory, CancellationToken cancellationToken)
+    protected virtual Task AddIntegrationEvents(IReadOnlyCollection<IIntegrationEvent> integrationEvents, IRepositoryFactory repositoryFactory, CancellationToken cancellationToken)
     {
-        if (domainEvents.Any())
-            return _domainEventDao.SaveAsync(domainEvents, repositoryFactory, cancellationToken);
+        if (integrationEvents.Any())
+            return OutboxIntegrationEventWriter.SaveAsync(integrationEvents, repositoryFactory, cancellationToken);
 
         return Task.CompletedTask;
     }

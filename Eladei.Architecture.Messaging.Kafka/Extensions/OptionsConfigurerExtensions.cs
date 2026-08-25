@@ -4,6 +4,9 @@ using Rebus.Pipeline.Send;
 
 namespace Eladei.Architecture.Messaging.Kafka.Extensions;
 
+/// <summary>
+/// Extension methods for configuring Rebus options
+/// </summary>
 public static class OptionsConfigurerExtensions
 {
     /// <summary>

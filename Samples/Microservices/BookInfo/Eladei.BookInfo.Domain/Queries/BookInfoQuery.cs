@@ -1,34 +1,21 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Queries;
-using Eladei.BookInfo.Domain.Exceptions;
-using Eladei.BookInfo.Domain.Properties;
-using Eladei.BookInfo.Domain.Queries.ReadModel;
+using Eladei.BookInfo.Application.Exceptions;
+using Eladei.BookInfo.Application.Properties;
+using Eladei.BookInfo.Application.Queries.ReadModel;
 using Eladei.BookInfo.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eladei.BookInfo.Domain.Queries;
+namespace Eladei.BookInfo.Application.Queries;
 
-/// <summary>
-/// Query for retrieving book information
-/// </summary>
 public sealed class BookInfoQuery : EfQueryBase<BookInfoDbContext, BookInfoReadModel>
 {
     private readonly Guid _bookId;
 
-    /// <summary>
-    /// Creates an instance of <see cref="BookInfoQuery"/>
-    /// </summary>
-    /// <param name="bookId">Book identifier</param>
     public BookInfoQuery(Guid bookId)
     {
         _bookId = bookId;
     }
 
-    /// <summary>
-    /// Retrieves book information
-    /// </summary>
-    /// <param name="context">Data context</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Book information</returns>
     public override async Task<BookInfoReadModel> ExecuteAsync(
         BookInfoDbContext context,
         CancellationToken cancellationToken)

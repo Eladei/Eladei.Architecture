@@ -7,14 +7,13 @@ namespace Eladei.BookRating.Api.Filters;
 /// <summary>
 /// Interceptor that sets correlationId if it was not provided by the client
 /// </summary>
+/// <remarks>
+/// CorrelationId is set only if it was not sent by the client via the "x-correlation-id" header.
+/// </remarks>
 public sealed class CorrelationIdInterceptor : Interceptor
 {
     private readonly ICorrelationContext _correlationContext;
 
-    /// <summary>
-    /// Interceptor that sets correlationId if it was not provided by the client
-    /// </summary>
-    /// <param name="correlationContext">Correlation context for distributed tracing</param>
     /// <exception cref="ArgumentNullException"></exception>
     public CorrelationIdInterceptor(ICorrelationContext correlationContext)
     {

@@ -12,20 +12,27 @@ public abstract class QuartzJobBase : IJob
 {
     private readonly string _jobName;
 
-    protected readonly ICorrelationContext _correlationContext;
-    protected readonly ILogger? _logger;
+    /// <summary>
+    /// The correlation context used for tracing job execution
+    /// </summary>
+    protected readonly ICorrelationContext CorrelationContext;
+
+    /// <summary>
+    /// The logger
+    /// </summary>
+    protected readonly ILogger? Logger;
 
     /// <summary>
     /// Creates an instance of the Quartz job
     /// </summary>
     /// <param name="correlationContext">The correlation context used for tracing job execution</param>
-    /// <param name="logger">Optional logger instance</param>
+    /// <param name="logger">The logger</param>
     public QuartzJobBase(ICorrelationContext correlationContext, ILogger? logger = null)
     {
-        _correlationContext = correlationContext
+        CorrelationContext = correlationContext
             ?? throw new ArgumentNullException(nameof(correlationContext));
 
-        _logger = logger;
+        Logger = logger;
 
         _jobName = GetType().Name;
     }
@@ -33,7 +40,7 @@ public abstract class QuartzJobBase : IJob
     /// <inheritdoc />
     public async Task Execute(IJobExecutionContext context)
     {
-        using (_correlationContext.SetCorrelationId(Guid.NewGuid()))
+        using (CorrelationContext.SetCorrelationId(Guid.NewGuid()))
         {
             try
             {
@@ -64,7 +71,7 @@ public abstract class QuartzJobBase : IJob
     protected virtual void LogJobStarted()
     {
         var msg = string.Format(Resources.JobStarted, _jobName);
-        _logger?.LogInformation(msg);
+        Logger?.LogInformation(msg);
     }
 
     /// <summary>
@@ -73,7 +80,7 @@ public abstract class QuartzJobBase : IJob
     protected virtual void LogJobFinished()
     {
         var msg = string.Format(Resources.JobFinished, _jobName);
-        _logger?.LogInformation(msg);
+        Logger?.LogInformation(msg);
     }
 
     /// <summary>
@@ -83,7 +90,7 @@ public abstract class QuartzJobBase : IJob
     protected virtual void LogJobCancelled(OperationCanceledException ex)
     {
         var msg = string.Format(Resources.JobCancelled, _jobName);
-        _logger?.LogInformation(ex, msg);
+        Logger?.LogInformation(ex, msg);
     }
 
     /// <summary>
@@ -93,7 +100,7 @@ public abstract class QuartzJobBase : IJob
     protected virtual void LogJobError(Exception ex)
     {
         var errorMsg = string.Format(Resources.JobError, _jobName);
-        _logger?.LogCritical(ex, errorMsg);
+        Logger?.LogCritical(ex, errorMsg);
     }
 
     #endregion

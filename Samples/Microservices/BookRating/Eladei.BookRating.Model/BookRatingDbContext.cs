@@ -1,25 +1,17 @@
 ﻿using Eladei.BookRating.Model.Entities;
-using Eladei.BookRating.Model.Entities.IntegrationEvents;
+using Eladei.BookRating.Model.Entities.Outbox;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Eladei.BookRating.Model;
 
-/// <summary>
-/// Database context for working with book ratings
-/// </summary>
 public class BookRatingDbContext : DbContext
 {
-    public BookRatingDbContext() : base() { }
-
     public BookRatingDbContext(DbContextOptions<BookRatingDbContext> contextOptions) : base(contextOptions) { }
 
-    /// <summary>
-    /// Information about books
-    /// </summary>
     public virtual DbSet<Book> Books { get; set; }
 
-    public virtual DbSet<IntegrationEventToSend> IntegrationEvents { get; set; }
+    public virtual DbSet<OutboxMessage> OutboxMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,7 +19,7 @@ public class BookRatingDbContext : DbContext
 
         modelBuilder.Entity<Book>()
             .Property(e => e.Version).IsRowVersion();
-        modelBuilder.Entity<IntegrationEventToSend>()
+        modelBuilder.Entity<OutboxMessage>()
             .Property(e => e.Version).IsRowVersion();
     }
 

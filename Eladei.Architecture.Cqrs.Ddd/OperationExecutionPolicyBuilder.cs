@@ -1,0 +1,122 @@
+﻿using Eladei.Architecture.Cqrs.Ddd.Commands.Exceptions;
+using Eladei.Architecture.Cqrs.Ddd.Properties;
+
+namespace Eladei.Architecture.Cqrs.Ddd;
+
+/// <summary>
+/// Builder for creating operation execution policies
+/// </summary>
+/// <remarks>
+/// By default, retry attempts are not allowed
+/// for domain logic failures
+/// </remarks>
+public class OperationExecutionPolicyBuilder
+{
+    private IReadOnlyCollection<Type>? _exceptionTypesForRetry;
+    private uint _maxAttemptsCount;
+    private uint _maxDelayInMilliseconds;
+
+    /// <summary>
+    /// Creates a new instance of <see cref="OperationExecutionPolicyBuilder"/>
+    /// </summary>
+    /// <remarks>
+    /// By default, retry attempts are not allowed
+    /// for domain logic failures
+    /// </remarks>
+    public OperationExecutionPolicyBuilder()
+    {
+        _maxAttemptsCount = 1;
+        _maxDelayInMilliseconds = 5000;
+    }
+
+    /// <summary>
+    /// Configures retry attempts for the specified exception types
+    /// </summary>
+    /// <param name="exceptionTypesForRetry">Exception types that allow retry attempts</param>
+    /// <returns>The current builder instance</returns>
+    /// <exception cref="ArgumentException"></exception>
+    /// <remarks>
+    /// By default, retry attempts are not allowed
+    /// for domain logic failures
+    /// </remarks>
+    public virtual OperationExecutionPolicyBuilder RetryOn(params Type[] exceptionTypesForRetry)
+    {
+        if (exceptionTypesForRetry.Any(e => typeof(DddCommandLogicException).IsAssignableFrom(e)))
+        {
+            var error = string.Format(Resources.UnsupportedExceptionType, nameof(DddCommandLogicException));
+
+            throw new ArgumentException(error, nameof(DddCommandLogicException));
+        }
+
+        _exceptionTypesForRetry = exceptionTypesForRetry.AsReadOnly();
+
+        return this;
+    }
+
+    /// <summary>
+    /// Configures the maximum number of execution attempts
+    /// </summary>
+    /// <param name="maxAttemptsCount">
+    /// Maximum number of execution attempts
+    /// </param>
+    /// <returns>The current builder instance</returns>
+    public virtual OperationExecutionPolicyBuilder MaxAttemptsCount(uint maxAttemptsCount)
+    {
+        if (maxAttemptsCount == 0)
+            throw new InvalidOperationException(Resources.MaxAttemptsCountMustBeGreaterThanZero);
+
+        _maxAttemptsCount = maxAttemptsCount;
+
+        return this;
+    }
+
+    /// <summary>
+    /// Configures the maximum delay before the next retry attempt
+    /// </summary>
+    /// <param name="maxDelayInMilliseconds">
+    /// Maximum delay, in milliseconds, before the next retry attempt
+    /// </param>
+    /// <returns>The current builder instance</returns>
+    public virtual OperationExecutionPolicyBuilder MaxDelayInMilliseconds(uint maxDelayInMilliseconds)
+    {
+        _maxDelayInMilliseconds = maxDelayInMilliseconds;
+
+        return this;
+    }
+
+    /// <summary>
+    /// Builds the operation execution policy based on the configured parameters
+    /// </summary>
+    /// <returns></returns>
+    public IOperationExecutionPolicy Build()
+        => new OperationExecutionPolicy()
+        {
+            ExceptionTypesForRetry = _exceptionTypesForRetry,
+            MaxAttemptsCount = _maxAttemptsCount,
+            MaxDelayInMilliseconds = _maxDelayInMilliseconds,
+        };
+
+    /// <summary>
+    /// Operation execution policy
+    /// </summary>
+    internal sealed class OperationExecutionPolicy : IOperationExecutionPolicy
+    {
+        internal IReadOnlyCollection<Type>? ExceptionTypesForRetry { get; init; }
+
+        /// <inheritdoc />
+        public uint MaxAttemptsCount { get; init; }
+
+        /// <inheritdoc />
+        public uint MaxDelayInMilliseconds { get; init; }
+
+        /// <inheritdoc />
+        public bool ShouldRetry<T>(T ex, uint currentAttempt) where T : Exception
+        {
+            if (currentAttempt >= MaxAttemptsCount)
+                return false;
+
+            return ExceptionTypesForRetry is null
+                || ExceptionTypesForRetry.Any(x => x.IsAssignableFrom(ex.GetType()));
+        }
+    }
+}

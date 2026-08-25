@@ -1,27 +1,18 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands;
-using Eladei.BookRating.Domain.Commands.DomainEvents;
-using Eladei.BookRating.Domain.Exceptions;
-using Eladei.BookRating.Domain.Properties;
+using Eladei.BookRating.Application.Exceptions;
+using Eladei.BookRating.Application.Properties;
+using Eladei.BookRating.Contract.Messaging.IntegrationEvents;
 using Eladei.BookRating.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eladei.BookRating.Domain.Commands;
+namespace Eladei.BookRating.Application.Commands;
 
-/// <summary>
-/// Command for updating book information in the rating
-/// </summary>
 public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext>
 {
     private readonly Guid _bookId;
     private readonly string _newName;
     private readonly string _newAuthor;
 
-    /// <summary>
-    /// Creates an instance of the UpdateBookInfoCommand class
-    /// </summary>
-    /// <param name="bookId">Book identifier</param>
-    /// <param name="newName">New title</param>
-    /// <param name="newAuthor">New author</param>
     /// <exception cref="ArgumentException"></exception>
     public UpdateBookInfoCommand(Guid bookId, string newName, string newAuthor)
     {
@@ -64,10 +55,10 @@ public sealed class UpdateBookInfoCommand : EfCommandBase<BookRatingDbContext>
         book.Name = _newName;
         book.Author = _newAuthor;
 
-        var bookInfoWasUpdatedEvent = new BookInfoWasUpdatedInRatingDomainEvent(
+        var bookInfoWasUpdatedEvent = new BookInfoWasUpdatedInRatingIntegrationEvent(
             book.Id, book.Name, book.Author);
 
-        SaveDomainEvents(bookInfoWasUpdatedEvent);
+        AddIntegrationEvents(bookInfoWasUpdatedEvent);
 
         context.Books.Update(book);
     }

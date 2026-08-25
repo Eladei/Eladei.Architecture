@@ -1,4 +1,4 @@
-﻿using Eladei.Architecture.Ddd.Entities;
+﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands.Exceptions;
 
 namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 
@@ -10,26 +10,26 @@ public interface IEfCommandExecutorLogger
     /// <summary>
     /// Logs the start of command execution
     /// </summary>
-    void ExecutingStarted(string commandName);
+    void ExecutionStarted(string commandName);
 
     /// <summary>
     /// Logs successful completion of command execution
     /// </summary>
-    void ExecutingSuccessfulFinished(string commandName);
+    void ExecutionSucceeded(string commandName);
 
     /// <summary>
     /// Logs command cancellation
     /// </summary>
     /// <param name="commandName">The command name</param>
     /// <param name="ex">The cancellation exception</param>
-    void ExecutingCancelled(string commandName, OperationCanceledException ex);
+    void ExecutionCancelled(string commandName, OperationCanceledException ex);
 
     /// <summary>
-    /// Logs a domain logic error
+    /// Logs a command logic error
     /// </summary>
     /// <param name="commandName">The command name</param>
-    /// <param name="ex">The domain logic exception</param>
-    void DomainLogicError(string commandName, DomainLogicException ex);
+    /// <param name="ex">The command logic exception</param>
+    void CommandLogicError(string commandName, EfCommandLogicException ex);
 
     /// <summary>
     /// Logs a critical command execution error

@@ -1,22 +1,15 @@
 ﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands;
-using Eladei.BookRating.Domain.Exceptions;
-using Eladei.BookRating.Domain.Properties;
+using Eladei.BookRating.Application.Exceptions;
+using Eladei.BookRating.Application.Properties;
 using Eladei.BookRating.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eladei.BookRating.Domain.Commands;
+namespace Eladei.BookRating.Application.Commands;
 
-/// <summary>
-/// Command for voting for a book in the rating
-/// </summary>
 public sealed class VoteForBookCommand : EfCommandBase<BookRatingDbContext>
 {
     private readonly Guid _bookId;
 
-    /// <summary>
-    /// Creates an instance of the VoteForBookCommand class
-    /// </summary>
-    /// <param name="bookId">Book identifier</param>
     public VoteForBookCommand(Guid bookId)
     {
         _bookId = bookId;

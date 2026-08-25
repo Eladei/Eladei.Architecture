@@ -8,12 +8,10 @@ using Eladei.Architecture.Cqrs.Queries;
 using Eladei.Architecture.Jobs.Quartz.Extensions;
 using Eladei.Architecture.Logging;
 using Eladei.Architecture.Messaging.IntegrationEvents;
-using Eladei.Architecture.Messaging.Kafka.Extensions;
-using Eladei.Architecture.Messaging.Kafka.Interceptors;
+using Eladei.Architecture.Messaging.Kafka;
 using Eladei.BookRating.Api.Configuration;
 using Eladei.BookRating.Api.Filters;
 using Eladei.BookRating.Api.Helpers;
-using Eladei.BookRating.Api.IntegrationEvents;
 using Eladei.BookRating.Api.Jobs;
 using Eladei.BookRating.Api.Logging;
 using Eladei.BookRating.Api.Policies;
@@ -31,14 +29,8 @@ using Serilog.Events;
 
 namespace Eladei.BookRating.Api;
 
-/// <summary>
-/// Composition root of the service
-/// </summary>
 public static class CompositionRoot
 {
-    /// <summary>
-    /// Defines the dependencies of the service
-    /// </summary>
     public static void DefineDependencies(WebApplicationBuilder appBuilder)
     {
         Env.Load();
@@ -57,10 +49,10 @@ public static class CompositionRoot
 
         appBuilder.Services.AddGrpcReflection();
 
-        appBuilder.Services.AddTransient<IIntegrationEventFactory, IntegrationEventFactory>();
-        appBuilder.Services.AddTransient<IEfOutboxDomainEventDao<BookRatingDbContext>, OutboxDomainEventDao>();
+        appBuilder.Services.AddTransient<IOutboxMessageFactory, OutboxMessageFactory>();
+        appBuilder.Services.AddTransient<IEfOutboxIntegrationEventWriter<BookRatingDbContext>, OutboxIntegrationEventWriter>();
 
-        appBuilder.Services.AddTransient<IOperationExecutionPolicyService, OperationExecutionPolicyService>();
+        appBuilder.Services.AddTransient<IOperationExecutionPolicyProvider, OperationExecutionPolicyProvider>();
 
         appBuilder.Services.AddTransient<IEfCommandExecutor<BookRatingDbContext>, EfCommandExecutor<BookRatingDbContext>>();
         appBuilder.Services.AddTransient<IEfCommandExecutorLogger, EfCommandExecutorLogger>();
@@ -72,10 +64,6 @@ public static class CompositionRoot
         appBuilder.Services.AddTransient<IOperationExecutor, OperationExecutor>();
     }
 
-    /// <summary>
-    /// Sets up the objects for working with the database
-    /// </summary>
-    /// <param name="services">Service collection</param>
     private static void SetDbServices(IServiceCollection services)
     {
         string connectionStr = EnvVariablesHelper.GetVariable<string>(EnvVariablesNames.DbConnectionString);
@@ -86,10 +74,6 @@ public static class CompositionRoot
         services.AddDbContextFactory<BookRatingDbContext>();
     }
 
-    /// <summary>
-    /// Sets up the loggers
-    /// </summary>
-    /// <param name="appBuilder">Service builder</param>
     private static void SetLoggers(WebApplicationBuilder appBuilder)
     {
         const string consoleOutputTemplate = "[{Timestamp:u} {Level}] [{CorrelationId}] {Message}{NewLine}{Exception}";
@@ -113,10 +97,6 @@ public static class CompositionRoot
         appBuilder.Services.AddTransient<ICorrelationContext, CorrelationContext>();
     }
 
-    /// <summary>
-    /// Sets up the interceptors
-    /// </summary>
-    /// <param name="services">Service collection</param>
     private static void SetInterceptors(IServiceCollection services)
     {
         services.AddGrpc(options =>
@@ -127,10 +107,6 @@ public static class CompositionRoot
         });
     }
 
-    /// <summary>
-    /// Sets up the jobs
-    /// </summary>
-    /// <param name="services">Service collection</param>
     private static void SetJobs(IServiceCollection services)
     {
         var integrationEventsSenderJobConfig = new OutboxIntegrationEventsSenderJobConfig
@@ -157,10 +133,6 @@ public static class CompositionRoot
         });
     }
 
-    /// <summary>
-    /// Configures the event bus
-    /// </summary>
-    /// <param name="services">Services of the current polling service</param>
     private static void SetUpEventBus(IServiceCollection services)
     {
         var host = EnvVariablesHelper.GetVariable<string>(EnvVariablesNames.KafkaHost);
@@ -218,7 +190,6 @@ public static class CompositionRoot
                 .Options(o =>
                 {
                     o.SetMaxParallelism(1);
-                    o.InsertStepAfterAutoHeadersOutgoingStep(new AddKafkaKeyHeaderByEventIdStepInterceptor());
                     o.RetryStrategy(
                         errorQueueName: errorTopic,
                         maxDeliveryAttempts: integrationEventsHandlingRetriesCount);

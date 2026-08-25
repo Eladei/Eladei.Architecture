@@ -61,6 +61,51 @@ namespace Eladei.Architecture.Messaging.Kafka.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Processing integration event &apos;{0}&apos; with Id &apos;{1}&apos; was cancelled.
+        /// </summary>
+        internal static string IntegrationEventHandlingCancelled {
+            get {
+                return ResourceManager.GetString("IntegrationEventHandlingCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while processing integration event &apos;{0}&apos; with Id &apos;{1}&apos;.
+        /// </summary>
+        internal static string IntegrationEventHandlingError {
+            get {
+                return ResourceManager.GetString("IntegrationEventHandlingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while processing integration event &apos;{0}&apos; with Id &apos;{1}&apos; and will be ignored.
+        /// </summary>
+        internal static string IntegrationEventHandlingErrorWillBeIgrored {
+            get {
+                return ResourceManager.GetString("IntegrationEventHandlingErrorWillBeIgrored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing integration event &apos;{0}&apos; with Id &apos;{1}&apos; started.
+        /// </summary>
+        internal static string IntegrationEventHandlingStarted {
+            get {
+                return ResourceManager.GetString("IntegrationEventHandlingStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing integration event &apos;{0}&apos; with Id &apos;{1}&apos; completed.
+        /// </summary>
+        internal static string IntegrationEventHandlingSuccessfullyFinished {
+            get {
+                return ResourceManager.GetString("IntegrationEventHandlingSuccessfullyFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error while publishing integration event &apos;{0}&apos; with Id &apos;{1}&apos; to topic &apos;{2}&apos;.
         /// </summary>
         internal static string IntegrationEventPublishingError {

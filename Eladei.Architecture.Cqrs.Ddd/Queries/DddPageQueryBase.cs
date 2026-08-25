@@ -5,25 +5,32 @@ namespace Eladei.Architecture.Cqrs.Ddd.Queries;
 /// <summary>
 /// Paged query
 /// </summary>
-public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
+public abstract class DddPageQueryBase<R> : DddQueryBase<PageResult<R>>
 {
-    private readonly uint _page;
-    protected readonly uint? _elementsPerPage;
+    /// <summary>
+    /// The page number to query
+    /// </summary>
+    protected readonly uint Page;
+
+    /// <summary>
+    /// The number of elements per page
+    /// </summary>
+    protected readonly uint? ElementsPerPage;
 
     /// <summary>
     /// Number of elements to skip for the query
     /// </summary>
-    protected uint ElementsToSkip => _elementsPerPage.HasValue
-        ? _elementsPerPage.Value * (_page - 1)
+    protected uint ElementsToSkip => ElementsPerPage.HasValue
+        ? ElementsPerPage.Value * (Page - 1)
         : 0;
 
     /// <summary>
-    /// Creates a new instance of <see cref="EfPageQueryBase{R}"/>
+    /// Creates a new instance of <see cref="DddPageQueryBase{R}"/>
     /// </summary>
     /// <param name="elementsPerPage">The number of elements per page</param>
     /// <param name="page">The page number to query</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    protected EfPageQueryBase(uint? elementsPerPage = null, uint? page = null)
+    protected DddPageQueryBase(uint? elementsPerPage = null, uint? page = null)
     {
         if (elementsPerPage.HasValue)
             ArgumentOutOfRangeException.ThrowIfZero(elementsPerPage.Value);
@@ -31,8 +38,8 @@ public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
         if (page.HasValue)
             ArgumentOutOfRangeException.ThrowIfZero(page.Value);
 
-        _elementsPerPage = elementsPerPage;
-        _page = page ?? 1;
+        ElementsPerPage = elementsPerPage;
+        Page = page ?? 1;
     }
 
     /// <inheritdoc />
@@ -44,7 +51,7 @@ public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
 
         return new PageResult<R>
         {
-            CurrentPage = _page,
+            CurrentPage = Page,
             TotalPages = pagesAdditionalInfo.TotalPages,
             TotalElements = pagesAdditionalInfo.TotalElements,
             Result = result
@@ -75,8 +82,8 @@ public abstract class EfPageQueryBase<R> : DddQueryBase<PageResult<R>>
     {
         var allElementsCount = await GetAllElementsCount(repositoryFactory, cancellationToken);
 
-        var totalPages = _elementsPerPage.HasValue
-            ? (uint)Math.Ceiling((double)allElementsCount / _elementsPerPage.Value)
+        var totalPages = ElementsPerPage.HasValue
+            ? (uint)Math.Ceiling((double)allElementsCount / ElementsPerPage.Value)
             : allElementsCount;
 
         return new PageAdditionalInfo

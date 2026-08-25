@@ -1,11 +1,8 @@
-﻿using Eladei.Architecture.Ddd.Entities;
+﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands.Exceptions;
 
-namespace Eladei.BookInfo.Domain.Exceptions;
+namespace Eladei.BookInfo.Application.Exceptions;
 
-/// <summary>
-/// Book with the specified identifier was not found
-/// </summary>
-public sealed class BookWithIdNotFoundException : DomainLogicException
+public sealed class BookWithIdNotFoundException : EfCommandLogicException
 {
     public BookWithIdNotFoundException() : base() { }
 

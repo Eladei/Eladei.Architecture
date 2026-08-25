@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Eladei.Architecture.Cqrs\Eladei.Architecture.Cqrs.csproj" />
-    <ProjectReference Include="..\Eladei.Architecture.Ddd\Eladei.Architecture.Ddd.csproj" />
+    <ProjectReference Include="..\Eladei.Architecture.Messaging\Eladei.Architecture.Messaging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,6 @@
-﻿using Eladei.Architecture.Cqrs.Commands;
+﻿using Eladei.Architecture.Cqrs.EntityFramework.Commands.Exceptions;
 using Eladei.Architecture.Cqrs.EntityFramework.Properties;
-using Eladei.Architecture.Ddd.DomainEvents;
-using Eladei.Architecture.Ddd.Entities;
+using Eladei.Architecture.Messaging.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -13,40 +12,55 @@ namespace Eladei.Architecture.Cqrs.EntityFramework.Commands;
 /// <remarks>
 /// Coordinates command execution process:
 /// retry policies, transactional execution, and logging.
-/// To persist domain events in the database (outbox pattern) within the same transaction,
-/// an implementation of <see cref="IEfOutboxDomainEventDao{T}"/> is required
+/// To persist integration events in the database (outbox pattern) within the same transaction,
+/// an implementation of <see cref="IEfOutboxIntegrationEventWriter{T}"/> is required
 /// </remarks>
 /// <typeparam name="T">The database context type</typeparam>
 public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
 {
-    protected readonly IDbContextFactory<T> _contextFactory;
-    protected readonly IOperationExecutionPolicyService _executionRetryPolicy;
-    protected readonly IEfOutboxDomainEventDao<T> _domainEventDao;
-    protected readonly IEfCommandExecutorLogger? _logger;
+    /// <summary>
+    /// The database context factory
+    /// </summary>
+    protected readonly IDbContextFactory<T> ContextFactory;
+
+    /// <summary>
+    /// The operation execution policy provider
+    /// </summary>
+    protected readonly IOperationExecutionPolicyProvider OperationExecutionPolicyProvider;
+
+    /// <summary>
+    /// The integration event outbox storage
+    /// </summary>
+    protected readonly IEfOutboxIntegrationEventWriter<T> IntegrationEventWriter;
+
+    /// <summary>
+    /// The logger
+    /// </summary>
+    protected readonly IEfCommandExecutorLogger? Logger;
 
     /// <summary>
     /// Creates an instance of the EF command executor
     /// </summary>
     /// <param name="contextFactory">The database context factory</param>
-    /// <param name="executionPolicyService">The operation execution policy service</param>
-    /// <param name="domainEventDao">The domain event outbox storage</param>
-    /// <param name="logger">The optional logger</param>
+    /// <param name="operationExecutionPolicyProvider">The operation execution policy provider</param>
+    /// <param name="integrationEventDao">The integration event outbox storage</param>
+    /// <param name="logger">The logger</param>
     public EfCommandExecutor(
         IDbContextFactory<T> contextFactory,
-        IOperationExecutionPolicyService executionPolicyService,
-        IEfOutboxDomainEventDao<T> domainEventDao,
+        IOperationExecutionPolicyProvider operationExecutionPolicyProvider,
+        IEfOutboxIntegrationEventWriter<T> integrationEventDao,
         IEfCommandExecutorLogger? logger = null)
     {
-        _contextFactory = contextFactory
+        ContextFactory = contextFactory
             ?? throw new ArgumentNullException(nameof(contextFactory));
 
-        _domainEventDao = domainEventDao
-            ?? throw new ArgumentNullException(nameof(domainEventDao));
+        IntegrationEventWriter = integrationEventDao
+            ?? throw new ArgumentNullException(nameof(integrationEventDao));
 
-        _executionRetryPolicy = executionPolicyService
-            ?? throw new ArgumentNullException(nameof(executionPolicyService));
+        OperationExecutionPolicyProvider = operationExecutionPolicyProvider
+            ?? throw new ArgumentNullException(nameof(operationExecutionPolicyProvider));
 
-        _logger = logger;
+        Logger = logger;
     }
 
     /// <inheritdoc />
@@ -54,9 +68,9 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
     {
         var commandName = command.GetType().Name;
 
-        _logger?.ExecutingStarted(commandName);
+        Logger?.ExecutionStarted(commandName);
 
-        var commandPolicy = _executionRetryPolicy.GetExecutionPolicy(command);
+        var commandPolicy = OperationExecutionPolicyProvider.GetExecutionPolicy(command);
 
         for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++)
         {
@@ -71,9 +85,15 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
                 if (!continueExecuting)
                     return;
             }
+            catch (EfCommandLogicException ex)
+            {
+                Logger?.CommandLogicError(commandName, ex);
+
+                throw;
+            }
             catch (Exception ex)
             {
-                _logger?.CriticalError(commandName, ex);
+                Logger?.CriticalError(commandName, ex);
 
                 throw;
             }
@@ -86,21 +106,21 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
             {
                 await command.ExecuteAsync(context, cancellationToken);
 
-                await SaveDomainEvents(command.Events, context, cancellationToken);
+                await SaveIntegrationEvents(command.Events, context, cancellationToken);
 
                 await context.SaveChangesAsync(cancellationToken);
 
                 await transaction.CommitAsync(cancellationToken);
 
-                _logger?.ExecutingSuccessfulFinished(commandName);
+                Logger?.ExecutionSucceeded(commandName);
 
                 return;
             }
-            catch (DomainLogicException ex)
+            catch (EfCommandLogicException ex)
             {
                 await transaction.RollbackAsync(cancellationToken);
 
-                _logger?.DomainLogicError(commandName, ex);
+                Logger?.CommandLogicError(commandName, ex);
 
                 throw;
             }
@@ -119,7 +139,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
 
                 foundEx = ex;
 
-                _logger?.ExecutingCancelled(commandName, ex);
+                Logger?.ExecutionCancelled(commandName, ex);
 
                 throw;
             }
@@ -129,7 +149,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
 
                 foundEx = ex;
 
-                _logger?.CriticalError(commandName, foundEx);
+                Logger?.CriticalError(commandName, foundEx);
             }
 
             if (!commandPolicy.ShouldRetry(foundEx, attempt))
@@ -141,7 +161,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
 
                 var maxRetryEx = new CommandExecutionAttemptLimitReachedException(errorMsg, foundEx);
 
-                _logger?.AttemptLimitReachedError(commandName, maxRetryEx, commandPolicy.MaxAttemptsCount);
+                Logger?.AttemptLimitReachedError(commandName, maxRetryEx, commandPolicy.MaxAttemptsCount);
 
                 throw maxRetryEx;
             }
@@ -155,23 +175,29 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
     {
         var commandName = command.GetType().Name;
 
-        _logger?.ExecutingStarted(commandName);
+        Logger?.ExecutionStarted(commandName);
 
-        var commandPolicy = _executionRetryPolicy.GetExecutionPolicy(command);
+        var commandPolicy = OperationExecutionPolicyProvider.GetExecutionPolicy(command);
 
         for (uint attempt = 1; attempt <= commandPolicy.MaxAttemptsCount; attempt++)
         {
             command.ClearEvents();
 
             using var context = await CreateDbContextAsync(commandName, cancellationToken);
-
+            
             try
             {
                 await command.BeforeExecuteAsync(context, cancellationToken);
             }
+            catch (EfCommandLogicException ex)
+            {
+                Logger?.CommandLogicError(commandName, ex);
+
+                throw;
+            }
             catch (Exception ex)
             {
-                _logger?.CriticalError(commandName, ex);
+                Logger?.CriticalError(commandName, ex);
 
                 throw;
             }
@@ -184,21 +210,21 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
             {
                 var result = await command.ExecuteAsync(context, cancellationToken);
 
-                await SaveDomainEvents(command.Events, context, cancellationToken);
+                await SaveIntegrationEvents(command.Events, context, cancellationToken);
 
                 await context.SaveChangesAsync(cancellationToken);
 
                 await transaction.CommitAsync(cancellationToken);
 
-                _logger?.ExecutingSuccessfulFinished(commandName);
+                Logger?.ExecutionSucceeded(commandName);
 
                 return result;
             }
-            catch (DomainLogicException ex)
+            catch (EfCommandLogicException ex)
             {
                 await transaction.RollbackAsync(cancellationToken);
 
-                _logger?.DomainLogicError(commandName, ex);
+                Logger?.CommandLogicError(commandName, ex);
 
                 throw;
             }
@@ -215,7 +241,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
             {
                 await transaction.RollbackAsync(cancellationToken);
 
-                _logger?.ExecutingCancelled(commandName, ex);
+                Logger?.ExecutionCancelled(commandName, ex);
 
                 throw;
             }
@@ -225,7 +251,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
 
                 foundEx = ex;
 
-                _logger?.CriticalError(commandName, foundEx);
+                Logger?.CriticalError(commandName, foundEx);
             }
 
             if (!commandPolicy.ShouldRetry(foundEx, attempt))
@@ -237,7 +263,7 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
 
                 var maxRetryEx = new CommandExecutionAttemptLimitReachedException(errorMsg, foundEx);
 
-                _logger?.AttemptLimitReachedError(commandName, maxRetryEx, commandPolicy.MaxAttemptsCount);
+                Logger?.AttemptLimitReachedError(commandName, maxRetryEx, commandPolicy.MaxAttemptsCount);
 
                 throw maxRetryEx;
             }
@@ -257,13 +283,13 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
     /// <exception cref="InvalidOperationException"></exception>
     protected virtual async Task<T> CreateDbContextAsync(string commandName, CancellationToken cancellationToken)
     {
-        T context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-
+        T context = await ContextFactory.CreateDbContextAsync(cancellationToken);
+        
         if (context is null)
         {
             var invalidOperEx = new InvalidOperationException(Resources.CantCreateDbContext);
 
-            _logger?.CriticalError(commandName, invalidOperEx);
+            Logger?.CriticalError(commandName, invalidOperEx);
 
             throw invalidOperEx;
         }
@@ -302,13 +328,13 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
                     case EntityState.Modified:
                         var modifObjEx = new DbModifiedObjectWasRemovedException(Resources.ModifiedObjectWasRemoved, ex);
 
-                        _logger?.CriticalError(commandName, modifObjEx);
+                        Logger?.CriticalError(commandName, modifObjEx);
 
                         throw modifObjEx;
                     case EntityState.Deleted:
                         var removingObjEx = new DbRemovingObjectWasRemovedException(Resources.RemovingObjectWasAlreadyRemoved, ex);
 
-                        _logger?.CriticalError(commandName, removingObjEx);
+                        Logger?.CriticalError(commandName, removingObjEx);
 
                         throw removingObjEx;
                     case EntityState.Detached:
@@ -316,14 +342,14 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
                     default:
                         var unknownStateEx = new DbUnknownEntityStateException(Resources.UnknownDbEntityState, ex);
 
-                        _logger?.CriticalError(commandName, unknownStateEx);
+                        Logger?.CriticalError(commandName, unknownStateEx);
 
                         throw unknownStateEx;
                 }
             }
         }
 
-        _logger?.UpdateError(commandName, ex, attempt, maxAttemptsCount);
+        Logger?.UpdateError(commandName, ex, attempt, maxAttemptsCount);
     }
 
     /// <summary>
@@ -335,7 +361,6 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
     protected virtual async Task DelayBeforeNewAttempt(
         uint currentAttempt, uint maxDelayInMilliseconds, CancellationToken cancellationToken)
     {
-
         uint baseDelay = Math.Min(1000 * (uint)Math.Pow(2, currentAttempt - 1), maxDelayInMilliseconds);
 
         // Add jitter ±20%
@@ -350,15 +375,15 @@ public class EfCommandExecutor<T> : IEfCommandExecutor<T> where T : DbContext
     }
 
     /// <summary>
-    /// Saves domain events using the outbox storage mechanism
+    /// Saves integration events using the outbox storage mechanism
     /// </summary>
-    /// <param name="domainEvents">The domain events to persist</param>
+    /// <param name="integrationEvents">The intogration events to persist</param>
     /// <param name="context">The database context</param>
     /// <param name="cancellationToken">The cancellation token</param>
-    protected virtual Task SaveDomainEvents(IReadOnlyCollection<IDomainEvent> domainEvents, T context, CancellationToken cancellationToken)
+    protected virtual Task SaveIntegrationEvents(IReadOnlyCollection<IIntegrationEvent> integrationEvents, T context, CancellationToken cancellationToken)
     {
-        if (domainEvents.Any())
-            return _domainEventDao.SaveAsync(domainEvents, context, cancellationToken);
+        if (integrationEvents.Any())
+            return IntegrationEventWriter.SaveAsync(integrationEvents, context, cancellationToken);
 
         return Task.CompletedTask;
     }
